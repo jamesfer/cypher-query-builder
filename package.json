@@ -1,0 +1,24 @@
+{
+  "name": "cypher-query-builder",
+  "version": "0.1.0",
+  "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha src/*.spec.js src/**/*.spec.js"
+  },
+  "keywords": [
+    "cypher",
+    "query",
+    "builder",
+    "neo4j"
+  ],
+  "author": "James Ferguson",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  }
+}
