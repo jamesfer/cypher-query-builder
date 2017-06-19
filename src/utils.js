@@ -39,7 +39,7 @@ module.exports.stringifyConditions = function stringifyConditions(conditions) {
 /**
  * Converts a path length bounds into a string to put into a relationship.
  * @param  {Array<int>|string} bounds An array of bounds
- * @return {[type]}        [description]
+ * @return {string}
  */
 module.exports.stringifyPathLength = function stringifyPathLength(bounds) {
   if (!bounds) {
