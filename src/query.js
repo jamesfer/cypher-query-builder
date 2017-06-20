@@ -1,35 +1,34 @@
 const _ = require('lodash');
 const Match = require('./clauses/match');
 const Node = require('./clauses/node');
-const Segment = require('./segment');
+const Create = require('./clauses/create');
+const Return = require('./clauses/return');
+const Statement = require('./statement');
 
-
-class Query {
-  constructor(segments = null) {
-    /**
-     * @type {Array<Segment>}
-     */
-    this.segments = segments || [new Segment()];
-  }
-
-  toString() {
-    return _.join(_.map(this.segments, segment => segment.toString()), '\n');
-  }
-
-  /**
-   * Adds a clause to the last segment.
-   * @param {Clause} clause
-   */
-  addClause(clause) {
-    _.last(this.segments).addClause(clause);
+class Query extends Statement {
+  constructor(statements = null) {
+    super(statements)
   }
 
   matchNode(varName, labels = [], clauses = {}) {
-    this.addClause(new Match(new Node(varName, labels, clauses)))
+    this.addStatement(new Match(new Node(varName, labels, clauses)))
   }
 
   match(patterns, settings) {
-    this.addClause(new Match(patterns, settings));
+    this.addStatement(new Match(patterns, settings));
+  }
+
+  createNode(varName, labels = [], clauses = {}) {
+    this.addStatement(new Create(new Node(varName, labels, clauses)));
+  }
+
+  create(patterns) {
+    this.addStatement(new Create(patterns));
+  }
+
+  ret(terms) {
+    this.addStatement(new Return(terms));
   }
 }
+
 module.exports = Query;

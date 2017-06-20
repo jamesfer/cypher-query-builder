@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const Clause = require('./clause');
+const Statement = require('../statement')
 
-class PatternClause extends Clause {
+class PatternClause extends Statement {
   constructor(patterns) {
     super();
 
@@ -19,9 +19,13 @@ class PatternClause extends Clause {
     }
   }
 
-  toString() {
-    let patternStrings = _.map(this.patterns, pattern => _.join(pattern, ''));
-    return _.join(patternStrings, ', ');
+  build() {
+    console.log(this.patterns);
+    let queryObjs = _.map(this.patterns, (pattern) => {
+      return this.mergeStatements(_.map(pattern, clause => clause.build()), '');
+    });
+    let queryObj = this.mergeStatements(queryObjs, ', ');
+    return queryObj;
   }
 }
 module.exports = PatternClause;

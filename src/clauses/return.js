@@ -10,8 +10,8 @@ class Return extends TermListClause {
     super(terms);
   }
 
-  toString() {
-    return 'RETURN ' + super.toString();
+  build() {
+    return this.prefixQuery(super.build(), 'RETURN ');
   }
 }
 

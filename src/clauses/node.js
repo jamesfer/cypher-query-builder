@@ -1,20 +1,20 @@
 const _ = require('lodash');
-const Clause = require('./clause');
+const Statement = require('../statement')
 const utils = require('../utils');
 
-class Node extends Clause {
+class Node extends Statement {
   constructor(varName, labels = [], conditions = {}) {
     super();
     this.varName = varName;
     this.labels = _.concat([], labels);
     this.conditions = conditions;
+    this.conditionParam = this.addParam(conditions);
   }
 
-  toString() {
+  build() {
     let labelString = utils.stringifyLabels(this.labels);
-    let clauseString = utils.stringifyConditions(this.conditions);
-    let internalString = _.trim(`${this.varName}${labelString} ${clauseString}`);
-    return '(' + internalString + ')';
+    let internalString = _.trim(`${this.varName}${labelString} ${this.conditionParam}`);
+    return this.makeQueryObject('(' + internalString + ')');
   }
 }
 module.exports = Node;

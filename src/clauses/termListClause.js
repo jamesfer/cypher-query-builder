@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const Clause = require('./clause');
+const Statement = require('../statement')
 
-class TermListClause extends Clause {
+class TermListClause extends Statement {
   constructor(terms) {
     super();
 
@@ -36,6 +36,10 @@ class TermListClause extends Clause {
         }));
       }
     })), ', ');
+  }
+
+  build() {
+    return this.makeQueryObject(this.toString());
   }
 }
 

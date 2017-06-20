@@ -1,30 +1,30 @@
 const _ = require('lodash');
-const Clause = require('./clause');
+const Statement = require('../statement')
 const utils = require('../utils');
 
-class Relation extends Clause {
+class Relation extends Statement {
   constructor(dir, varName = '', labels = [], conditions = {}, length = null) {
     super();
     this.dir = dir;
     this.varName = varName;
     this.labels = labels;
-    this.conditions = conditions;
     this.length = length;
+    this.conditions = conditions;
+    this.conditionParam = this.addParam(conditions);
   }
 
-  toString() {
+  build() {
     let labelString = utils.stringifyLabels(this.labels);
-    let clauseString = utils.stringifyConditions(this.conditions);
     let pathLengthString = utils.stringifyPathLength(this.length);
-    let internalString = _.trim(`${this.varName}${labelString}${pathLengthString} ${clauseString}`);
+    let internalString = _.trim(`${this.varName}${labelString}${pathLengthString} ${this.conditionParam}`);
 
     let arrows = {
       'in': ['<-[', ']-'],
       'out': ['-[', ']->'],
       'either': ['-[', ']-'],
-    }
-
-    return arrows[this.dir][0] + internalString + arrows[this.dir][1];
+    };
+    let queryStr = arrows[this.dir][0] + internalString + arrows[this.dir][1];
+    return this.makeQueryObject(queryStr);
   }
 }
 module.exports = Relation;

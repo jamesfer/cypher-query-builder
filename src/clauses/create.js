@@ -6,8 +6,8 @@ class Create extends PatternClause {
     super(patterns);
   }
 
-  toString() {
-    return 'CREATE ' + super.toString();
+  build() {
+    return this.prefixQuery(super.build(), 'CREATE ');
   }
 }
 module.exports = Create;

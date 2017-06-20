@@ -1,7 +1,6 @@
-const builder = require('./builder');
+const Query = require('./src/query');
 
-
-// console.log(builder.node('PERSON', {name: true}), builder.relation('out', 'LIKES', {rating: 7}), builder.node('PERSON', {}, 'friends'));
-
-
-console.log(builder.ret({image: ['status', 'url'], owner: ['name', 'address']}));
+let query = new Query();
+query.matchNode('node', 'Record');
+query.ret('node');
+console.log(query.build());

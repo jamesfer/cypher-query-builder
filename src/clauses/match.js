@@ -10,12 +10,13 @@ class Match extends PatternClause {
     this.optional = settings.optional;
   }
 
-  toString() {
+  build() {
     let str = 'MATCH ';
     if (this.optional) {
       str = 'OPTIONAL ' + str;
     }
-    return str + super.toString();
+    console.log(super.build());
+    return this.prefixQuery(super.build(), str);
   }
 }
 module.exports = Match;
