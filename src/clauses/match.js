@@ -15,7 +15,6 @@ class Match extends PatternClause {
     if (this.optional) {
       str = 'OPTIONAL ' + str;
     }
-    console.log(super.build());
     return this.prefixQuery(super.build(), str);
   }
 }

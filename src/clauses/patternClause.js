@@ -20,11 +20,10 @@ class PatternClause extends Statement {
   }
 
   build() {
-    console.log(this.patterns);
     let queryObjs = _.map(this.patterns, (pattern) => {
-      return this.mergeStatements(_.map(pattern, clause => clause.build()), '');
+      return this.mergeQueryObjects(_.map(pattern, clause => clause.build()), '');
     });
-    let queryObj = this.mergeStatements(queryObjs, ', ');
+    let queryObj = this.mergeQueryObjects(queryObjs, ', ');
     return queryObj;
   }
 }

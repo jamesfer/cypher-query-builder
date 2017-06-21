@@ -2,9 +2,12 @@ const _ = require('lodash');
 const ParameterBag = require('./parameterBag')
 
 class Statement {
-  constructor(statements = null) {
+  constructor(statements = []) {
     this.parameterBag = new ParameterBag();
-    this.statements = statements || [];
+    this.statements = [];
+    if (statements) {
+      statements.forEach(statement => this.addStatement(statement));
+    }
   }
 
   /**
@@ -12,7 +15,7 @@ class Statement {
    * @return {object} Query object with two properties: query and params.
    */
   build() {
-    return this.mergeStatements(this.statements);
+    return this.mergeQueryObjects(_.map(this.statements, s => s.build()));
   }
 
   /**
@@ -68,16 +71,15 @@ class Statement {
   }
 
   /**
-   * Merges all of its child statements together by concatenating the queries in
-   * order with a delimiter and merging each param object.
+   * Merges an array of query objects together by concatenating the queries
+   * with a string and merging the params objects.
    * @param {String} [delimiter='\n']
    * @return {object}
    */
-  mergeStatements(statements, delimiter = '\n') {
-    let queryObjs = _.map(this.statements, statement => statement.build());
+  mergeQueryObjects(objects, delimiter = '\n') {
     return {
-      query: _.join(_.map(queryObjs, 'query'), delimiter),
-      params: _.assign({}, ..._.map(queryObjs, 'params')),
+      query: _.join(_.map(objects, 'query'), delimiter),
+      params: _.assign({}, ..._.map(objects, 'params')),
     };
   }
 
