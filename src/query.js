@@ -6,8 +6,9 @@ const Return = require('./clauses/return');
 const Statement = require('./statement');
 
 class Query extends Statement {
-  constructor(statements = null) {
-    super(statements)
+  constructor(connection = null) {
+    super();
+    this.connection = connection;
   }
 
   matchNode(varName, labels = [], clauses = {}) {
@@ -28,6 +29,32 @@ class Query extends Statement {
 
   ret(terms) {
     this.addStatement(new Return(terms));
+  }
+
+  async run() {
+    if (!this.connection) {
+      throw Error('Cannot run query; no connection object available.');
+    }
+
+    if (!this.connection.open) {
+      throw Error('Cannot run query; connection is not open.');
+    }
+
+    if (!this.statements.length) {
+      throw Error('Cannot run query: no statements attached to the query.');
+    }
+
+    let session = this.connection.session();
+    let queryObj = this.build();
+    return session.run(queryObj.query, queryObj.params)
+      .then(result => {
+        session.close();
+        return result;
+      })
+      .catch(error => {
+        session.close();
+        return Promise.reject(error);
+      });
   }
 }
 
