@@ -20,6 +20,7 @@ console.log(query.build());
 let result = query.run()
   .then(result => {
     console.log(result);
+    con.close();
   });
 
 

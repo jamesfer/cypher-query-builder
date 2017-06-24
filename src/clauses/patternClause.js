@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const Statement = require('../statement')
 
+// TODO rename to pattern statement
 class PatternClause extends Statement {
   constructor(patterns) {
     super();
