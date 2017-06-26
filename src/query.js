@@ -12,23 +12,28 @@ class Query extends Statement {
   }
 
   matchNode(varName, labels = [], clauses = {}) {
-    this.addStatement(new Match(new Node(varName, labels, clauses)))
+    this.addStatement(new Match(new Node(varName, labels, clauses)));
+    return this;
   }
 
   match(patterns, settings) {
     this.addStatement(new Match(patterns, settings));
+    return this;
   }
 
   createNode(varName, labels = [], clauses = {}) {
     this.addStatement(new Create(new Node(varName, labels, clauses)));
+    return this;
   }
 
   create(patterns) {
     this.addStatement(new Create(patterns));
+    return this;
   }
 
   ret(terms) {
     this.addStatement(new Return(terms));
+    return this;
   }
 
   async run() {

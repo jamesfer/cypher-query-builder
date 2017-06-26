@@ -61,8 +61,7 @@ class Connection {
 	'ret',
 ].forEach(name => {
 	Connection.prototype[name] = function () {
-		let query = Query.prototype[name].apply(this.query(), arguments);
-		return query;
+		return Query.prototype[name].apply(this.query(), arguments);
 	}
 });
 
