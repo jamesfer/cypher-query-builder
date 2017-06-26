@@ -43,10 +43,37 @@ class Connection {
 
 	/**
 	 * Returns a new query that uses this connection.
-	 * @type {Query}
+	 * @return {Query}
 	 */
 	query() {
 		return new Query(this);
+	}
+
+	/**
+	 * Runs a query in a session using this connection.
+	 * @param {Query} query
+	 * @return {Promise<Array>}
+	 */
+	run(query) {
+		if (!this.open) {
+      throw Error('Cannot run query; connection is not open.');
+    }
+
+    if (!query.statements.length) {
+      throw Error('Cannot run query: no statements attached to the query.');
+    }
+
+    let queryObj = query.build();
+		let session = this.session();
+    return session.run(queryObj.query, queryObj.params)
+      .then(result => {
+        session.close();
+        return result;
+      })
+      .catch(error => {
+        session.close();
+        return Promise.reject(error);
+      });
 	}
 }
 

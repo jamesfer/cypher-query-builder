@@ -41,25 +41,7 @@ class Query extends Statement {
       throw Error('Cannot run query; no connection object available.');
     }
 
-    if (!this.connection.open) {
-      throw Error('Cannot run query; connection is not open.');
-    }
-
-    if (!this.statements.length) {
-      throw Error('Cannot run query: no statements attached to the query.');
-    }
-
-    let session = this.connection.session();
-    let queryObj = this.build();
-    return session.run(queryObj.query, queryObj.params)
-      .then(result => {
-        session.close();
-        return result;
-      })
-      .catch(error => {
-        session.close();
-        return Promise.reject(error);
-      });
+    return this.connection.run(this);
   }
 }
 
