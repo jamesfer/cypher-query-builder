@@ -41,39 +41,30 @@ class Connection {
 		return null;
 	}
 
-
-	/** Query shortcut methods. */
-
-	matchNode(varName, labels = [], clauses = {}) {
-		let query = new Query(this);
-		query.matchNode(varName, labels, clauses);
-		return query;
-	}
-
-	match(patterns, settings) {
-		let query = new Query(this);
-		query.match(patterns, settings);
-		return query;
-	}
-
-	createNode(varName, labels = [], clauses = {}) {
-		let query = new Query(this);
-		query.createNode(varName, labels, clauses);
-		return query;
-	}
-
-	create(patterns) {
-		let query = new Query(this);
-		query.create(patterns);
-		return query;
-	}
-
-	ret(terms) {
-		let query = new Query(this);
-		query.ret(terms);
-		return query;
+	/**
+	 * Returns a new query that uses this connection.
+	 * @type {Query}
+	 */
+	query() {
+		return new Query(this);
 	}
 }
+
+
+/** Query shortcut methods. */
+
+[
+	'matchNode',
+	'match',
+	'createNode',
+	'create',
+	'ret',
+].forEach(name => {
+	Connection.prototype[name] = function () {
+		let query = Query.prototype[name].apply(this.query(), arguments);
+		return query;
+	}
+});
 
 
 module.exports = Connection;
