@@ -41,39 +41,56 @@ class Connection {
 		return null;
 	}
 
-
-	/** Query shortcut methods. */
-
-	matchNode(varName, labels = [], clauses = {}) {
-		let query = new Query(this);
-		query.matchNode(varName, labels, clauses);
-		return query;
+	/**
+	 * Returns a new query that uses this connection.
+	 * @return {Query}
+	 */
+	query() {
+		return new Query(this);
 	}
 
-	match(patterns, settings) {
-		let query = new Query(this);
-		query.match(patterns, settings);
-		return query;
-	}
+	/**
+	 * Runs a query in a session using this connection.
+	 * @param {Query} query
+	 * @return {Promise<Array>}
+	 */
+	run(query) {
+		if (!this.open) {
+      throw Error('Cannot run query; connection is not open.');
+    }
 
-	createNode(varName, labels = [], clauses = {}) {
-		let query = new Query(this);
-		query.createNode(varName, labels, clauses);
-		return query;
-	}
+    if (!query.statements.length) {
+      throw Error('Cannot run query: no statements attached to the query.');
+    }
 
-	create(patterns) {
-		let query = new Query(this);
-		query.create(patterns);
-		return query;
-	}
-
-	ret(terms) {
-		let query = new Query(this);
-		query.ret(terms);
-		return query;
+    let queryObj = query.build();
+		let session = this.session();
+    return session.run(queryObj.query, queryObj.params)
+      .then(result => {
+        session.close();
+        return result;
+      })
+      .catch(error => {
+        session.close();
+        return Promise.reject(error);
+      });
 	}
 }
+
+
+/** Query shortcut methods. */
+
+[
+	'matchNode',
+	'match',
+	'createNode',
+	'create',
+	'ret',
+].forEach(name => {
+	Connection.prototype[name] = function () {
+		return Query.prototype[name].apply(this.query(), arguments);
+	}
+});
 
 
 module.exports = Connection;

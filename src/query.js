@@ -12,23 +12,28 @@ class Query extends Statement {
   }
 
   matchNode(varName, labels = [], clauses = {}) {
-    this.addStatement(new Match(new Node(varName, labels, clauses)))
+    this.addStatement(new Match(new Node(varName, labels, clauses)));
+    return this;
   }
 
   match(patterns, settings) {
     this.addStatement(new Match(patterns, settings));
+    return this;
   }
 
   createNode(varName, labels = [], clauses = {}) {
     this.addStatement(new Create(new Node(varName, labels, clauses)));
+    return this;
   }
 
   create(patterns) {
     this.addStatement(new Create(patterns));
+    return this;
   }
 
   ret(terms) {
     this.addStatement(new Return(terms));
+    return this;
   }
 
   async run() {
@@ -36,25 +41,7 @@ class Query extends Statement {
       throw Error('Cannot run query; no connection object available.');
     }
 
-    if (!this.connection.open) {
-      throw Error('Cannot run query; connection is not open.');
-    }
-
-    if (!this.statements.length) {
-      throw Error('Cannot run query: no statements attached to the query.');
-    }
-
-    let session = this.connection.session();
-    let queryObj = this.build();
-    return session.run(queryObj.query, queryObj.params)
-      .then(result => {
-        session.close();
-        return result;
-      })
-      .catch(error => {
-        session.close();
-        return Promise.reject(error);
-      });
+    return this.connection.run(this);
   }
 }
 

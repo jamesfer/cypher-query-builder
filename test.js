@@ -9,19 +9,25 @@ const neo4j = require('neo4j-driver').v1;
 
 
 let con = new Connection('bolt://localhost', { username: 'neo4j', password: 'admin' })
-let query = new Query(con);
-query.match([
-  new Node('node', 'Record'),
-  new Relation('out', 'rel', ['Has'], { type: 'date' }),
-  new Node(null, 'Field')
-]);
-query.ret('node');
+let query = con.matchNode('node', 'Person', { name: 'Harold'});
 console.log(query.build());
 let result = query.run()
   .then(result => {
     console.log(result);
     con.close();
   });
+// let query = new Query(con);
+// query.match([
+//   new Node('node', 'Record'),
+//   new Relation('out', 'rel', ['Has'], { type: 'date' }),
+//   new Node(null, 'Field')
+// ]);
+// query.ret('node');
+// console.log(query.build());
+// let result = query.run()
+//   .then(result => {
+//     console.log(result);
+//   });
 
 
 // Create a driver instance, for the user neo4j with password neo4j.
