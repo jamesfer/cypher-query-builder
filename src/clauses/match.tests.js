@@ -1,27 +1,30 @@
 const expect = require('chai').expect;
 const patternClauseTests = require('./patternClause.tests');
 
-module.exports = function(makeMatchString) {
-  patternClauseTests(makeMatchString, 'MATCH ');
-
+module.exports = function(makeMatch) {
   class TestClause {
     constructor(str) {
       this.str = str;
     }
 
-    toString() {
-      return this.str;
+    build() {
+      return {
+        query: this.str,
+        params: {}
+      };
     }
   }
 
+  patternClauseTests(makeMatch, 'MATCH ');
+
   it('should prefix optional', function() {
-    let match = makeMatchString([
+    let match = makeMatch([
       new TestClause('a'),
       new TestClause('b'),
       new TestClause('c'),
     ], {
       optional: true
     });
-    expect(match).to.equal('OPTIONAL MATCH abc');
+    expect(match.query).to.equal('OPTIONAL MATCH abc');
   });
 }

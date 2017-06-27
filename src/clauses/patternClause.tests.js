@@ -1,38 +1,62 @@
+const _ = require('lodash');
 const expect = require('chai').expect;
 
-module.exports = function(makePatternString, prefix) {
-  class TestClause {
-    constructor(str) {
-      this.str = str;
+module.exports = function(makePattern, prefix) {
+  class TestStatement {
+    constructor(query, params= {}) {
+      this.query = query;
+      this.params = params;
     }
 
-    toString() {
-      return this.str;
+    build() {
+      return {
+        query: this.query,
+        params: this.params,
+      }
     }
   }
 
   it('should combine pattern sections with no delimiter', function() {
-    let pattern = makePatternString([
-      new TestClause('a'),
-      new TestClause('b'),
-      new TestClause('c'),
+    let pattern = makePattern([
+      new TestStatement('a'),
+      new TestStatement('b'),
+      new TestStatement('c'),
     ]);
-    expect(pattern).to.equal(prefix + 'abc');
+    expect(pattern.query).to.equal(prefix + 'abc');
   });
 
   it('should combine multiple patterns with a comma', function() {
-    let pattern = makePatternString([
+    let pattern = makePattern([
       [
-        new TestClause('a'),
-        new TestClause('b'),
-        new TestClause('c'),
+        new TestStatement('a'),
+        new TestStatement('b'),
+        new TestStatement('c'),
       ],
       [
-        new TestClause('d'),
-        new TestClause('e'),
-        new TestClause('f'),
+        new TestStatement('d'),
+        new TestStatement('e'),
+        new TestStatement('f'),
       ]
     ]);
-    expect(pattern).to.equal(prefix + 'abc, def');
+    expect(pattern.query).to.equal(prefix + 'abc, def');
+  });
+
+  it('should merge param objects of child patterns', function() {
+    let pattern = makePattern([
+      [
+        new TestStatement('a', {a: 'valueA'}),
+        new TestStatement('b', {b: 'valueB'}),
+        new TestStatement('c', {c: 'valueC'}),
+      ],
+      [
+        new TestStatement('d', {d: 'valueD'}),
+        new TestStatement('e', {e: 'valueE'}),
+        new TestStatement('f', {f: 'valueF'}),
+      ]
+    ]);
+    expect(_.keys(pattern.params)).to.have.length(6);
+    _.each(['valueA', 'valueB', 'valueC', 'valueD', 'valueE', 'valueF'], val => {
+      expect(_.values(pattern.params)).to.contain(val);
+    });
   });
 }
