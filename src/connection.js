@@ -1,6 +1,7 @@
 const Query = require('./query');
 const neo4j = require('neo4j-driver').v1;
 const nodeCleanup = require('node-cleanup');
+const Transformer = require('./transformer');
 
 let connections = [];
 
@@ -18,6 +19,7 @@ class Connection {
 		this.auth = neo4j.auth.basic(credentials.username, credentials.password);
 		this.driver = neo4j.driver(this.url, this.auth);
 		this.open = true;
+		this.transformer = new Transformer();
 		connections.push(this);
 	}
 
@@ -68,7 +70,7 @@ class Connection {
     return session.run(queryObj.query, queryObj.params)
       .then(result => {
         session.close();
-        return result;
+        return this.transformer.transformResult(result);
       })
       .catch(error => {
         session.close();
