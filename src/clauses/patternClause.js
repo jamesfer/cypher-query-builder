@@ -18,6 +18,13 @@ class PatternClause extends Statement {
     else {
       this.patterns = [[patterns]];
     }
+
+    // Add child patterns as statements
+    this.patterns.forEach(patternArray => {
+      patternArray.forEach(pattern => {
+        this.addStatement(pattern);
+      });
+    });
   }
 
   build() {
