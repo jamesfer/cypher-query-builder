@@ -70,10 +70,7 @@ class ParameterBag {
 			this.parent.addExistingParam(param);
 		}
 		else {
-			let existing = _.find(this.parameters, { name: param.name });
-			if (existing) {
-				param.name = this.getName();
-			}
+			param.name = this.getName();
 		}
 		this.parameters.push(param);
 	}
