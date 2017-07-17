@@ -5,9 +5,7 @@ class Statement {
   constructor(statements = []) {
     this.parameterBag = new ParameterBag();
     this.statements = [];
-    if (statements) {
-      statements.forEach(statement => this.addStatement(statement));
-    }
+    statements.forEach(statement => this.addStatement(statement));
   }
 
   /**
@@ -20,7 +18,7 @@ class Statement {
 
   /**
    * Sets the parent bag of this statement's parameter bag.
-   * @param {ParemeterBag} parent
+   * @param {ParameterBag} parent
    */
   setParameterParent(parent) {
     this.parameterBag.setParent(parent);
