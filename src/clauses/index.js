@@ -10,5 +10,5 @@ module.exports = {
   relation: construct(Relation),
   match: construct(Match),
   create: construct(Create),
-  return: construct(Return),
+  ret: construct(Return),
 };

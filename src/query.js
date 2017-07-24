@@ -1,8 +1,6 @@
 const _ = require('lodash');
-const Match = require('./clauses/match');
-const Node = require('./clauses/node');
-const Create = require('./clauses/create');
 const Return = require('./clauses/return');
+const { match, node, create, ret } = require('./clauses');
 const Statement = require('./statement');
 
 class Query extends Statement {
@@ -12,28 +10,23 @@ class Query extends Statement {
   }
 
   matchNode(varName, labels = [], clauses = {}) {
-    this.addStatement(new Match(new Node(varName, labels, clauses)));
-    return this;
+    return this.addStatement(match(node(varName, labels, clauses)));
   }
 
   match(patterns, settings) {
-    this.addStatement(new Match(patterns, settings));
-    return this;
+    return this.addStatement(match(patterns, settings));
   }
 
   createNode(varName, labels = [], clauses = {}) {
-    this.addStatement(new Create(new Node(varName, labels, clauses)));
-    return this;
+    return this.addStatement(create(node(varName, labels, clauses)));
   }
 
   create(patterns) {
-    this.addStatement(new Create(patterns));
-    return this;
+    return this.addStatement(create(patterns));
   }
 
   ret(terms) {
-    this.addStatement(new Return(terms));
-    return this;
+    return this.addStatement(ret(terms));
   }
 
   async run() {
