@@ -5,51 +5,59 @@ describe('Relation', function() {
   describe('#build', function() {
     it('should build a relation pattern directed inwards', function() {
       let rel = new Relation('in');
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('<-[]-');
+      expect(queryObj.query).to.equal('<-[]-');
+      expect(queryObj.params).to.be.empty;
     });
 
     it('should build a relation pattern directed outwards', function() {
       let rel = new Relation('out');
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('-[]->');
+      expect(queryObj.query).to.equal('-[]->');
+      expect(queryObj.params).to.be.empty;
     });
 
     it('should build a relation pattern that is directionless', function() {
       let rel = new Relation('either');
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('-[]-');
+      expect(queryObj.query).to.equal('-[]-');
+      expect(queryObj.params).to.be.empty;
     });
 
     it('should build a relation pattern with a variable name', function() {
       let rel = new Relation('in', 'link');
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('<-[link]-');
+      expect(queryObj.query).to.equal('<-[link]-');
+      expect(queryObj.params).to.be.empty;
     });
 
     it('should build a relation pattern with a label', function() {
       let rel = new Relation('in', '', 'FriendsWith');
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('<-[:FriendsWith]-');
+      expect(queryObj.query).to.equal('<-[:FriendsWith]-');
+      expect(queryObj.params).to.be.empty;
     });
 
     it('should build a relation pattern with multiple labels', function() {
       let rel = new Relation('in', '', ['FriendsWith', 'WorksWith']);
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('<-[:FriendsWith:WorksWith]-');
+      expect(queryObj.query).to.equal('<-[:FriendsWith:WorksWith]-');
+      expect(queryObj.params).to.be.empty;
     });
 
-    it.skip('should build a relation pattern with conditions', function() {
+    it('should build a relation pattern with conditions', function() {
       let rel = new Relation('out', '', [], {recent: true, years: 7});
-      let relString = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relString.query).to.equal('-[{recent: true, years: 7}]->');
+      expect(queryObj.query).to.match(/^-\[\{ recent: \$[a-zA-Z0-9-_]+, years: \$[a-zA-Z0-9-_]+ \}\]->$/);
+      expect(_.keys(queryObj.params)).to.have.length(2);
+      expect(_.values(queryObj.params)).to.have.members([true, 7]);
     });
 
     it('should build a relation pattern with flexible length', function() {
@@ -58,17 +66,18 @@ describe('Relation', function() {
       let minBound = new Relation('out', '', [], {}, [2]);
       let bothBounds = new Relation('out', '', [], {}, [2, 7]);
 
-      expect(any.build().query).to.equal('-[*]->');
-      expect(exact.build().query).to.equal('-[*3]->');
-      expect(minBound.build().query).to.equal('-[*2..]->');
-      expect(bothBounds.build().query).to.equal('-[*2..7]->');
+      expect(any.buildQueryObject().query).to.equal('-[*]->');
+      expect(exact.buildQueryObject().query).to.equal('-[*3]->');
+      expect(minBound.buildQueryObject().query).to.equal('-[*2..]->');
+      expect(bothBounds.buildQueryObject().query).to.equal('-[*2..7]->');
     });
 
-    it.skip('should build a complete relation pattern', function() {
+    it('should build a complete relation pattern', function() {
       let rel = new Relation('either', 'f', ['FriendsWith', 'WorksWith'], {recent: true, years: 7}, [2, 3]);
-      let relObj = rel.build();
+      let queryObj = rel.buildQueryObject();
 
-      expect(relObj.query).to.equal('-[f:FriendsWith:WorksWith*2..3 {recent: true, years: 7}]-');
-    });
+      expect(queryObj.query).to.equal('-[f:FriendsWith:WorksWith*2..3 {recent: true, years: 7}]-');
+      expect(_.keys(queryObj.params)).to.have.length(2);
+      expect(_.values(queryObj.params)).to.have.members([true, 7]);});
   });
 });

@@ -1,14 +1,10 @@
 const expect = require('chai').expect;
 const TermListClause = require('./termListClause.js');
 const termListClauseTests = require('./termListClause.tests');
+const { construct } = require('../utils');
 
 describe('TermListClause', function() {
   describe('#build', function() {
-    termListClauseTests(function() {
-      let args = [TermListClause];
-      args.push.apply(args, arguments);
-      let termList = new (TermListClause.bind.apply(TermListClause, args))();
-      return termList.build();
-    }, '');
+    termListClauseTests(construct(TermListClause, s => s.buildQueryObject()), '');
   });
 });

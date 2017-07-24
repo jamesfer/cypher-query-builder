@@ -23,6 +23,7 @@ module.exports = function(makePattern, prefix) {
       new TestStatement('c'),
     ]);
     expect(pattern.query).to.equal(prefix + 'abc');
+    expect(pattern.params).to.be.empty;
   });
 
   it('should combine multiple patterns with a comma', function() {
@@ -39,6 +40,7 @@ module.exports = function(makePattern, prefix) {
       ]
     ]);
     expect(pattern.query).to.equal(prefix + 'abc, def');
+    expect(pattern.params).to.be.empty;
   });
 
   it('should merge param objects of child patterns', function() {
