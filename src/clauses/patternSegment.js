@@ -24,11 +24,6 @@ class PatternSegment extends Statement {
       return '';
     }
 
-    if (_.isArray(this.conditions)) {
-      let param = parameterBag.addParam(this.conditions);
-      return param.toString();
-    }
-
     let str = _.join(_.map(this.conditions, (value, key) => {
       return `${key}: ${parameterBag.addParam(value).toString()}`;
     }), ', ');
