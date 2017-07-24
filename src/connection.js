@@ -88,6 +88,8 @@ class Connection {
   'createNode',
   'create',
   'ret',
+  'with',
+  'unwind',
 ].forEach(name => {
   Connection.prototype[name] = function () {
     return Query.prototype[name].apply(this.query(), arguments);

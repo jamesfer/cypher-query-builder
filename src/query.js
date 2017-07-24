@@ -1,6 +1,4 @@
-const _ = require('lodash');
-const Return = require('./clauses/return');
-const { match, node, create, ret } = require('./clauses');
+const { match, node, create, ret, unwind, withVars } = require('./clauses');
 const Statement = require('./statement');
 
 class Query extends Statement {
@@ -28,6 +26,15 @@ class Query extends Statement {
   ret(terms) {
     return this.addStatement(ret(terms));
   }
+
+  with(terms) {
+    return this.addStatement(withVars(terms));
+  }
+
+  unwind(list, name) {
+    return this.addStatement(unwind(list, name));
+  }
+
 
   async run() {
     if (!this.connection) {

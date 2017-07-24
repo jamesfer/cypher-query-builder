@@ -4,6 +4,8 @@ const Relation = require('./relation');
 const Match = require('./match');
 const Create = require('./create');
 const Return = require('./return');
+const With = require('./with');
+const Unwind = require('./unwind');
 
 module.exports = {
   node: construct(Node),
@@ -11,4 +13,6 @@ module.exports = {
   match: construct(Match),
   create: construct(Create),
   ret: construct(Return),
+  withVars: construct(With),
+  unwind: construct(Unwind),
 };
