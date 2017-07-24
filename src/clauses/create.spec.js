@@ -1,13 +1,9 @@
 const Create = require('./create');
 const createTests = require('./create.tests');
+const { construct } = require('../utils');
 
 describe('Create', function() {
   describe('#build', function() {
-    createTests(function() {
-      let args = [Create];
-      args.push.apply(args, arguments);
-      let create = new (Create.bind.apply(Create, args))();
-      return create.build();
-    });
+    createTests(construct(Create));
   });
 });
