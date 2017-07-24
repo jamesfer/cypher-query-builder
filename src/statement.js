@@ -33,6 +33,7 @@ class Statement {
    */
   addStatement(statement) {
     this.statements.push(statement);
+    return this;
   }
 }
 
