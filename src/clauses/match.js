@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const PatternClause = require('./patternClause');
+const ParameterBag = require('../parameterBag');
 
 class Match extends PatternClause {
   constructor(patterns, settings = {}) {
@@ -10,12 +11,12 @@ class Match extends PatternClause {
     this.optional = settings.optional;
   }
 
-  build() {
+  build(parameterBag = new ParameterBag()) {
     let str = 'MATCH ';
     if (this.optional) {
       str = 'OPTIONAL ' + str;
     }
-    return this.prefixQuery(super.build(), str);
+    return str + super.build(parameterBag);
   }
 }
 module.exports = Match;

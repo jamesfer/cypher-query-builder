@@ -8,12 +8,7 @@ class PatternSegment extends Statement {
     super();
     this.name = name;
     this.labels = _.concat([], labels);
-
-    this.conditions = _.mapValues(conditions, condValue => {
-      return this.addParam(condValue);
-    });
-    // this.conditions = conditions;
-    // this.conditionParam = this.addParam(this.conditions);
+    this.conditions = conditions;
   }
 
   getNameString() {
@@ -24,21 +19,20 @@ class PatternSegment extends Statement {
     return utils.stringifyLabels(this.labels);
   }
 
-  getConditionsParamString() {
-    let str = _.join(_.map(this.conditions, (condParam, name) => {
-      return name + ': ' + condParam.toString();
+  getConditionsParamString(parameterBag) {
+    if (_.isEmpty(this.conditions)) {
+      return '';
+    }
+
+    if (_.isArray(parameterBag)) {
+      let param = parameterBag.addParam(this.conditions);
+      return param.toString();
+    }
+
+    let str = _.join(_.map(this.conditions, (value, key) => {
+      return `${key}: ${parameterBag.addParam(value).toString()}`;
     }), ', ');
     return str.length ? '{ ' + str + ' }' : '';
-    // return this.areConditionsEmpty() ? '' : this.conditionParam.toString();
-  }
-
-  getConditionParams() {
-    return this.getParams();
-    // return this.areConditionsEmpty() ? {} : this.getParams();
-  }
-
-  areConditionsEmpty() {
-    return _.isEmpty(this.conditions);
   }
 }
 

@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Statement = require('../statement')
+const ParameterBag = require('../parameterBag');
 
 class TermListClause extends Statement {
   constructor(terms) {
@@ -38,8 +39,8 @@ class TermListClause extends Statement {
     })), ', ');
   }
 
-  build() {
-    return this.makeQueryObject(this.toString());
+  build(parameterBag = new ParameterBag()) {
+    return this.toString();
   }
 }
 
