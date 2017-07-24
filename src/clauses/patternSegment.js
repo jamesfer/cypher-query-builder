@@ -24,7 +24,7 @@ class PatternSegment extends Statement {
       return '';
     }
 
-    if (_.isArray(parameterBag)) {
+    if (_.isArray(this.conditions)) {
       let param = parameterBag.addParam(this.conditions);
       return param.toString();
     }
