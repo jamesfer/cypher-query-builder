@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Statement = require('../statement')
+const ParameterBag = require('../parameterBag');
 
 // TODO rename to pattern statement
 class PatternClause extends Statement {
@@ -27,12 +28,10 @@ class PatternClause extends Statement {
     });
   }
 
-  build() {
-    let queryObjs = _.map(this.patterns, (pattern) => {
-      return this.mergeQueryObjects(_.map(pattern, clause => clause.build()), '');
-    });
-    let queryObj = this.mergeQueryObjects(queryObjs, ', ');
-    return queryObj;
+  build(parameterBag = new ParameterBag()) {
+    return _.join(_.map(this.patterns, pattern => {
+      return _.join(_.map(pattern, clause => clause.build(parameterBag)), '');
+    }), ', ');
   }
 }
 module.exports = PatternClause;

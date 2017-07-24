@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const TermListClause = require('./termListClause');
+const ParameterBag = require('../parameterBag');
 
 class Return extends TermListClause {
   /**
@@ -10,8 +11,8 @@ class Return extends TermListClause {
     super(terms);
   }
 
-  build() {
-    return this.prefixQuery(super.build(), 'RETURN ');
+  build(parameterBag = new ParameterBag()) {
+    return 'RETURN ' + super.build(parameterBag);
   }
 }
 

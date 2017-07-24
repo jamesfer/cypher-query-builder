@@ -65,7 +65,7 @@ class Connection {
       throw Error('Cannot run query: no statements attached to the query.');
     }
 
-    let queryObj = query.build();
+    let queryObj = query.buildQueryObject();
 		let session = this.session();
     return session.run(queryObj.query, queryObj.params)
       .then(result => {

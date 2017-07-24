@@ -19,7 +19,7 @@ class ParameterBag {
 	constructor() {
 		this.count = 0;
 		this.parameters = [];
-		this.parent = null;
+		// this.parent = null;
 	}
 
 	/**
@@ -39,17 +39,10 @@ class ParameterBag {
 	 */
 	addParam(value, name = null) {
 		let param = null;
-		if (this.parent) {
-			param = this.parent.addParam(value, name);
+		if (!name) {
+			name = this.getName();
 		}
-		else {
-			if (!name) {
-				name = this.getName();
-			}
-
-			param = new Parameter(name, value);
-		}
-
+		param = new Parameter(name, value);
 		this.parameters.push(param);
 		return param;
 	}
@@ -63,28 +56,6 @@ class ParameterBag {
 		return _.fromPairs(_.map(this.parameters, (param) => {
 			return [param.name, param.value]
 		}));
-	}
-
-	addExistingParam(param) {
-		if (this.parent) {
-			this.parent.addExistingParam(param);
-		}
-		else {
-			param.name = this.getName();
-		}
-		this.parameters.push(param);
-	}
-
-	/**
-	 * Sets the parent of this parameter bag. All existing params will be added
-	 * to the parent and possibly renamed to avoid collisions.
-	 * @param {ParameterBag} parent
-	 */
-	setParent(parent) {
-		if (this.parent === null) {
-			this.parent = parent;
-			this.parameters.forEach(param => parent.addExistingParam(param));
-		}
 	}
 }
 
