@@ -7,16 +7,22 @@ class Query extends Statement {
     this.connection = connection;
   }
 
-  matchNode(varName, labels = [], clauses = {}) {
-    return this.addStatement(clauses.match(clauses.node(varName, labels, clauses)));
+  matchNode(varName, labels = [], conditions = {}) {
+    return this.addStatement(clauses.match(clauses.node(varName, labels, conditions)));
   }
 
   match(patterns, settings) {
     return this.addStatement(clauses.match(patterns, settings));
   }
 
-  createNode(varName, labels = [], clauses = {}) {
-    return this.addStatement(clauses.create(clauses.node(varName, labels, clauses)));
+  optionalMatch(patterns, settings) {
+    return this.addStatement(clauses.match(patterns, Object.assign(settings, {
+      optional: true,
+    })));
+  }
+
+  createNode(varName, labels = [], conditions = {}) {
+    return this.addStatement(clauses.create(clauses.node(varName, labels, conditions)));
   }
 
   create(patterns) {
@@ -39,8 +45,10 @@ class Query extends Statement {
     return this.addStatement(clauses.delete(terms));
   }
 
-  detachDelete(terms) {
-    return this.addStatement(clauses.detachDelete(terms));
+  detachDelete(terms, settings) {
+    return this.addStatement(clauses.delete(terms, Object.assign(settings, {
+      detach: true,
+    })));
   }
 
 
