@@ -4,6 +4,7 @@ const nodeTests = require('./clauses/node.tests');
 const matchTests = require('./clauses/match.tests');
 const createTests = require('./clauses/create.tests');
 const returnTests = require('./clauses/return.tests');
+const { construct } = require('./utils');
 
 describe('Query', function() {
   class TestSegment {
@@ -20,9 +21,11 @@ describe('Query', function() {
     nodeTests(function() {
       let query = new Query();
       query.matchNode.apply(query, arguments);
-      let queryObj = query.build();
-      queryObj.query = queryObj.query.substring(6);
-      return queryObj;
+      let { query: queryString, params } = query.buildQueryObject();
+      return {
+        query: queryString.substring(6),
+        params,
+      };
     });
   });
 
@@ -30,7 +33,7 @@ describe('Query', function() {
     matchTests(function() {
       let query = new Query();
       query.match.apply(query, arguments);
-      return query.build();
+      return query.buildQueryObject();
     });
   });
 
@@ -38,9 +41,11 @@ describe('Query', function() {
     nodeTests(function() {
       let query = new Query();
       query.createNode.apply(query, arguments);
-      let queryObj = query.build();
-      queryObj.query = queryObj.query.substring(7);
-      return queryObj;
+      let { query: queryString, params } = query.buildQueryObject();
+      return {
+        query: queryString.substring(7),
+        params,
+      };
     });
   });
 
@@ -48,7 +53,7 @@ describe('Query', function() {
     createTests(function() {
       let query = new Query();
       query.create.apply(query, arguments);
-      return query.build();
+      return query.buildQueryObject();
     });
   });
 
@@ -56,7 +61,7 @@ describe('Query', function() {
     returnTests(function() {
       let query = new Query();
       query.ret.apply(query, arguments);
-      return query.build();
+      return query.buildQueryObject();
     });
   });
 
@@ -66,29 +71,4 @@ describe('Query', function() {
       expect(query.run()).to.be.rejectedWith(Error, 'no connection object available');
     });
   });
-
-  // describe.skip('#toString', function() {
-  //   it('should join each of the segments with new lines', function() {
-  //     let query = new Query([
-  //       new TestSegment('a'),
-  //       new TestSegment('b'),
-  //       new TestSegment('c')
-  //     ]);
-  //     expect(query.toString()).to.equal('a\nb\nc');
-  //   });
-  // });
-
-  // describe('#addClause', function() {
-  //   it('should append a new clause to the end of the list', function() {
-  //     let query = new Query([
-  //       new TestSegment('a'),
-  //       new TestSegment('b'),
-  //       new TestSegment('c')
-  //     ]);
-  //     expect(query.toString()).to.equal('a\nb\nc');
-  //   });
-  // });
-
-
-
 });

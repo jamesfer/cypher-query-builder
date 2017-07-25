@@ -4,6 +4,6 @@ const { construct } = require('../utils');
 
 describe('PatternClause', function() {
   describe('#build', function() {
-    patternClauseTests(() => (construct(PatternClause)()).buildQueryObject(), '');
+    patternClauseTests(construct(PatternClause, s => s.buildQueryObject()), '');
   });
 });
