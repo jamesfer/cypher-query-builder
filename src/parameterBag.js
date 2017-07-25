@@ -53,7 +53,7 @@ class ParameterBag {
 	 * @return {object}
 	 */
 	getParams(){
-		return _.fromPairs(_.map(this.parameters, (param) => {
+		return _.fromPairs(_.map(this.parameters, param => {
 			return [param.name, param.value]
 		}));
 	}

@@ -5,6 +5,6 @@ const { construct } = require('../utils');
 
 describe('Match', function() {
   describe('#build', function() {
-    matchTests(() => (construct(Match)()).buildQueryObject());
+    matchTests(construct(Match, s => s.buildQueryObject()));
   });
 });

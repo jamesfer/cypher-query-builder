@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const expect = require('chai').expect;
 const Relation = require('./relation');
 
@@ -76,7 +77,7 @@ describe('Relation', function() {
       let rel = new Relation('either', 'f', ['FriendsWith', 'WorksWith'], {recent: true, years: 7}, [2, 3]);
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('-[f:FriendsWith:WorksWith*2..3 {recent: true, years: 7}]-');
+      expect(queryObj.query).to.match(/^-\[f:FriendsWith:WorksWith\*2\.\.3 \{ recent: \$[a-zA-Z0-9-_]+, years: \$[a-zA-Z0-9-_]+ \}\]-$/);
       expect(_.keys(queryObj.params)).to.have.length(2);
       expect(_.values(queryObj.params)).to.have.members([true, 7]);});
   });

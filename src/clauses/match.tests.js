@@ -23,6 +23,6 @@ module.exports = function(makeMatch) {
       optional: true
     });
     expect(match.query).to.equal('OPTIONAL MATCH abc');
-    expect(match.params).to.be.empty();
+    expect(match.params).to.be.empty;
   });
 }
