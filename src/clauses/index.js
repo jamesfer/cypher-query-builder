@@ -6,6 +6,7 @@ const Create = require('./create');
 const Return = require('./return');
 const With = require('./with');
 const Unwind = require('./unwind');
+const Delete = require('./delete');
 
 module.exports = {
   node: construct(Node),
@@ -15,4 +16,9 @@ module.exports = {
   ret: construct(Return),
   withVars: construct(With),
   unwind: construct(Unwind),
+  delete: construct(Delete),
+  detachDelete: construct(Delete, d => {
+    d.detach = true;
+    return d;
+  }),
 };
