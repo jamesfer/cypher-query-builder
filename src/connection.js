@@ -85,6 +85,7 @@ class Connection {
 [
   'matchNode',
   'match',
+  'optionalMatch',
   'createNode',
   'create',
   'ret',
