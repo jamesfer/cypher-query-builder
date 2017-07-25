@@ -4,7 +4,7 @@
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/*.spec.js src/**/*.spec.js"
+    "test": "nyc --reporter=html --reporter=text mocha src/*.spec.js src/**/*.spec.js"
   },
   "keywords": [
     "cypher",
@@ -22,6 +22,16 @@
   },
   "devDependencies": {
     "chai": "^4.0.2",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.3"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "src/**/*.spec.js",
+      "src/**/*.tests.js"
+    ]
   }
 }
