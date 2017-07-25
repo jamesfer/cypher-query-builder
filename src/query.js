@@ -1,4 +1,4 @@
-const { match, node, create, ret, unwind, withVars } = require('./clauses');
+const clauses = require('./clauses');
 const Statement = require('./statement');
 
 class Query extends Statement {
@@ -8,31 +8,39 @@ class Query extends Statement {
   }
 
   matchNode(varName, labels = [], clauses = {}) {
-    return this.addStatement(match(node(varName, labels, clauses)));
+    return this.addStatement(clauses.match(clauses.node(varName, labels, clauses)));
   }
 
   match(patterns, settings) {
-    return this.addStatement(match(patterns, settings));
+    return this.addStatement(clauses.match(patterns, settings));
   }
 
   createNode(varName, labels = [], clauses = {}) {
-    return this.addStatement(create(node(varName, labels, clauses)));
+    return this.addStatement(clauses.create(clauses.node(varName, labels, clauses)));
   }
 
   create(patterns) {
-    return this.addStatement(create(patterns));
+    return this.addStatement(clauses.create(patterns));
   }
 
   ret(terms) {
-    return this.addStatement(ret(terms));
+    return this.addStatement(clauses.ret(terms));
   }
 
   with(terms) {
-    return this.addStatement(withVars(terms));
+    return this.addStatement(clauses.withVars(terms));
   }
 
   unwind(list, name) {
-    return this.addStatement(unwind(list, name));
+    return this.addStatement(clauses.unwind(list, name));
+  }
+
+  delete(terms) {
+    return this.addStatement(clauses.delete(terms));
+  }
+
+  detachDelete(terms) {
+    return this.addStatement(clauses.detachDelete(terms));
   }
 
 

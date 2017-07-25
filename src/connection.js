@@ -90,6 +90,8 @@ class Connection {
   'ret',
   'with',
   'unwind',
+  'delete',
+  'detachDelete',
 ].forEach(name => {
   Connection.prototype[name] = function () {
     return Query.prototype[name].apply(this.query(), arguments);
