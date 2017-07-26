@@ -5,6 +5,7 @@ const utils = require('../utils');
 
 class Set extends Statement {
   constructor({ labels, values, variables }, { overrideVariables }) {
+    super();
     this.labels = _.mapValues(label => _.concat([], label));
     this.values = values;
     this.variables = variables;
