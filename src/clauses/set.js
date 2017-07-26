@@ -4,7 +4,10 @@ const ParameterBag = require('../parameterBag');
 const utils = require('../utils');
 
 class Set extends Statement {
-  constructor({ labels, values, variables }, { overrideVariables }) {
+  constructor(
+    { labels = {}, values = {}, variables = {} },
+    { overrideVariables }
+  ) {
     super();
     this.labels = _.mapValues(label => _.concat([], label));
     this.values = values;
@@ -13,7 +16,9 @@ class Set extends Statement {
   }
 
   build(parameterBag = new ParameterBag()) {
-    let labelString = utils.stringifyLabels(this.labels);
+    let labelString = _.map(this.labels, (labels, key) => {
+      return key + utils.stringifyLabels(labels)
+    });
     let valuesString = _.map(this.values, (value, key) => {
       return key + ' = ' + parameterBag.addParam(value).toString();
     });
@@ -21,12 +26,12 @@ class Set extends Statement {
       return key + (this.overrideVariables ? ' = ' : ' += ') + value;
     }));
 
-    return _.join(_.concat(
+    return 'SET ' + _.join(_.concat(
       [],
       labelString,
       valuesString,
       variablesString
-    ));
+    ), ', ');
   }
 }
 
