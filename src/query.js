@@ -11,11 +11,11 @@ class Query extends Statement {
     return this.addStatement(clauses.match(clauses.node(varName, labels, conditions)));
   }
 
-  match(patterns, settings) {
+  match(patterns, settings = {}) {
     return this.addStatement(clauses.match(patterns, settings));
   }
 
-  optionalMatch(patterns, settings) {
+  optionalMatch(patterns, settings = {}) {
     return this.addStatement(clauses.match(patterns, Object.assign(settings, {
       optional: true,
     })));
@@ -45,7 +45,7 @@ class Query extends Statement {
     return this.addStatement(clauses.delete(terms));
   }
 
-  detachDelete(terms, settings) {
+  detachDelete(terms, settings = {}) {
     return this.addStatement(clauses.delete(terms, Object.assign(settings, {
       detach: true,
     })));
