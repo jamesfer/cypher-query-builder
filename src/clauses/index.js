@@ -18,5 +18,5 @@ module.exports = {
   withVars: construct(With),
   unwind: construct(Unwind),
   delete: construct(Delete),
-  set: construct(Set);
+  set: construct(Set),
 };

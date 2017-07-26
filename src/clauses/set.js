@@ -18,7 +18,7 @@ class Set extends Statement {
     });
     let variablesString = _.join(_.map(this.variables, (value, key) => {
       return key + (this.overrideVariables ? ' = ' : ' += ') + value;
-    });
+    }));
 
     return _.join(_.concat(
       [],
