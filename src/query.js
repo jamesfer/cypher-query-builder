@@ -45,6 +45,25 @@ class Query extends Statement {
     return this.addStatement(clauses.delete(terms));
   }
 
+  set(values, settings) {
+    return this.addStatement(clauses.set(values, settings));
+  }
+
+  setLabels(labels) {
+    return this.addStatement(clauses.set({ labels }));
+  }
+
+  setValues(values) {
+    return this.addStatement(clauses.set({ values }));
+  }
+
+  setVariables(variables, overrideVariables) {
+    return this.addStatement(clauses.set(
+      { variables },
+      { overrideVariables }
+    ));
+  }
+
   detachDelete(terms, settings = {}) {
     return this.addStatement(clauses.delete(terms, Object.assign(settings, {
       detach: true,

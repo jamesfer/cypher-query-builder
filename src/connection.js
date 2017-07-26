@@ -93,6 +93,10 @@ class Connection {
   'unwind',
   'delete',
   'detachDelete',
+  'set',
+  'setLabels',
+  'setValues',
+  'setVariables',
 ].forEach(name => {
   Connection.prototype[name] = function () {
     return Query.prototype[name].apply(this.query(), arguments);
