@@ -7,6 +7,7 @@ const Return = require('./return');
 const With = require('./with');
 const Unwind = require('./unwind');
 const Delete = require('./delete');
+const Set = require('./set');
 
 module.exports = {
   node: construct(Node),
@@ -17,4 +18,5 @@ module.exports = {
   withVars: construct(With),
   unwind: construct(Unwind),
   delete: construct(Delete),
+  set: construct(Set);
 };
