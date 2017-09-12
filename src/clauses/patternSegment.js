@@ -25,7 +25,7 @@ class PatternSegment extends Statement {
     }
 
     let str = _.join(_.map(this.conditions, (value, key) => {
-      return `${key}: ${parameterBag.addParam(value).toString()}`;
+      return `${key}: $${parameterBag.addParam(value)}`;
     }), ', ');
     return str.length ? '{ ' + str + ' }' : '';
   }

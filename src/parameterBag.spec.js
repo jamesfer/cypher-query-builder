@@ -11,12 +11,11 @@ describe('ParameterBag', function() {
 
   describe('#getName', function() {
     it('should return unique names', function() {
-      let names = [];
-      for (let i = 0; i < 10; i++) {
-        let name = parameterBag.getName();
-        expect(names).to.not.contain(name);
-        names.push(name);
-      }
+      parameterBag.addParam('1', 'name');
+      parameterBag.addParam('2', 'name2');
+      parameterBag.addParam('3', 'name3');
+      expect(parameterBag.getName()).to.equal('p');
+      expect(parameterBag.getName('name')).to.equal('name4');
     });
   });
 
@@ -46,9 +45,8 @@ describe('ParameterBag', function() {
 
   describe('#addParam', function() {
     it('should create and add a parameter to the bag', function() {
-      let param = parameterBag.addParam('value', 'name');
-      expect(param.name).to.equal('name');
-      expect(param.value).to.equal('value');
+      let paramName = parameterBag.addParam('value', 'name');
+      expect(paramName).to.equal('name');
       expect(parameterBag.getParams()).to.have.property('name', 'value');
     });
 

@@ -1,49 +1,29 @@
 const _ = require('lodash');
-
-class Parameter {
-  constructor(name, value) {
-    this.name = name;
-    this.value = value;
-  }
-
-  setName(name) {
-    this.name = name;
-  }
-
-  toString() {
-    return '$' + this.name;
-  }
-}
+const utils = require('./utils');
 
 class ParameterBag {
   constructor() {
-    this.count = 0;
-    this.parameters = [];
-    // this.parent = null;
+    this.parameters = {};
   }
 
   /**
    * Constructs a unique name for this parameter bag.
    * @return {string}
    */
-  getName() {
-    this.count += 1;
-    return 'p' + this.count;
+  getName(name = 'p') {
+    return utils.uniqueString(name, _.keys(this.parameters));
   }
 
   /**
-   * Adds a new parameter to this bag. If this bag has a parent, it will also
-   * be added to the parent.
+   * Adds a new parameter to this bag.
    * @param {*} value
-   * @param {string} [name=null]
+   * @param {string?} name
+   * @return {string} Actual name of the parameter.
    */
-  addParam(value, name = null) {
-    if (!name) {
-      name = this.getName();
-    }
-    let param = new Parameter(name, value);
-    this.parameters.push(param);
-    return param;
+  addParam(value, name = undefined) {
+    name = this.getName(name);
+    this.parameters[name] = value;
+    return name;
   }
 
   /**
@@ -52,12 +32,8 @@ class ParameterBag {
    * @return {object}
    */
   getParams(){
-    return _.reduce(this.parameters, (obj, param) => {
-      obj[param.name] = param.value;
-      return obj;
-    }, {});
+    return this.parameters;
   }
 }
 
 module.exports = ParameterBag;
-module.exports.Parameter = Parameter;
