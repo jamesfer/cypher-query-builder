@@ -15,6 +15,14 @@ class Statement {
   }
 
   /**
+   * Turns the statement into a query string.
+   * @return {string} Partial query string.
+   */
+  toString() {
+    return this.build();
+  }
+
+  /**
    * Turns the statement into a query object.
    * @return {object} Query object with two parameters: query and params.
    */
