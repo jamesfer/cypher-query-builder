@@ -1,4 +1,5 @@
 # Cypher Query Builder
+![Build Status](https://travis-ci.org/jamesfer/cypher-query-builder.svg?branch=master)
 
 A flexible and intuitive query builder for Neo4j and Cypher. 
 Write queries in Javascript just as you would write them in Cypher.
