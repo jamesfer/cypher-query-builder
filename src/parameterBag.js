@@ -52,9 +52,10 @@ class ParameterBag {
    * @return {object}
    */
   getParams(){
-    return _.fromPairs(_.map(this.parameters, param => {
-      return [param.name, param.value]
-    }));
+    return _.reduce(this.parameters, (obj, param) => {
+      obj[param.name] = param.value;
+      return obj;
+    }, {});
   }
 }
 
