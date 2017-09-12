@@ -38,11 +38,10 @@ class ParameterBag {
    * @param {string} [name=null]
    */
   addParam(value, name = null) {
-    let param = null;
     if (!name) {
       name = this.getName();
     }
-    param = new Parameter(name, value);
+    let param = new Parameter(name, value);
     this.parameters.push(param);
     return param;
   }
