@@ -1,11 +1,12 @@
 language: node_js
+git:
+  depth: 3
+notifications:
+  email: false
 node_js:
   - "node"
   - "8"
-git:
-  depth: 3
 cache:
   yarn: true
   directories:
     - "node_modules"
-
