@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const PatternClause = require('./patternClause');
+const PatternClause = require('./patternStatement');
 const ParameterBag = require('../parameterBag');
 
 class Create extends PatternClause {
