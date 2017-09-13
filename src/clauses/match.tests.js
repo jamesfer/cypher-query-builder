@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const patternClauseTests = require('./patternStatement.tests');
+const patternStatementTests = require('./patternStatement.tests');
 
 module.exports = function(makeMatch) {
   class TestClause {
@@ -12,7 +12,7 @@ module.exports = function(makeMatch) {
     }
   }
 
-  patternClauseTests(makeMatch, 'MATCH ');
+  patternStatementTests(makeMatch, 'MATCH ');
 
   it('should prefix optional', function() {
     let match = makeMatch([

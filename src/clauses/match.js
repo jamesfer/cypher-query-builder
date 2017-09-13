@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const PatternClause = require('./patternStatement');
+const PatternStatement = require('./patternStatement');
 const ParameterBag = require('../parameterBag');
 
-class Match extends PatternClause {
+class Match extends PatternStatement {
   constructor(patterns, settings = {}) {
     super(patterns);
     settings = _.assign({
