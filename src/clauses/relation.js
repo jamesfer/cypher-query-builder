@@ -1,9 +1,9 @@
 const _ = require('lodash');
-const PatternSegment = require('./pattern')
+const Pattern = require('./pattern')
 const utils = require('../utils');
 const ParameterBag = require('../parameterBag');
 
-class Relation extends PatternSegment {
+class Relation extends Pattern {
   constructor(dir, name = '', labels = [], conditions = {}, length = null) {
     super(name, labels, conditions);
     this.dir = dir;
