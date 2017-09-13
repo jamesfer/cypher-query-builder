@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const PatternSegment = require('./patternSegment')
+const PatternSegment = require('./pattern')
 const utils = require('../utils');
 const ParameterBag = require('../parameterBag');
 

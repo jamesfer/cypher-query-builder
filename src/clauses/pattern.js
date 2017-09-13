@@ -2,8 +2,7 @@ const _ = require('lodash');
 const Statement = require('../statement');
 const utils = require('../utils');
 
-// TODO rename to pattern clause
-class PatternSegment extends Statement {
+class Pattern extends Statement {
   constructor(name, labels = [], conditions = {}) {
     super();
     this.name = name;
@@ -31,4 +30,4 @@ class PatternSegment extends Statement {
   }
 }
 
-module.exports = PatternSegment;
+module.exports = Pattern;

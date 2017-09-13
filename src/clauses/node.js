@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const PatternSegment = require('./patternSegment');
+const PatternSegment = require('./pattern');
 const ParameterBag = require('../parameterBag');
 
 class Node extends PatternSegment {
