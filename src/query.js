@@ -29,8 +29,8 @@ class Query extends Statement {
     return this.addStatement(clauses.create(patterns));
   }
 
-  ret(terms) {
-    return this.addStatement(clauses.ret(terms));
+  return(terms) {
+    return this.addStatement(clauses.return(terms));
   }
 
   with(terms) {
