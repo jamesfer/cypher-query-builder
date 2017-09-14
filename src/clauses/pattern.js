@@ -9,6 +9,11 @@ class Pattern extends Statement {
     this.labels = _.concat([], labels);
     this.conditions = conditions;
     this.useExpandedConditions = true;
+
+    this.expandedConditionParams = _.mapValues(conditions, (value, name) => {
+      return this.parameterBag.addParam(value, name);
+    });
+    this.condensedConditionParam = this.parameterBag.addParam(conditions, 'conditions');
   }
 
   setExpandedConditions(expanded) {
@@ -23,19 +28,19 @@ class Pattern extends Statement {
     return utils.stringifyLabels(this.labels);
   }
 
-  getConditionsParamString(parameterBag) {
+  getConditionsParamString() {
     if (_.isEmpty(this.conditions)) {
       return '';
     }
 
     if (this.useExpandedConditions) {
-      let str = _.join(_.map(this.conditions, (value, key) => {
-        return `${key}: $${parameterBag.addParam(value)}`;
+      let str = _.join(_.map(this.expandedConditionParams, (value, key) => {
+        return `${key}: ${value}`;
       }), ', ');
-      return str.length ? '{ ' + str + ' }' : '';
+      return '{ ' + str + ' }';
     }
     else {
-      return '$' + parameterBag.addParam(this.conditions);
+      return this.condensedConditionParam.toString();
     }
   }
 }

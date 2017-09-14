@@ -1,8 +1,9 @@
 const _ = require('lodash');
-const ParameterBag = require('./parameterBag')
+const ParameterContainer = require('./parameterContainer');
 
-class Statement {
+class Statement extends ParameterContainer {
   constructor(statements = []) {
+    super();
     this.statements = statements;
   }
 
@@ -10,8 +11,8 @@ class Statement {
    * Turns the statement into a query string.
    * @return {string} Partial query string.
    */
-  build(parameterBag = new ParameterBag()) {
-    return _.join(_.map(this.statements, s => s.build(parameterBag)), '\n');
+  build() {
+    return _.join(_.map(this.statements, s => s.build()), '\n');
   }
 
   /**
@@ -27,11 +28,9 @@ class Statement {
    * @return {object} Query object with two parameters: query and params.
    */
   buildQueryObject() {
-    let parameterBag = new ParameterBag();
-    let obj = this.build(parameterBag);
     return {
-      query: obj,
-      params: parameterBag.getParams(),
+      query: this.build(),
+      params: this.getParams(),
     }
   }
 

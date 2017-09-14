@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const Statement = require('../statement');
-const ParameterBag = require('../parameterBag');
 
 class PatternStatement extends Statement {
   constructor(patterns, options) {
@@ -32,9 +31,9 @@ class PatternStatement extends Statement {
     });
   }
 
-  build(parameterBag = new ParameterBag()) {
+  build() {
     return _.join(_.map(this.patterns, pattern => {
-      return _.join(_.map(pattern, clause => clause.build(parameterBag)), '');
+      return _.join(_.map(pattern, clause => clause.build()), '');
     }), ', ');
   }
 }

@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const Statement = require('../statement');
-const ParameterBag = require('../parameterBag');
 const utils = require('../utils');
 
 class Set extends Statement {
@@ -9,18 +8,20 @@ class Set extends Statement {
     { overrideVariables }
   ) {
     super();
-    this.labels = _.mapValues(label => _.concat([], label));
-    this.values = values;
+    this.labels = _.mapValues(_.castArray);
+    this.values = _.mapValues(values, (value, name) => {
+      return this.parameterBag.addParam(value, name);
+    });
     this.variables = variables;
     this.overrideVariables = overrideVariables;
   }
 
-  build(parameterBag = new ParameterBag()) {
+  build() {
     let labelString = _.map(this.labels, (labels, key) => {
       return key + utils.stringifyLabels(labels)
     });
     let valuesString = _.map(this.values, (value, key) => {
-      return key + ' = ' + parameterBag.addParam(value).toString();
+      return key + ' = ' + value;
     });
     let variablesString = _.join(_.map(this.variables, (value, key) => {
       return key + (this.overrideVariables ? ' = ' : ' += ') + value;
