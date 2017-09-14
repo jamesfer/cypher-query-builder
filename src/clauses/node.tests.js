@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const expect = require('chai').expect;
 
-module.exports = function(makeNode) {
+module.exports = function(makeNode, expanded = true) {
   it('should build a node pattern with a variable name', function() {
     let queryObj = makeNode('person');
     expect(queryObj.query).to.equal('(person)');
@@ -21,20 +21,38 @@ module.exports = function(makeNode) {
   });
 
   it('should build a node pattern with conditions', function() {
-    let queryObj = makeNode('person', [], { name: 'Steve', active: true });
-    expect(queryObj.query).to.match(/^\(person \{ name: \$[a-zA-Z0-9-_]+, active: \$[a-zA-Z0-9-_]+ \}\)$/);
-    expect(_.keys(queryObj.params)).to.have.length(2);
-    expect(_.values(queryObj.params)).to.have.members(['Steve', true]);
+    let conditions = { name: 'Steve', active: true };
+    let queryObj = makeNode('person', [], conditions);
+
+    if (expanded) {
+      expect(queryObj.query).to.match(/^\(person \{ name: \$[a-zA-Z0-9-_]+, active: \$[a-zA-Z0-9-_]+ \}\)$/);
+      expect(_.keys(queryObj.params)).to.have.length(2);
+      expect(_.values(queryObj.params)).to.have.members(['Steve', true]);
+    }
+    else {
+      expect(queryObj.query).to.match(/^\(person \$[a-zA-Z0-9-_]+\)$/);
+      expect(_.keys(queryObj.params)).to.have.length(1);
+      expect(_.values(queryObj.params)).to.have.members([conditions]);
+    }
   });
 
   it('should build a complete node pattern', function() {
+    let conditions = { name: 'Steve', active: true };
     let queryObj = makeNode(
       'person',
       ['Person', 'Staff', 'Female'],
-      { name: 'Steve', active: true }
+      conditions
     );
-    expect(queryObj.query).to.match(/^\(person:Person:Staff:Female \{ name: \$[a-zA-Z0-9-_]+, active: \$[a-zA-Z0-9-_]+ \}\)$/);
-    expect(_.keys(queryObj.params)).to.have.length(2);
-    expect(_.values(queryObj.params)).to.have.members(['Steve', true]);
+
+    if (expanded) {
+      expect(queryObj.query).to.match(/^\(person:Person:Staff:Female \{ name: \$[a-zA-Z0-9-_]+, active: \$[a-zA-Z0-9-_]+ \}\)$/);
+      expect(_.keys(queryObj.params)).to.have.length(2);
+      expect(_.values(queryObj.params)).to.have.members(['Steve', true]);
+    }
+    else {
+      expect(queryObj.query).to.match(/^\(person:Person:Staff:Female \$[a-zA-Z0-9-_]+\)$/);
+      expect(_.keys(queryObj.params)).to.have.length(1);
+      expect(_.values(queryObj.params)).to.have.members([conditions]);
+    }
   });
 }

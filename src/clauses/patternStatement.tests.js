@@ -1,9 +1,11 @@
 const _ = require('lodash');
 const expect = require('chai').expect;
+const PatternSegment = require('./patternSegment');
 
 module.exports = function(makePattern, prefix) {
-  class TestStatement {
+  class TestStatement extends PatternSegment {
     constructor(query, params= {}) {
+      super('');
       this.query = query;
       this.params = params;
     }

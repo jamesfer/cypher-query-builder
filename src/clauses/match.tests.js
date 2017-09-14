@@ -1,9 +1,11 @@
 const expect = require('chai').expect;
+const PatternStatment = require('./patternStatement');
 const patternStatementTests = require('./patternStatement.tests');
 
 module.exports = function(makeMatch) {
-  class TestClause {
+  class TestClause extends PatternStatement {
     constructor(str) {
+      super('');
       this.str = str;
     }
 
