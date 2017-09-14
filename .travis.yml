@@ -4,7 +4,6 @@ git:
 notifications:
   email: false
 node_js:
-  - "node"
   - "8"
 cache:
   yarn: true
