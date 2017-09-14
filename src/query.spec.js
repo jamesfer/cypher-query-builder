@@ -46,7 +46,7 @@ describe('Query', function() {
         query: queryString.substring(7),
         params,
       };
-    });
+    }, false);
   });
 
   describe('#create', function() {
@@ -57,10 +57,10 @@ describe('Query', function() {
     });
   });
 
-  describe('#ret', function() {
+  describe('#return', function() {
     returnTests(function() {
       let query = new Query();
-      query.ret.apply(query, arguments);
+      query.return.apply(query, arguments);
       return query.buildQueryObject();
     });
   });

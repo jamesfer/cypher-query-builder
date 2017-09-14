@@ -1,10 +1,14 @@
 const _ = require('lodash');
-const Statement = require('../statement')
+const Statement = require('../statement');
 const ParameterBag = require('../parameterBag');
 
 class PatternStatement extends Statement {
-  constructor(patterns) {
+  constructor(patterns, options) {
     super();
+
+    options = _.assign({
+      useExpandedConditions: true,
+    }, options);
 
     // Ensure patterns is a two dimensional array.
     if (_.isArray(patterns)) {
@@ -22,6 +26,7 @@ class PatternStatement extends Statement {
     // Add child patterns as statements
     this.patterns.forEach(patternArray => {
       patternArray.forEach(pattern => {
+        pattern.setExpandedConditions(options.useExpandedConditions);
         this.addStatement(pattern);
       });
     });

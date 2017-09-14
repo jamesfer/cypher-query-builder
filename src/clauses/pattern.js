@@ -8,6 +8,11 @@ class Pattern extends Statement {
     this.name = name;
     this.labels = _.concat([], labels);
     this.conditions = conditions;
+    this.useExpandedConditions = true;
+  }
+
+  setExpandedConditions(expanded) {
+    this.useExpandedConditions = expanded;
   }
 
   getNameString() {
@@ -23,10 +28,15 @@ class Pattern extends Statement {
       return '';
     }
 
-    let str = _.join(_.map(this.conditions, (value, key) => {
-      return `${key}: $${parameterBag.addParam(value)}`;
-    }), ', ');
-    return str.length ? '{ ' + str + ' }' : '';
+    if (this.useExpandedConditions) {
+      let str = _.join(_.map(this.conditions, (value, key) => {
+        return `${key}: $${parameterBag.addParam(value)}`;
+      }), ', ');
+      return str.length ? '{ ' + str + ' }' : '';
+    }
+    else {
+      return '$' + parameterBag.addParam(this.conditions);
+    }
   }
 }
 
