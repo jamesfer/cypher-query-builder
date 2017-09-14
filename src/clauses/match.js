@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const PatternStatement = require('./patternStatement');
-const ParameterBag = require('../parameterBag');
 
 class Match extends PatternStatement {
   constructor(patterns, settings = {}) {
@@ -11,12 +10,12 @@ class Match extends PatternStatement {
     this.optional = settings.optional;
   }
 
-  build(parameterBag = new ParameterBag()) {
+  build() {
     let str = 'MATCH ';
     if (this.optional) {
       str = 'OPTIONAL ' + str;
     }
-    return str + super.build(parameterBag);
+    return str + super.build();
   }
 }
 module.exports = Match;

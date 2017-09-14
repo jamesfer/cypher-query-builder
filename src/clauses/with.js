@@ -10,8 +10,8 @@ class With extends TermListClause {
     super(terms);
   }
 
-  build(parameterBag = new ParameterBag()) {
-    return 'WITH ' + super.build(parameterBag);
+  build() {
+    return 'WITH ' + super.build();
   }
 }
 
