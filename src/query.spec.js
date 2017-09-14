@@ -46,7 +46,7 @@ describe('Query', function() {
         query: queryString.substring(7),
         params,
       };
-    });
+    }, false);
   });
 
   describe('#create', function() {
