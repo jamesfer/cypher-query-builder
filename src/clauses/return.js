@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const TermListClause = require('./termListClause');
+const TermListClause = require('./termListStatement');
 const ParameterBag = require('../parameterBag');
 
 class Return extends TermListClause {

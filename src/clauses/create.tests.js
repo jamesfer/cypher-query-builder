@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-const patternClauseTests = require('./patternClause.tests');
+const patternStatementTests = require('./patternStatement.tests');
 
 module.exports = function(makeCreateString) {
-  patternClauseTests(makeCreateString, 'CREATE ');
+  patternStatementTests(makeCreateString, 'CREATE ');
 }

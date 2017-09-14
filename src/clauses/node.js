@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const PatternSegment = require('./patternSegment');
+const Pattern = require('./pattern');
 const ParameterBag = require('../parameterBag');
 
-class Node extends PatternSegment {
+class Node extends Pattern {
   constructor(name, labels = [], conditions = {}) {
     super(name, labels, conditions);
   }

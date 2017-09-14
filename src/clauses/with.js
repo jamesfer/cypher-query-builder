@@ -1,4 +1,4 @@
-const TermListClause = require('./termListClause');
+const TermListClause = require('./termListStatement');
 const ParameterBag = require('../parameterBag');
 
 class With extends TermListClause {

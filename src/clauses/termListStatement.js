@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Statement = require('../statement')
 const ParameterBag = require('../parameterBag');
 
-class TermListClause extends Statement {
+class TermListStatement extends Statement {
   constructor(terms) {
     super();
 
@@ -44,4 +44,4 @@ class TermListClause extends Statement {
   }
 }
 
-module.exports = TermListClause;
+module.exports = TermListStatement;
