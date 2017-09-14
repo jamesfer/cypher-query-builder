@@ -88,7 +88,7 @@ class Connection {
   'optionalMatch',
   'createNode',
   'create',
-  'ret',
+  'return',
   'with',
   'unwind',
   'delete',
