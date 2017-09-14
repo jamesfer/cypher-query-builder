@@ -15,7 +15,7 @@ module.exports = {
   match: construct(Match),
   create: construct(Create),
   return: construct(Return),
-  withVars: construct(With),
+  with: construct(With),
   unwind: construct(Unwind),
   delete: construct(Delete),
   set: construct(Set),
