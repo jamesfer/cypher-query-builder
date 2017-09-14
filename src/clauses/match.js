@@ -4,7 +4,7 @@ const ParameterBag = require('../parameterBag');
 
 class Match extends PatternClause {
   constructor(patterns, settings = {}) {
-    super(patterns);
+    super(patterns, { useExpandedConditions: true });
     settings = _.assign({
       optional: false,
     }, settings);
