@@ -4,7 +4,7 @@ const ParameterBag = require('../parameterBag');
 
 class Create extends PatternClause {
   constructor(patterns) {
-    super(patterns);
+    super(patterns, { useExpandedConditions: false });
   }
 
   build(parameterBag = new ParameterBag()) {
