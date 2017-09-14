@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
-const PatternSegment = require('./patternSegment');
-const patternClauseTests = require('./patternClause.tests');
+const Pattern = require('./pattern');
+const patternStatementTests = require('./patternStatement.tests');
 
 module.exports = function(makeMatch) {
-  class TestClause extends PatternSegment {
+  class TestClause extends Pattern {
     constructor(str) {
       super('');
       this.str = str;
@@ -14,7 +14,7 @@ module.exports = function(makeMatch) {
     }
   }
 
-  patternClauseTests(makeMatch, 'MATCH ');
+  patternStatementTests(makeMatch, 'MATCH ');
 
   it('should prefix optional', function() {
     let match = makeMatch([

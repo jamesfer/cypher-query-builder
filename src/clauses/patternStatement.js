@@ -2,8 +2,7 @@ const _ = require('lodash');
 const Statement = require('../statement');
 const ParameterBag = require('../parameterBag');
 
-// TODO rename to pattern statement
-class PatternClause extends Statement {
+class PatternStatement extends Statement {
   constructor(patterns, options) {
     super();
 
@@ -39,4 +38,4 @@ class PatternClause extends Statement {
     }), ', ');
   }
 }
-module.exports = PatternClause;
+module.exports = PatternStatement;
