@@ -6,64 +6,35 @@ const createTests = require('./clauses/create.tests');
 const returnTests = require('./clauses/return.tests');
 
 describe('Query', function() {
+  function makeQuery(builder, start = 0, end = 0) {
+    let queryObj = builder(new Query()).buildQueryObject();
+    if (end <= 0) {
+      end += queryObj.query.length;
+    }
+    return {
+      query: queryObj.query.substring(start, end),
+      params: queryObj.params,
+    };
+  }
+
   describe('#matchNode', function() {
-    nodeTests(function() {
-      let query = new Query();
-      query.matchNode.apply(query, arguments);
-      let { query: queryString, params } = query.buildQueryObject();
-      return {
-        query: queryString.substring(6, queryString.length - 1),
-        params,
-      };
-    });
+    nodeTests((...args) => makeQuery(q => q.matchNode(...args), 6, -1));
   });
 
   describe('#match', function() {
-    matchTests(function() {
-      let query = new Query();
-      query.match.apply(query, arguments);
-      let { query: queryString, params } = query.buildQueryObject();
-      return {
-        query: queryString.substring(0, queryString.length - 1),
-        params,
-      };
-    });
+    matchTests((...args) => makeQuery(q => q.match(...args), 0, -1));
   });
 
   describe('#createNode', function() {
-    nodeTests(function() {
-      let query = new Query();
-      query.createNode.apply(query, arguments);
-      let { query: queryString, params } = query.buildQueryObject();
-      return {
-        query: queryString.substring(7, queryString.length - 1),
-        params,
-      };
-    }, false);
+    nodeTests((...args) => makeQuery(q => q.createNode(...args), 7, -1), false);
   });
 
   describe('#create', function() {
-    createTests(function() {
-      let query = new Query();
-      query.create.apply(query, arguments);
-      let { query: queryString, params } = query.buildQueryObject();
-      return {
-        query: queryString.substring(0, queryString.length - 1),
-        params,
-      };
-    });
+    createTests((...args) => makeQuery(q => q.create(...args), 0, -1));
   });
 
   describe('#return', function() {
-    returnTests(function() {
-      let query = new Query();
-      query.return.apply(query, arguments);
-      let { query: queryString, params } = query.buildQueryObject();
-      return {
-        query: queryString.substring(0, queryString.length - 1),
-        params,
-      };
-    });
+    returnTests((...args) => makeQuery(q => q.return(...args), 0, -1));
   });
 
   describe('#run', function() {
