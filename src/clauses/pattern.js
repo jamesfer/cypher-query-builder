@@ -1,23 +1,50 @@
 const _ = require('lodash');
 const Statement = require('../statement');
 const utils = require('../utils');
+const Parameter = require('../parameterBag').Parameter;
 
 class Pattern extends Statement {
-  constructor(name, labels = [], conditions = {}) {
+  constructor(name, labels = [], conditions = {}, { expanded = true } = {}) {
     super();
     this.name = name;
     this.labels = _.concat([], labels);
     this.conditions = conditions;
-    this.useExpandedConditions = true;
-
-    this.expandedConditionParams = _.mapValues(conditions, (value, name) => {
-      return this.parameterBag.addParam(value, name);
-    });
-    this.condensedConditionParam = this.parameterBag.addParam(conditions, 'conditions');
+    this.conditionParams = {};
+    this.setExpandedConditions(expanded);
   }
 
   setExpandedConditions(expanded) {
-    this.useExpandedConditions = expanded;
+    if (this.useExpandedConditions !== expanded) {
+      this.useExpandedConditions = expanded;
+      this.rebindConditionParams();
+    }
+  }
+
+  rebindConditionParams() {
+    // Delete old bindings
+    if (this.conditionParams instanceof Parameter) {
+      this.parameterBag.deleteParam(this.conditionParams.name);
+    }
+    else {
+      _.each(this.conditionParams, param => {
+        this.parameterBag.deleteParam(param.name);
+      });
+    }
+
+    // Rebind params
+    if (!_.isEmpty(this.conditions)) {
+      if (this.useExpandedConditions) {
+        this.conditionParams = _.mapValues(this.conditions, (value, name) => {
+          return this.parameterBag.addParam(value, name);
+        });
+      }
+      else {
+        this.conditionParams = this.parameterBag.addParam(this.conditions, 'conditions');
+      }
+    }
+    else {
+      this.conditionParams = {};
+    }
   }
 
   getNameString() {
@@ -34,14 +61,12 @@ class Pattern extends Statement {
     }
 
     if (this.useExpandedConditions) {
-      let str = _.join(_.map(this.expandedConditionParams, (value, key) => {
-        return `${key}: ${value}`;
+      let str = _.join(_.map(this.conditionParams, (param, name) => {
+        return `${name}: ${param}`;
       }), ', ');
       return '{ ' + str + ' }';
     }
-    else {
-      return this.condensedConditionParam.toString();
-    }
+    return this.conditionParams.toString();
   }
 }
 

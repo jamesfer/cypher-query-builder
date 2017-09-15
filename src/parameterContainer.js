@@ -6,9 +6,8 @@ class ParameterContainer {
   }
 
   useParameterBag(newBag) {
-    let existingParams = this.parameterBag.getParams();
-    for (let key in existingParams) {
-      newBag.addParam(existingParams[key], key);
+    for (let key in this.parameterBag.parameterMap) {
+      newBag.addExistingParam(this.parameterBag.parameterMap[key]);
     }
     this.parameterBag = newBag;
   }
