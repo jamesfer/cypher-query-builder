@@ -2,9 +2,8 @@ const _ = require('lodash');
 const ParameterContainer = require('./parameterContainer');
 
 class Statement extends ParameterContainer {
-  constructor(statements = []) {
+  constructor() {
     super();
-    this.statements = statements;
   }
 
   /**
@@ -12,7 +11,7 @@ class Statement extends ParameterContainer {
    * @return {string} Partial query string.
    */
   build() {
-    return _.join(_.map(this.statements, s => s.build()), '\n');
+    return '';
   }
 
   /**
@@ -32,16 +31,6 @@ class Statement extends ParameterContainer {
       query: this.build(),
       params: this.getParams(),
     }
-  }
-
-  /**
-   * Adds a statement to the child list
-   * @param {Statement} statement
-   */
-  addStatement(statement) {
-    statement.useParameterBag(this.parameterBag);
-    this.statements.push(statement);
-    return this;
   }
 }
 
