@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const ParameterContainer = require('./parameterContainer');
+const utils = require('./utils');
 
 class Statement extends ParameterContainer {
   constructor() {
@@ -31,6 +32,19 @@ class Statement extends ParameterContainer {
       query: this.build(),
       params: this.getParams(),
     }
+  }
+
+  /**
+   * The statement into a query string with parameters
+   * interpolated into the string. For debugging purposes only.
+   * @return {string}
+   */
+  interpolate() {
+    let { params, query } = this.buildQueryObject();
+    for (let name in params) {
+      query = query.replace('$' + name, utils.stringifyValue(params[name]));
+    }
+    return query;
   }
 }
 

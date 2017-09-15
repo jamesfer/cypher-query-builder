@@ -52,6 +52,32 @@ module.exports.uniqueString = function(str, existing) {
 
 
 /**
+ * Converts a Javascript value into a string suitable for a cypher query.
+ * @param {object|Array|string|boolean|number} value
+ * @return {string}
+ */
+module.exports.stringifyValue = function stringifyValue(value) {
+  if (_.isNumber(value) || _.isBoolean(value)) {
+    return '' + value;
+  }
+  if (_.isString(value)) {
+    return `'` + value + `'`;
+  }
+  if (_.isArray(value)) {
+    let str = _.join(_.map(value, el => stringifyValue), ', ');
+    return `[ ${str} ]`;
+  }
+  if (_.isObject(value)) {
+    let str = _.join(_.map(value, (el, key) => {
+      return key + ': ' + stringifyValue(el);
+    }), ', ');
+    return `{ ${str} }`;
+  }
+  return '';
+};
+
+
+/**
  * Converts labels into a string that can be put into a pattern.
  *
  * @param {string|array<string>} labels
