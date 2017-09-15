@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const clauses = require('./clauses');
 const Statement = require('./statement');
 
@@ -5,6 +6,7 @@ class Query extends Statement {
   constructor(connection = null) {
     super();
     this.connection = connection;
+    this.statements = [];
   }
 
   matchNode(varName, labels = [], conditions = {}) {
@@ -70,6 +72,24 @@ class Query extends Statement {
     })));
   }
 
+  build() {
+    return _.join(_.map(this.statements, s => s.build()), '\n') + ';';
+  }
+
+  getStatements() {
+    return this.statements;
+  }
+
+  /**
+   * Adds a statement to the child list.
+   * @param {Statement} statement
+   * @return {Query}
+   */
+  addStatement(statement) {
+    statement.useParameterBag(this.parameterBag);
+    this.statements.push(statement);
+    return this;
+  }
 
   async run() {
     if (!this.connection) {

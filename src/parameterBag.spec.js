@@ -45,8 +45,9 @@ describe('ParameterBag', function() {
 
   describe('#addParam', function() {
     it('should create and add a parameter to the bag', function() {
-      let paramName = parameterBag.addParam('value', 'name');
-      expect(paramName).to.equal('name');
+      let param = parameterBag.addParam('value', 'name');
+      expect(param.name).to.equal('name');
+      expect(param.value).to.equal('value');
       expect(parameterBag.getParams()).to.have.property('name', 'value');
     });
 

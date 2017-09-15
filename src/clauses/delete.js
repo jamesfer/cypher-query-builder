@@ -3,11 +3,12 @@ const Statement = require('../statement');
 
 class Delete extends Statement {
   constructor(variables = [], { detach = false }) {
+    super();
     this.variables = variables;
     this.detach = detach;
   }
 
-  build(parameterBag = new ParameterBag()) {
+  build() {
     let str = this.detach ? 'DETACH ' : '';
     str += 'DELETE ';
     return str + _.join(this.variables, ', ');

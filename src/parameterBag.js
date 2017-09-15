@@ -1,9 +1,20 @@
 const _ = require('lodash');
 const utils = require('./utils');
 
+class Parameter {
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
+
+  toString() {
+    return '$' + this.name;
+  }
+}
+
 class ParameterBag {
   constructor() {
-    this.parameters = {};
+    this.parameterMap = {};
   }
 
   /**
@@ -11,19 +22,32 @@ class ParameterBag {
    * @return {string}
    */
   getName(name = 'p') {
-    return utils.uniqueString(name, _.keys(this.parameters));
+    return utils.uniqueString(name, _.keys(this.parameterMap));
   }
 
   /**
    * Adds a new parameter to this bag.
    * @param {*} value
-   * @param {string?} name
-   * @return {string} Actual name of the parameter.
+   * @param {string|undefined} name
+   * @return {Parameter} Newly created parameter object.
    */
   addParam(value, name = undefined) {
-    name = this.getName(name);
-    this.parameters[name] = value;
-    return name;
+    let actualName = this.getName(name);
+    let param = new Parameter(actualName, value);
+    this.parameterMap[actualName] = param;
+    return param;
+  }
+
+  /**
+   * Adds an existing parameter to this bag. The name may be changed if
+   * it is already taken, however, the Parameter object will not be recreated.
+   * @param {Parameter} param
+   * @return {Parameter}
+   */
+  addExistingParam(param) {
+    param.name = this.getName(param.name);
+    this.parameterMap[param.name] = param;
+    return param;
   }
 
   /**
@@ -31,9 +55,18 @@ class ParameterBag {
    * query object.
    * @return {object}
    */
-  getParams(){
-    return this.parameters;
+  getParams() {
+    return _.mapValues(this.parameterMap, 'value');
+  }
+
+  /**
+   * Removes a parameter from the internal map.
+   * @param {string} name
+   */
+  deleteParam(name) {
+    delete this.parameterMap[name];
   }
 }
 
 module.exports = ParameterBag;
+module.exports.Parameter = Parameter;
