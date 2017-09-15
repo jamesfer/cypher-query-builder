@@ -4,19 +4,8 @@ const nodeTests = require('./clauses/node.tests');
 const matchTests = require('./clauses/match.tests');
 const createTests = require('./clauses/create.tests');
 const returnTests = require('./clauses/return.tests');
-const { construct } = require('./utils');
 
 describe('Query', function() {
-  class TestSegment {
-    constructor(str) {
-      this.str = str;
-    }
-
-    toString() {
-      return this.str;
-    }
-  }
-
   describe('#matchNode', function() {
     nodeTests(function() {
       let query = new Query();
