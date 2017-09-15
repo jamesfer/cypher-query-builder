@@ -36,7 +36,7 @@ class Query extends Statement {
   }
 
   with(terms) {
-    return this.addStatement(clauses.withVars(terms));
+    return this.addStatement(clauses.with(terms));
   }
 
   unwind(list, name) {
