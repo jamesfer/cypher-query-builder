@@ -26,7 +26,7 @@ class PatternStatement extends Statement {
     this.patterns.forEach(patternArray => {
       patternArray.forEach(pattern => {
         pattern.setExpandedConditions(options.useExpandedConditions);
-        this.addStatement(pattern);
+        pattern.useParameterBag(this.parameterBag);
       });
     });
   }
