@@ -17,22 +17,14 @@ class Set extends Statement {
   }
 
   build() {
-    let labelString = _.map(this.labels, (labels, key) => {
+    let labels = _.map(this.labels, (labels, key) => {
       return key + utils.stringifyLabels(labels)
     });
-    let valuesString = _.map(this.values, (value, key) => {
-      return key + ' = ' + value;
-    });
-    let variablesString = _.join(_.map(this.variables, (value, key) => {
-      return key + (this.overrideVariables ? ' = ' : ' += ') + value;
-    }));
+    let values = _.map(this.values, (param, key) => `${key} = ${param}`);
+    let op = this.overrideVariables ? ' = ' : ' += ';
+    let variables = _.join(_.map(this.variables, (value, key) => key + op + value));
 
-    return 'SET ' + _.join(_.concat(
-      [],
-      labelString,
-      valuesString,
-      variablesString
-    ), ', ');
+    return 'SET ' + _.join(_.concat(labels, values, variables), ', ');
   }
 }
 

@@ -33,7 +33,7 @@ class PatternStatement extends Statement {
 
   build() {
     return _.join(_.map(this.patterns, pattern => {
-      return _.join(_.map(pattern, clause => clause.build()), '');
+      return _.reduce(pattern, (str, clause) => str + clause.build(), '');
     }), ', ');
   }
 }

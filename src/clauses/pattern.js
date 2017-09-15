@@ -61,10 +61,10 @@ class Pattern extends Statement {
     }
 
     if (this.useExpandedConditions) {
-      let str = _.join(_.map(this.conditionParams, (param, name) => {
+      let strings = _.map(this.conditionParams, (param, name) => {
         return `${name}: ${param}`;
-      }), ', ');
-      return '{ ' + str + ' }';
+      });
+      return '{ ' + _.join(strings, ', ') + ' }';
     }
     return this.conditionParams.toString();
   }
