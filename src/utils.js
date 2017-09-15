@@ -5,8 +5,8 @@ const _ = require('lodash');
  * Returns a function that constructs the given class with the given params.
  */
 module.exports.construct = function (cls, cb = null) {
-  return function() {
-    let obj = new (cls.bind.apply(cls, [cls, ...arguments]))();
+  return function(...args) {
+    let obj = new (cls.bind.apply(cls, [cls, ...args]))();
     return cb ? cb(obj) : obj;
   }
 };
