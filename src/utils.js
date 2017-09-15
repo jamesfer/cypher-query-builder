@@ -6,9 +6,7 @@ const _ = require('lodash');
  */
 module.exports.construct = function (cls, cb = null) {
   return function() {
-    let args = [cls];
-    args.push.apply(args, arguments);
-    let obj = new (cls.bind.apply(cls, args))();
+    let obj = new (cls.bind.apply(cls, [cls, ...arguments]))();
     return cb ? cb(obj) : obj;
   }
 };
@@ -60,32 +58,7 @@ module.exports.uniqueString = function(str, existing) {
  * @return {string}
  */
 module.exports.stringifyLabels = function stringifyLabels(labels) {
-  labels = _.concat([], labels);
-  return _.join(_.map(labels, label => ':' + label), '');
-};
-
-
-/**
- * Converts conditions into a string that could be inserted into a pattern.
- * @param {object} conditions
- * @return {string}
- */
-module.exports.stringifyConditions = function stringifyConditions(conditions) {
-  if (_.isEmpty(conditions)) {
-    return '';
-  }
-
-  let pairs = _.filter(_.toPairs(conditions), clause => {
-    return !_.isObject(conditions[1]);
-  });
-  return '{' + _.join(_.map(pairs, pair => {
-    let quote = '';
-    if (_.isString(pair[1])) {
-      quote = '"';
-    }
-
-    return pair[0] + ': ' + quote + pair[1] + quote;
-  }), ', ')+ '}';
+  return _.reduce(_.castArray(labels), (str, l) => str + ':' + l, '');
 };
 
 
