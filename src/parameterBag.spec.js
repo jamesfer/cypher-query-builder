@@ -37,7 +37,6 @@ describe('ParameterBag', function() {
       parameterBag.addParam('hello');
       parameterBag.addParam('world');
       let paramObj = parameterBag.getParams();
-      console.log(parameterBag);
       expect(_.keys(paramObj)).to.have.length(2);
       expect(_.values(paramObj)).to.contain('hello');
       expect(_.values(paramObj)).to.contain('world');

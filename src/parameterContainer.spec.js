@@ -32,6 +32,18 @@ describe('ParameterContainer', function() {
       expect(params).to.have.property('name', 'bag value');
       expect(params).to.have.property('name2', 'container value');
     });
+
+    it('should not recreate the Parameter objects', function() {
+      let container = new ParameterContainer();
+      let param = container.parameterBag.addParam('container value', 'name');
+
+      let bag = new ParameterBag();
+      bag.addParam('bag value', 'name');
+      container.useParameterBag(bag);
+
+      expect(param.name).to.equal('name2');
+      expect(container.parameterBag.parameterMap['name2']).to.equal(param);
+    });
   });
 
   describe('#getParams', function() {

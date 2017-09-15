@@ -39,6 +39,18 @@ class ParameterBag {
   }
 
   /**
+   * Adds an existing parameter to this bag. The name may be changed if
+   * it is already taken, however, the Parameter object will not be recreated.
+   * @param {Parameter} param
+   * @return {Parameter}
+   */
+  addExistingParam(param) {
+    param.name = this.getName(param.name);
+    this.parameterMap[param.name] = param;
+    return param;
+  }
+
+  /**
    * Returns the params in a name: value object suitable for putting into a
    * query object.
    * @return {object}
@@ -46,6 +58,15 @@ class ParameterBag {
   getParams() {
     return _.mapValues(this.parameterMap, 'value');
   }
+
+  /**
+   * Removes a parameter from the internal map.
+   * @param {string} name
+   */
+  deleteParam(name) {
+    delete this.parameterMap[name];
+  }
 }
 
 module.exports = ParameterBag;
+module.exports.Parameter = Parameter;

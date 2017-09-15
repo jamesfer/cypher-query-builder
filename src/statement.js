@@ -39,6 +39,7 @@ class Statement extends ParameterContainer {
    * @param {Statement} statement
    */
   addStatement(statement) {
+    statement.useParameterBag(this.parameterBag);
     this.statements.push(statement);
     return this;
   }
