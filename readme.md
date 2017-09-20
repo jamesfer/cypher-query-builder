@@ -28,8 +28,8 @@ Write queries in Javascript just as you would write them in Cypher.
     //   },
     // }]
 
-This package is currently in develop and many things are likely to be 
-undocumented or to change without warning. However, all feedback is welcome.
+This package is currently in development and many things are likely to be 
+undocumented or to change without warning. However, any feedback is welcome.
 
 ## Usage
 
