@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Statement = require('../statement');
 
 class Delete extends Statement {
-  constructor(variables = [], { detach = false }) {
+  constructor(variables = [], { detach } = { detach: false }) {
     super();
     this.variables = variables;
     this.detach = detach;
