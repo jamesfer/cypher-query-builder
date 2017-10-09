@@ -52,11 +52,11 @@ class Query extends Statement {
   }
 
   setLabels(labels) {
-    return this.addStatement(clauses.set({ labels }));
+    return this.addStatement(clauses.set({ labels }, {}));
   }
 
   setValues(values) {
-    return this.addStatement(clauses.set({ values }));
+    return this.addStatement(clauses.set({ values }, {}));
   }
 
   setVariables(variables, overrideVariables) {

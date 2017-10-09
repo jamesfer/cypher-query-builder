@@ -22,7 +22,7 @@ class Set extends Statement {
     });
     let values = _.map(this.values, (param, key) => `${key} = ${param}`);
     let op = this.overrideVariables ? ' = ' : ' += ';
-    let variables = _.join(_.map(this.variables, (value, key) => key + op + value));
+    let variables = _.map(this.variables, (value, key) => key + op + value);
 
     return 'SET ' + _.join(_.concat(labels, values, variables), ', ');
   }
