@@ -1,7 +1,7 @@
-import { clauses } from './clauses/index';
 import { Statement } from './statement';
 import { join, map } from 'lodash';
 import { Connection } from './connection';
+import { Create, Match, Node, Set, Unwind, Return, With, Delete } from './clauses/index';
 
 export class Query extends Statement {
   protected statements: Statement[] = [];
@@ -11,66 +11,66 @@ export class Query extends Statement {
   }
 
   matchNode(varName, labels = [], conditions = {}) {
-    return this.addStatement(clauses.match(clauses.node(varName, labels, conditions)));
+    return this.addStatement(new Match(new Node(varName, labels, conditions)));
   }
 
-  match(patterns, settings = {}) {
-    return this.addStatement(clauses.match(patterns, settings));
+  match(patterns, settings?) {
+    return this.addStatement(new Match(patterns, settings));
   }
 
-  optionalMatch(patterns, settings = {}) {
-    return this.addStatement(clauses.match(patterns, Object.assign(settings, {
+  optionalMatch(patterns, settings?) {
+    return this.addStatement(new Match(patterns, Object.assign(settings, {
       optional: true,
     })));
   }
 
   createNode(varName, labels = [], conditions = {}) {
-    return this.addStatement(clauses.create(clauses.node(varName, labels, conditions)));
+    return this.addStatement(new Create(new Node(varName, labels, conditions)));
   }
 
   create(patterns) {
-    return this.addStatement(clauses.create(patterns));
+    return this.addStatement(new Create(patterns));
   }
 
   return(terms) {
-    return this.addStatement(clauses.return(terms));
+    return this.addStatement(new Return(terms));
   }
 
   with(terms) {
-    return this.addStatement(clauses.with(terms));
+    return this.addStatement(new With(terms));
   }
 
   unwind(list, name) {
-    return this.addStatement(clauses.unwind(list, name));
+    return this.addStatement(new Unwind(list, name));
   }
 
-  delete(terms) {
-    return this.addStatement(clauses.delete(terms));
-  }
-
-  set(values, settings) {
-    return this.addStatement(clauses.set(values, settings));
-  }
-
-  setLabels(labels) {
-    return this.addStatement(clauses.set({ labels }, {}));
-  }
-
-  setValues(values) {
-    return this.addStatement(clauses.set({ values }, {}));
-  }
-
-  setVariables(variables, overrideVariables) {
-    return this.addStatement(clauses.set(
-      { variables },
-      { overrideVariables }
-    ));
+  delete(terms, settings?) {
+    return this.addStatement(new Delete(terms, settings));
   }
 
   detachDelete(terms, settings = {}) {
-    return this.addStatement(clauses.delete(terms, Object.assign(settings, {
+    return this.addStatement(new Delete(terms, Object.assign(settings, {
       detach: true,
     })));
+  }
+
+  set(values, settings) {
+    return this.addStatement(new Set(values, settings));
+  }
+
+  setLabels(labels) {
+    return this.addStatement(new Set({ labels }));
+  }
+
+  setValues(values) {
+    return this.addStatement(new Set({ values }));
+  }
+
+  setVariables(variables, override) {
+    return this.addStatement(new Set(
+      { variables },
+      { override }
+    ));
   }
 
   build() {
