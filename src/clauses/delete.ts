@@ -1,12 +1,19 @@
 import { Statement } from '../statement';
-import { join } from 'lodash';
+import { join, Many, castArray } from 'lodash';
+
+export interface DeleteOptions {
+  detach?: boolean;
+}
 
 export class Delete extends Statement {
+  variables: string[];
+
   constructor(
-    protected variables: string[] = [],
-    protected options: { detach: boolean } = { detach: true },
+    variables: Many<string>,
+    protected options: DeleteOptions = { detach: true },
   ) {
     super();
+    this.variables = castArray(variables);
   }
 
   build() {

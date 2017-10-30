@@ -1,38 +1,49 @@
 import { v1 as neo4j } from 'neo4j-driver';
-import { map, mapValues } from 'lodash';
+import { Dictionary, map, mapValues } from 'lodash';
+import Record from 'neo4j-driver/types/v1/record';
+import { Node as NeoNode } from 'neo4j-driver/types/v1/graph-types';
+import Integer from 'neo4j-driver/types/v1/integer';
+
+export interface Node {
+  identity: string;
+  labels: string[];
+  properties: Dictionary<string | boolean | null | number>;
+}
+
+export type NeoValue = Integer | string | boolean | null | { low: number, high: number };
 
 export class Transformer {
-  transformResult(result) {
+  transformResult(result: { records: Record[] }) {
     return map(result.records, rec => this.transformRecord(rec));
   }
 
-  transformRecord(record) {
+  transformRecord(record: Record) {
     return mapValues(record.toObject(), node => {
       return this.isNode(node) ? this.transformNode(node) : node;
     });
   }
 
-  transformNode(node) {
+  transformNode(node: NeoNode): Node {
     return {
       identity: neo4j.integer.toString(node.identity),
       labels: node.labels,
-      properties: this.convertNumbers(node.properties),
+      properties: this.convertNumbers(node.properties as {}),
     };
   }
 
-  isNode(node) {
+  isNode(node: any) {
     return node.identity && node.labels && node.properties;
   }
 
-  convertNumbers(object, recursive = true) {
-    return mapValues(object, value => {
-      if (!neo4j.isInt(value)) {
-        return value;
+  convertNumbers(object: Dictionary<NeoValue>): Dictionary<string | boolean | number | null> {
+    return mapValues(object, (value: NeoValue): string | boolean | number | null => {
+      if (neo4j.isInt(value as object)) {
+        if (neo4j.integer.inSafeRange(value as Integer)) {
+          return neo4j.integer.toNumber(value as Integer);
+        }
+        return neo4j.integer.toString(value as string);
       }
-      if (neo4j.integer.inSafeRange(value)) {
-        return neo4j.integer.toNumber(value);
-      }
-      return neo4j.integer.toString(value);
+      return value as string;
     });
   }
 }

@@ -1,9 +1,13 @@
 import { PatternStatement } from './patternStatement';
 
+export interface MatchOptions {
+  optional?: boolean,
+}
+
 export class Match extends PatternStatement {
   constructor(
     patterns,
-    protected options = { optional: false }
+    protected options: MatchOptions = { optional: false }
   ) {
     super(patterns, { useExpandedConditions: true });
   }

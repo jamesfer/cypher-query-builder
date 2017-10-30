@@ -1,72 +1,78 @@
 import { Statement } from './statement';
-import { join, map } from 'lodash';
+import { Dictionary, join, Many, map } from 'lodash';
 import { Connection } from './connection';
 import { Create, Match, Node, Set, Unwind, Return, With, Delete } from './clauses/index';
+import { Builder } from './builder';
+import { PatternCollection } from './clauses/patternStatement';
+import { MatchOptions } from './clauses/match';
+import { SetOptions, SetProperties } from './clauses/set';
+import { PropertyTerm } from './clauses/termListStatement';
+import { DeleteOptions } from './clauses/delete';
 
-export class Query extends Statement {
+export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
 
   constructor(protected connection: Connection = null) {
     super();
   }
 
-  matchNode(varName, labels = [], conditions = {}) {
+  matchNode(varName: string, labels?: Many<string>, conditions?: {}) {
     return this.addStatement(new Match(new Node(varName, labels, conditions)));
   }
 
-  match(patterns, settings?) {
-    return this.addStatement(new Match(patterns, settings));
+  match(patterns: PatternCollection, options?: MatchOptions) {
+    return this.addStatement(new Match(patterns, options));
   }
 
-  optionalMatch(patterns, settings?) {
-    return this.addStatement(new Match(patterns, Object.assign(settings, {
+  optionalMatch(patterns: PatternCollection, options?: MatchOptions) {
+    return this.addStatement(new Match(patterns, Object.assign(options, {
       optional: true,
     })));
   }
 
-  createNode(varName, labels = [], conditions = {}) {
+  createNode(varName: any, labels?: Many<string>, conditions?: {}) {
     return this.addStatement(new Create(new Node(varName, labels, conditions)));
   }
 
-  create(patterns) {
+  create(patterns: PatternCollection) {
     return this.addStatement(new Create(patterns));
   }
 
-  return(terms) {
+  return(terms: Many<PropertyTerm>) {
     return this.addStatement(new Return(terms));
   }
 
-  with(terms) {
+  with(terms: Many<PropertyTerm>) {
     return this.addStatement(new With(terms));
   }
 
-  unwind(list, name) {
+  unwind(list: any[], name: string) {
     return this.addStatement(new Unwind(list, name));
   }
 
-  delete(terms, settings?) {
-    return this.addStatement(new Delete(terms, settings));
+  delete(terms: Many<string>, options?: DeleteOptions) {
+    return this.addStatement(new Delete(terms, options));
   }
 
-  detachDelete(terms, settings = {}) {
-    return this.addStatement(new Delete(terms, Object.assign(settings, {
+  detachDelete(terms: Many<string>, options?: DeleteOptions) {
+    return this.addStatement(new Delete(terms, Object.assign(options, {
       detach: true,
     })));
   }
 
-  set(values, settings) {
-    return this.addStatement(new Set(values, settings));
+  set(properties: SetProperties, options: SetOptions) {
+    return this.addStatement(new Set(properties, options));
   }
 
-  setLabels(labels) {
+  setLabels(labels: Dictionary<Many<string>>) {
     return this.addStatement(new Set({ labels }));
   }
 
-  setValues(values) {
+  setValues(values: Dictionary<any>) {
     return this.addStatement(new Set({ values }));
   }
 
-  setVariables(variables, override) {
+  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean) {
     return this.addStatement(new Set(
       { variables },
       { override }

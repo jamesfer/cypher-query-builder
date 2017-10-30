@@ -2,12 +2,18 @@ import { Statement } from '../statement';
 import { join, reduce, map, assign, castArray } from 'lodash';
 import { Pattern } from './pattern';
 
+export interface PatternOptions {
+  useExpandedConditions?: boolean;
+}
+
+export type PatternCollection = Pattern | Pattern[] | Pattern[][];
+
 export class PatternStatement extends Statement {
   protected patterns: Pattern[][];
 
   constructor(
-    patterns: Pattern | Pattern[] | Pattern[][],
-    options = { useExpandedConditions: false },
+    patterns: PatternCollection,
+    options: PatternOptions = { useExpandedConditions: false },
   ) {
     super();
 

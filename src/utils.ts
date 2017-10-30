@@ -1,9 +1,43 @@
 import { camelCase, isNumber, isArray, isString, isObject, isBoolean, isInteger, join, map, reduce, castArray } from 'lodash';
 
+interface AnyClass<T> {
+  new (...args: any[]): T;
+}
+// interface Class00<T> {
+//   new (): T;
+// }
+// interface Class01<T> {
+//   new (): T;
+// }
+// interface Class02<T> {
+//   new (): T;
+// }
+// interface Class03<T> {
+//   new (): T;
+// }
+//
+// interface Class1<T, A1> {
+//   new (a1: A1): T;
+// }
+// interface Class2<T, A1, A2> {
+//   new (a1: A1, a2: A2): T;
+// }
+// interface Class3<T, A1, A2, A3> {
+//   new (a1: A1, a2: A2, a3: A3): T;
+// }
+// interface Class4<T, A1, A2, A3, A4> {
+//   new (a1: A1, a2: A2, a3: A3, a4: A4): T;
+// }
+
 /**
  * Returns a function that constructs the given class with the given params.
  */
-export function construct(cls, cb = null) {
+// export function construct<T>(cls: Class<T>, cb?: (c: T) => T): () => T;
+// export function construct<T, A1>(cls: Class1<T, A1>, cb?: (c: T) => T): (a1: A1) => T;
+// export function construct<T, A1, A2>(cls: Class2<T, A1, A2>, cb?: (c: T) => T): (a1: A1, a2: A2) => T;
+// export function construct<T, A1, A2, A3>(cls: Class3<T, A1, A2, A3>, cb?: (c: T) => T): (a1: A1, a2: A2, a3: A3) => T;
+// export function construct<T, A1, A2, A3, A4>(cls: Class4<T, A1, A2, A3, A4>, cb?: (c: T) => T): (a1: A1, a2: A2, a3: A3, a4: A4) => T;
+export function construct<T, R = T>(cls: AnyClass<T>, cb?: (c: T) => R): (...args: any[]) => R {
   return function(...args) {
     let obj = new (cls.bind.apply(cls, [cls, ...args]))();
     return cb ? cb(obj) : obj;

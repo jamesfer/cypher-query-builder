@@ -1,22 +1,19 @@
 import { Statement } from '../statement';
-import { join, concat, map, mapValues, castArray, Dictionary } from 'lodash';
+import {
+  join, concat, map, mapValues, castArray, Dictionary,
+  Many,
+} from 'lodash';
 import { stringifyLabels } from '../utils';
 import { Parameter } from '../parameterBag';
 
-type Labels = string[];
-type Values = any;
-type Variables = string;
-
-interface SetPropertiesInterface<L, V, R> {
-  labels: Dictionary<L>,
-  values: Dictionary<V>,
-  variables: Dictionary<R>,
-}
-
-type SetProperties = {
-  labels?: Dictionary<string | string[]>,
+export type SetProperties = {
+  labels?: Dictionary<Many<string>>,
   values?: Dictionary<any>,
   variables?: Dictionary<string | Dictionary<string>>,
+}
+
+export interface SetOptions {
+  override: boolean;
 }
 
 export class Set extends Statement {
@@ -27,7 +24,7 @@ export class Set extends Statement {
 
   constructor(
     { labels, values, variables }: SetProperties,
-    options = { override: true },
+    options: SetOptions = { override: true },
   ) {
     super();
     this.labels = mapValues(labels, castArray);

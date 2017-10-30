@@ -2,6 +2,13 @@ import { Transformer } from './transformer';
 import nodeCleanup from 'node-cleanup';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
+import { Builder } from './builder';
+import { Dictionary, Many } from 'lodash';
+import { SetOptions, SetProperties } from './clauses/set';
+import { PropertyTerm } from './clauses/termListStatement';
+import { DeleteOptions } from './clauses/delete';
+import { PatternCollection } from './clauses/patternStatement';
+import { MatchOptions } from './clauses/match';
 
 let connections: Connection[] = [];
 
@@ -15,7 +22,7 @@ nodeCleanup(function () {
 
 export type Credentials = { username: string, password: string };
 
-export class Connection {
+export class Connection implements Builder {
   protected auth: any;
   protected driver: any;
   protected open: boolean;
@@ -86,59 +93,59 @@ export class Connection {
       });
   }
 
-  matchNode(name: string, labels?: string | string[], conditions?: {}) {
-    return this.query().matchNode(name, labels, conditions);
+  matchNode(varName: string, labels?: Many<string>, conditions?: {}) {
+    return this.query().matchNode(varName, labels, conditions);
   }
 
-  match(patterns, options?: { optional: boolean; }) {
+  match(patterns: PatternCollection, options?: MatchOptions) {
     return this.query().match(patterns, options);
   }
 
-  optionalMatch(patterns, options?: { optional: boolean }) {
-    return this.query().optionalMatch(options);
+  optionalMatch(patterns: PatternCollection, options?: MatchOptions) {
+    return this.query().optionalMatch(patterns, options);
   }
 
-  createNode(name: string, labels?: string | string[], conditions?: {}) {
-    return this.query().createNode(name, labels, conditions);
+  createNode(varName: any, labels?: Many<string>, conditions?: {}) {
+    return this.query().createNode(varName, labels, conditions);
   }
 
-  create(patterns) {
+  create(patterns: PatternCollection) {
     return this.query().create(patterns);
   }
 
-  return(terms) {
+  return(terms: Many<PropertyTerm>) {
     return this.query().return(terms);
   }
 
-  with(terms) {
+  with(terms: Many<PropertyTerm>) {
     return this.query().with(terms);
   }
 
-  unwind(list, name) {
+  unwind(list: any[], name: string) {
     return this.query().unwind(list, name);
   }
 
-  delete(terms, settings) {
-    return this.query().delete(terms, settings);
+  delete(terms: Many<string>, options?: DeleteOptions) {
+    return this.query().delete(terms, options);
   }
 
-  detachDelete(terms, settings) {
-    return this.query().detachDelete(terms, settings);
+  detachDelete(terms: Many<string>, options?: DeleteOptions) {
+    return this.query().detachDelete(terms, options);
   }
 
-  set(values, settings) {
-    return this.query().set(values, settings);
+  set(properties: SetProperties, options: SetOptions) {
+    return this.query().set(properties, options);
   }
 
-  setLabels(labels) {
+  setLabels(labels: Dictionary<Many<string>>) {
     return this.query().setLabels(labels);
   }
 
-  setValues(values) {
+  setValues(values: Dictionary<any>) {
     return this.query().setValues(values);
   }
 
-  setVariables(variables, override) {
+  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean) {
     return this.query().setVariables(variables, override);
   }
 }
