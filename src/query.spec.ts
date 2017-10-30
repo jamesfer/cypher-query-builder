@@ -1,5 +1,5 @@
 import { Query } from './query';
-import { nodeTests } from './clauses/node.tests';
+import { nodeTests } from './clauses/node-pattern.tests';
 import { matchTests } from './clauses/match.tests';
 import { createTests } from './clauses/create.tests';
 import { returnTests } from './clauses/return.tests';

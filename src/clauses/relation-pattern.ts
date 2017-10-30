@@ -2,7 +2,7 @@ import { Pattern } from './pattern';
 import { trim } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
-export class Relation extends Pattern {
+export class RelationPattern extends Pattern {
   constructor(
     protected dir: 'in' | 'out' | 'either',
     name: string = '',

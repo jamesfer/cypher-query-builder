@@ -1,7 +1,7 @@
 import { Pattern } from './pattern';
 import { trim } from 'lodash';
 
-export class Node extends Pattern {
+export class NodePattern extends Pattern {
   constructor(
     name: string,
     labels: string | string[] = [],

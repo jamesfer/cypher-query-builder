@@ -22,17 +22,17 @@
 
 
 export { Create } from './create';
-export { Node } from './node';
+export { NodePattern } from './node-pattern';
 export { With } from './with';
 export { Unwind } from './unwind';
 export { Delete } from './delete';
 export { Set } from './set';
-export { Relation } from './relation';
+export { RelationPattern } from './relation-pattern';
 export { Match } from './match';
 export { Return } from './return';
 
-import { Node } from './node';
-import { Relation } from './relation';
+import { NodePattern } from './node-pattern';
+import { RelationPattern } from './relation-pattern';
 import { PathLength } from '../utils';
 
 export function node(
@@ -40,7 +40,7 @@ export function node(
   labels: string | string[] = [],
   conditions = {}
 ) {
-  return new Node(name, labels, conditions);
+  return new NodePattern(name, labels, conditions);
 }
 
 export function relation(
@@ -50,5 +50,5 @@ export function relation(
   conditions = {},
   length?: PathLength
 ) {
-  return new Relation(dir, name, labels, conditions, length);
+  return new RelationPattern(dir, name, labels, conditions, length);
 }
