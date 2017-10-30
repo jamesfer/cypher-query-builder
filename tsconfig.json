@@ -13,9 +13,6 @@
     "noImplicitThis": false,
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "lib": [
       "es2016"
     ]

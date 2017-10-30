@@ -1,4 +1,4 @@
-import { Transformer } from './transformer';
+import { SanitizedRecord, Transformer } from './transformer';
 import nodeCleanup from 'node-cleanup';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
@@ -71,7 +71,7 @@ export class Connection implements Builder {
    * @param {Query} query
    * @return {Promise<Array>}
    */
-  run(query: Query) {
+  run(query: Query): Promise<SanitizedRecord[]> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }

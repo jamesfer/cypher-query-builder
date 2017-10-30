@@ -8,6 +8,7 @@ import { MatchOptions } from './clauses/match';
 import { SetOptions, SetProperties } from './clauses/set';
 import { PropertyTerm } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
+import { SanitizedRecord } from './transformer';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -98,7 +99,7 @@ export class Query extends Statement implements Builder {
     return this;
   }
 
-  async run() {
+  async run(): Promise<SanitizedRecord[]> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
