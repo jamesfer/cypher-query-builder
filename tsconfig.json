@@ -3,7 +3,6 @@
   "compilerOptions": {
     "allowJs": false,
     "outDir": "./dist",
-    "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
