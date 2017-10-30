@@ -13,7 +13,7 @@ nodeCleanup(function () {
   connections = [];
 });
 
-type Credentials = { username: string, password: string };
+export type Credentials = { username: string, password: string };
 
 export class Connection {
   protected auth: any;
@@ -85,31 +85,60 @@ export class Connection {
         return Promise.reject(error);
       });
   }
+
+  matchNode(name: string, labels?: string | string[], conditions?: {}) {
+    return this.query().matchNode(name, labels, conditions);
+  }
+
+  match(patterns, options?: { optional: boolean; }) {
+    return this.query().match(patterns, options);
+  }
+
+  optionalMatch(patterns, options?: { optional: boolean }) {
+    return this.query().optionalMatch(options);
+  }
+
+  createNode(name: string, labels?: string | string[], conditions?: {}) {
+    return this.query().createNode(name, labels, conditions);
+  }
+
+  create(patterns) {
+    return this.query().create(patterns);
+  }
+
+  return(terms) {
+    return this.query().return(terms);
+  }
+
+  with(terms) {
+    return this.query().with(terms);
+  }
+
+  unwind(list, name) {
+    return this.query().unwind(list, name);
+  }
+
+  delete(terms, settings) {
+    return this.query().delete(terms, settings);
+  }
+
+  detachDelete(terms, settings) {
+    return this.query().detachDelete(terms, settings);
+  }
+
+  set(values, settings) {
+    return this.query().set(values, settings);
+  }
+
+  setLabels(labels) {
+    return this.query().setLabels(labels);
+  }
+
+  setValues(values) {
+    return this.query().setValues(values);
+  }
+
+  setVariables(variables, override) {
+    return this.query().setVariables(variables, override);
+  }
 }
-
-
-/** Query shortcut methods. */
-
-[
-  'matchNode',
-  'match',
-  'optionalMatch',
-  'createNode',
-  'create',
-  'return',
-  'with',
-  'unwind',
-  'delete',
-  'detachDelete',
-  'set',
-  'setLabels',
-  'setValues',
-  'setVariables',
-].forEach(name => {
-  Connection.prototype[name] = function () {
-    return Query.prototype[name].apply(this.query(), arguments);
-  };
-});
-
-
-module.exports = Connection;
