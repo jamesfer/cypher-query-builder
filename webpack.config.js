@@ -21,7 +21,7 @@ module.exports = env => {
           options: {
             silent: true,
             sourceMap: true,
-            transpileOnly: true,
+            declaration: production,
           },
         },
         exclude: [ /node_modules/ ],
