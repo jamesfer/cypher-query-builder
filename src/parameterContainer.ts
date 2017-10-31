@@ -1,4 +1,4 @@
-import { ParameterBag } from './parameterBag';
+import { Parameter, ParameterBag } from './parameterBag';
 export class ParameterContainer {
   protected parameterBag = new ParameterBag();
 
@@ -17,7 +17,7 @@ export class ParameterContainer {
    * @param {string|undefined} name
    * @return {Parameter} Newly created parameter object.
    */
-  addParam(value: any, name?: string) {
+  addParam(value: any, name?: string): Parameter {
     return this.parameterBag.addParam(value, name);
   }
 

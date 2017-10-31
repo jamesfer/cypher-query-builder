@@ -1,14 +1,14 @@
-import { SanitizedRecord, Transformer } from './transformer';
+import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
 import nodeCleanup from 'node-cleanup';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
-import { Builder } from './builder';
 import { Dictionary, Many } from 'lodash';
 import { SetOptions, SetProperties } from './clauses/set';
 import { PropertyTerm } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
+import { Builder } from './utils';
 
 let connections: Connection[] = [];
 
@@ -71,7 +71,7 @@ export class Connection implements Builder {
    * @param {Query} query
    * @return {Promise<Array>}
    */
-  run(query: Query): Promise<SanitizedRecord[]> {
+  run<R = SanitizedValue>(query: Query): Promise<SanitizedRecord<R>[]> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }

@@ -1,14 +1,14 @@
 import { Statement } from './statement';
 import { Dictionary, join, Many, map } from 'lodash';
 import { Connection } from './connection';
-import { Create, Match, Node, Set, Unwind, Return, With, Delete } from './clauses/index';
-import { Builder } from './builder';
+import { Create, Match, NodePattern, Set, Unwind, Return, With, Delete } from './clauses/index';
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { SetOptions, SetProperties } from './clauses/set';
 import { PropertyTerm } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
-import { SanitizedRecord } from './transformer';
+import { SanitizedRecord, SanitizedValue } from './transformer';
+import { Builder } from './utils';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -18,7 +18,7 @@ export class Query extends Statement implements Builder {
   }
 
   matchNode(varName: string, labels?: Many<string>, conditions?: {}) {
-    return this.addStatement(new Match(new Node(varName, labels, conditions)));
+    return this.addStatement(new Match(new NodePattern(varName, labels, conditions)));
   }
 
   match(patterns: PatternCollection, options?: MatchOptions) {
@@ -32,7 +32,7 @@ export class Query extends Statement implements Builder {
   }
 
   createNode(varName: any, labels?: Many<string>, conditions?: {}) {
-    return this.addStatement(new Create(new Node(varName, labels, conditions)));
+    return this.addStatement(new Create(new NodePattern(varName, labels, conditions)));
   }
 
   create(patterns: PatternCollection) {
@@ -73,7 +73,7 @@ export class Query extends Statement implements Builder {
     return this.addStatement(new Set({ values }));
   }
 
-  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean) {
+  setVariables(variables: Dictionary<string | Dictionary<string>>, override?: boolean) {
     return this.addStatement(new Set(
       { variables },
       { override }
@@ -99,11 +99,11 @@ export class Query extends Statement implements Builder {
     return this;
   }
 
-  async run(): Promise<SanitizedRecord[]> {
+  async run<R = SanitizedValue>(): Promise<SanitizedRecord<R>[]> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
 
-    return this.connection.run(this);
+    return this.connection.run<R>(this);
   }
 }

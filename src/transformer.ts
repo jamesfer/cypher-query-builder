@@ -17,21 +17,23 @@ export interface NeoRelation {
   type: string;
   properties: Dictionary<NeoValue>;
 }
+
 export type PlainValue = string | boolean | null | number;
-export interface NodeType {
+export interface Node<P = Dictionary<PlainValue>> {
   identity: string;
   labels: string[];
-  properties: Dictionary<PlainValue>;
+  properties: P;
 }
-export interface RelationType {
+export interface Relation<P = Dictionary<PlainValue>> {
   identity: string;
   start: string;
   end: string;
   label: string;
-  properties: Dictionary<PlainValue>;
+  properties: P;
 }
-export type SanitizedValue = PlainValue | NodeType | RelationType;
-export type SanitizedRecord = Dictionary<SanitizedValue>;
+export type SanitizedValue = PlainValue | Node | Relation;
+export type SanitizedRecord<T = SanitizedValue> = Dictionary<T>;
+
 
 export class Transformer {
   transformResult(result: { records: Record[] }): SanitizedRecord[] {
@@ -63,7 +65,7 @@ export class Transformer {
     return node.identity && node.labels && node.properties;
   }
 
-  transformNode(node: NeoNode): NodeType {
+  transformNode(node: NeoNode): Node {
     return {
       identity: neo4j.integer.toString(node.identity),
       labels: node.labels,
@@ -75,7 +77,7 @@ export class Transformer {
     return rel.identity && rel.type && rel.properties && rel.start && rel.end;
   }
 
-  transformRelation(rel: NeoRelation): RelationType {
+  transformRelation(rel: NeoRelation): Relation {
     return {
       identity: neo4j.integer.toString(rel.identity),
       start: neo4j.integer.toString(rel.start),
