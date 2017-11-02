@@ -1,5 +1,5 @@
 import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
-import nodeCleanup from 'node-cleanup';
+import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, Many } from 'lodash';
