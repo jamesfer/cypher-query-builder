@@ -2,10 +2,10 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 module.exports = env => {
-  let production = env && env.production;
+  let production = !!(env && env.production);
   return {
     context: path.resolve(__dirname, 'src'),
-    devtool: 'source',
+    devtool: 'source-map',
     entry: './index.ts',
     target: 'node',
     output: {
@@ -17,10 +17,11 @@ module.exports = env => {
       rules: [{
         test: /\.tsx?$/,
         use: {
-          loader: 'awesome-typescript-loader',
+          loader: 'ts-loader',
           options: {
-            silent: true,
-            sourceMap: true,
+            compilerOptions: {
+              declaration: production,
+            },
           },
         },
         exclude: [ /node_modules/ ],

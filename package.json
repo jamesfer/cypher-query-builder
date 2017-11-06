@@ -7,7 +7,8 @@
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
-    "test": "nyc --reporter=html --reporter=text mocha src/*.spec.js src/**/*.spec.js"
+    "test": "nyc --reporter=text mocha --register ts-node/register src/*.spec.js src/**/*.spec.js",
+    "test:ci": "nyc --reporter=lcov mocha --register ts-node/register src/*.spec.js src/**/*.spec.js"
   },
   "keywords": [
     "cypher",
@@ -22,11 +23,11 @@
     "@types/lodash": "^4.14.77",
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.33",
-    "awesome-typescript-loader": "^3.2.3",
     "chai-as-promised": "^7.0.0",
     "lodash": "^4.17.4",
     "neo4j-driver": "^1.5.0",
     "node-cleanup": "^2.1.2",
+    "ts-loader": "^3.1.1",
     "typescript": "^2.5.3",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0"
