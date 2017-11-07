@@ -1,5 +1,5 @@
 import { Statement } from '../statement';
-import { join, reduce, map, assign, castArray } from 'lodash';
+import { join, reduce, map, assign, castArray, isArray } from 'lodash';
 import { Pattern } from './pattern';
 
 export interface PatternOptions {
@@ -22,7 +22,9 @@ export class PatternStatement extends Statement {
     }, options);
 
     // Ensure patterns is a two dimensional array.
-    this.patterns = map(castArray<Pattern | Pattern[]>(patterns), castArray);
+    let arr = castArray<Pattern | Pattern[]>(patterns);
+    this.patterns = (arr[0] instanceof Array ? arr : [arr]) as Pattern[][];
+
 
     // Add child patterns as statements
     this.patterns.forEach(arr => arr.forEach(pat => {
