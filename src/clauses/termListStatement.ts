@@ -16,14 +16,16 @@ export class TermListStatement extends Statement {
   }
 
   toString() {
-    return join(flattenDeep(map(this.terms, this.stringifyTerm)), ', ');
+    return join(flattenDeep(map(this.terms, term => this.stringifyTerm(term))), ', ');
   }
 
   private stringifyTerm(term: PropertyTerm, alias?: string, node?: string) {
     if (isString(term)) {
       let prefix = node ? node + '.' : '';
-      let suffix = alias ? ' AS ' + alias : '';
-      return prefix + term + suffix;
+      if (alias) {
+        prefix += alias + ' AS ';
+      }
+      return prefix + term;
     }
 
     if (isArray(term)) {
@@ -31,7 +33,7 @@ export class TermListStatement extends Statement {
     }
 
     if (isPlainObject(term)) {
-      return map(term, (t, k) => this.stringifyTerm(t, k, alias));
+      return map(term, (t, k) => this.stringifyTerm(t, k, alias || node));
     }
   }
 
