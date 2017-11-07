@@ -2,9 +2,13 @@
   "name": "cypher-query-builder",
   "version": "0.1.0-alpha.1",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha src/*.spec.js src/**/*.spec.js"
+    "build": "webpack --progress",
+    "build:prod": "webpack --progress --env.production",
+    "test": "nyc --reporter=text mocha src/**/*.spec.ts",
+    "test:ci": "nyc --reporter=lcov --reporter=text mocha src/**/*.spec.ts"
   },
   "keywords": [
     "cypher",
@@ -15,23 +19,27 @@
   "author": "James Ferguson",
   "license": "MIT",
   "dependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/lodash": "^4.14.77",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.33",
     "chai-as-promised": "^7.0.0",
     "lodash": "^4.17.4",
-    "neo4j-driver": "^1.3.0",
-    "node-cleanup": "^2.1.2"
+    "neo4j-driver": "^1.5.0",
+    "node-cleanup": "^2.1.2",
+    "source-map-support": "^0.5.0",
+    "ts-loader": "^3.1.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "chai": "^4.0.2",
-    "mocha": "^3.4.2",
-    "nyc": "^11.0.3"
+    "mocha": "^4.0.1",
+    "nyc": "^11.2.1"
   },
   "nyc": {
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "src/**/*.spec.js",
-      "src/**/*.tests.js"
-    ]
+    "extends": "./nyc.json"
   }
 }

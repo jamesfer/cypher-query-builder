@@ -1,0 +1,21 @@
+{
+  "all": true,
+  "produce-source-map": true,
+  "report-dir": "./coverage",
+  "extension": [
+    ".ts",
+    ".tsx"
+  ],
+  "require": [
+    "ts-node/register",
+    "source-map-support/register"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.d.ts",
+    "**/*.spec.ts",
+    "**/*.tests.ts"
+  ]
+}

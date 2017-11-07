@@ -1,0 +1,19 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowJs": false,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "target": "es5",
+    "module": "commonjs",
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": [
+      "es2016"
+    ]
+  }
+}
