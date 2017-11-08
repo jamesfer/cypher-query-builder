@@ -68,7 +68,7 @@ export function uniqueString(str, existing: string[]) {
   // If there was no suffix on the given string or it was already taken,
   // compute the new suffix.
   if (!number || takenSuffixes.indexOf(number) !== -1) {
-    number = (Math.max(...takenSuffixes) || 0) + 1;
+    number = Math.max(0, ...takenSuffixes) + 1;
   }
 
   // Append the suffix if it is not 1
