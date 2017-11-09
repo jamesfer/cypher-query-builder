@@ -1,7 +1,7 @@
 import { Statement } from '../statement';
 import {
   join, concat, map, mapValues, castArray, Dictionary,
-  Many,
+  Many, isObject,
 } from 'lodash';
 import { stringifyLabels } from '../utils';
 import { Parameter } from '../parameterBag';
@@ -36,15 +36,29 @@ export class Set extends Statement {
   }
 
   build() {
-    let op = this.override ? ' = ' : ' += ';
-    let setStatement = (value, key) => key + op + value;
-
     let labels = map(this.labels, (labels, key) => {
       return key + stringifyLabels(labels)
     });
-    let values = map(this.values, setStatement);
-    let variables = map(this.variables, setStatement);
+    let values = this.makeSetStatements(this.values);
+    let variables = this.makeSetStatements(this.variables, true);
 
     return 'SET ' + join(concat(labels, values, variables), ', ');
+  }
+
+  protected makeSetStatements(
+    obj: Dictionary<string | Parameter | Dictionary<string>>,
+    recursive: boolean = false,
+  ) {
+    return map(obj, (value, key) => this.setStatement(value, key, recursive));
+  }
+
+  protected setStatement(value, key, recursive: boolean = false) {
+    let op = this.override ? ' = ' : ' += ';
+    if (isObject(value) && recursive) {
+      return join(map(value, (value, prop) => {
+        return key + '.' + prop + op + value;
+      }), ', ');
+    }
+    return key + op + value;
   }
 }
