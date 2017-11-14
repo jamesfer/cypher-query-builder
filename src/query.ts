@@ -25,7 +25,7 @@ export class Query extends Statement implements Builder {
     return this.addStatement(new Match(patterns, options));
   }
 
-  optionalMatch(patterns: PatternCollection, options?: MatchOptions) {
+  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
     return this.addStatement(new Match(patterns, Object.assign(options, {
       optional: true,
     })));
