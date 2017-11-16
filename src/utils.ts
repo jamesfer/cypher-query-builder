@@ -23,6 +23,7 @@ export interface Builder {
   setValues(values: Dictionary<any>): Builder;
   setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean): Builder;
   skip(amount: number | string): Builder;
+  limit(amount: number | string): Builder;
 }
 
 

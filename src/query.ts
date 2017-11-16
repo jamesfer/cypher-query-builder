@@ -10,6 +10,7 @@ import { DeleteOptions } from './clauses/delete';
 import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './utils';
 import { Skip } from './clauses/skip';
+import { Limit } from './clauses/limit';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -83,6 +84,10 @@ export class Query extends Statement implements Builder {
 
   skip(amount: string | number) {
     return this.addStatement(new Skip(amount));
+  }
+
+  limit(amount: string | number) {
+    return this.addStatement(new Limit(amount));
   }
 
   build() {
