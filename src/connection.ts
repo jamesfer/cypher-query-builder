@@ -148,4 +148,8 @@ export class Connection implements Builder {
   setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean) {
     return this.query().setVariables(variables, override);
   }
+
+  skip(amount: string | number) {
+    return this.query().skip(amount);
+  }
 }

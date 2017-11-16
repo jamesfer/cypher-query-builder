@@ -9,6 +9,7 @@ import { Term } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
 import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './utils';
+import { Skip } from './clauses/skip';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -78,6 +79,10 @@ export class Query extends Statement implements Builder {
       { variables },
       { override }
     ));
+  }
+
+  skip(amount: string | number) {
+    return this.addStatement(new Skip(amount));
   }
 
   build() {

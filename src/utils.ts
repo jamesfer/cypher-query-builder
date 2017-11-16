@@ -22,6 +22,7 @@ export interface Builder {
   setLabels(labels: Dictionary<Many<string>>): Builder;
   setValues(values: Dictionary<any>): Builder;
   setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean): Builder;
+  skip(amount: number | string): Builder;
 }
 
 
