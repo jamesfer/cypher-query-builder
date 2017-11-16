@@ -2,7 +2,7 @@ import { camelCase, isNumber, isArray, isString, isObject, isBoolean, isInteger,
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { Dictionary, Many } from 'lodash';
-import { PropertyTerm } from './clauses/termListStatement';
+import { Term } from './clauses/termListStatement';
 import { SetOptions, SetProperties } from './clauses/set';
 import { DeleteOptions } from './clauses/delete';
 
@@ -13,8 +13,8 @@ export interface Builder {
   optionalMatch(patterns: PatternCollection, options?: MatchOptions): Builder;
   createNode(varName: any, labels?: Many<string>, conditions?: {}): Builder;
   create(patterns: PatternCollection): Builder;
-  return(terms: Many<PropertyTerm>): Builder;
-  with(terms: Many<PropertyTerm>): Builder;
+  return(terms: Many<Term>): Builder;
+  with(terms: Many<Term>): Builder;
   unwind(list: any[], name: string): Builder;
   delete(terms: Many<string>, options?: DeleteOptions): Builder;
   detachDelete(terms: Many<string>, options?: DeleteOptions): Builder;

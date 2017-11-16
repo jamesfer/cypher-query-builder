@@ -5,7 +5,7 @@ import { Create, Match, NodePattern, Set, Unwind, Return, With, Delete } from '.
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { SetOptions, SetProperties } from './clauses/set';
-import { PropertyTerm } from './clauses/termListStatement';
+import { Term } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
 import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './utils';
@@ -39,11 +39,11 @@ export class Query extends Statement implements Builder {
     return this.addStatement(new Create(patterns));
   }
 
-  return(terms: Many<PropertyTerm>) {
+  return(terms: Many<Term>) {
     return this.addStatement(new Return(terms));
   }
 
-  with(terms: Many<PropertyTerm>) {
+  with(terms: Many<Term>) {
     return this.addStatement(new With(terms));
   }
 
