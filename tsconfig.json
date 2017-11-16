@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowJs": false,
-    "outDir": "./dist",
     "sourceMap": true,
     "moduleResolution": "node",
     "target": "es5",
@@ -15,5 +14,9 @@
     "lib": [
       "es2016"
     ]
-  }
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.tests.ts"
+  ]
 }

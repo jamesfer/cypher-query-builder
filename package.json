@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
-    "test": "nyc --reporter=text mocha src/**/*.spec.ts",
+    "test": "nyc --reporter=text --reporter=html mocha src/**/*.spec.ts",
     "test:ci": "nyc --reporter=lcov --reporter=text mocha src/**/*.spec.ts"
   },
   "keywords": [

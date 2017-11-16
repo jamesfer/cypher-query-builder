@@ -1,9 +1,11 @@
-import { returnTests } from './return.tests';
-import { construct } from '../utils';
 import { Return } from './return';
+import { expect } from 'chai';
 
 describe('Return', function() {
   describe('#build', function() {
-    returnTests(construct(Return, s => s.buildQueryObject()));
+    it('should start with RETURN', function() {
+      let query = new Return('node');
+      expect(query.build()).to.equal('RETURN node');
+    });
   });
 });

@@ -4,11 +4,11 @@ import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, Many } from 'lodash';
 import { SetOptions, SetProperties } from './clauses/set';
-import { PropertyTerm } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { Builder } from './utils';
+import { Term } from './clauses/termListStatement';
 
 let connections: Connection[] = [];
 
@@ -113,11 +113,11 @@ export class Connection implements Builder {
     return this.query().create(patterns);
   }
 
-  return(terms: Many<PropertyTerm>) {
+  return(terms: Many<Term>) {
     return this.query().return(terms);
   }
 
-  with(terms: Many<PropertyTerm>) {
+  with(terms: Many<Term>) {
     return this.query().with(terms);
   }
 
