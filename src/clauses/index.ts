@@ -8,6 +8,7 @@ export { RelationPattern } from './relation-pattern';
 export { Match } from './match';
 export { Return } from './return';
 export { Skip } from './skip';
+export { Limit } from './limit';
 
 import { NodePattern } from './node-pattern';
 import { RelationPattern } from './relation-pattern';

@@ -152,4 +152,8 @@ export class Connection implements Builder {
   skip(amount: string | number) {
     return this.query().skip(amount);
   }
+
+  limit(amount: string | number) {
+    return this.query().limit(amount);
+  }
 }

@@ -7,5 +7,10 @@ describe('Limit', function() {
       let query = new Limit(10);
       expect(query.build()).to.equal('LIMIT 10');
     });
+
+    it('should accept a string param', function() {
+      let query = new Limit('toInteger(3 * 4)');
+      expect(query.build()).to.equal('LIMIT toInteger(3 * 4)');
+    });
   });
 });
