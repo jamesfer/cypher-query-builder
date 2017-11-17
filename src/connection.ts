@@ -9,6 +9,7 @@ import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { Builder } from './utils';
 import { Term } from './clauses/termListStatement';
+import { AnyConditions } from './clauses/where-utils';
 
 let connections: Connection[] = [];
 
@@ -155,5 +156,9 @@ export class Connection implements Builder {
 
   limit(amount: string | number) {
     return this.query().limit(amount);
+  }
+
+  where(conditions: AnyConditions) {
+    return this.query().where(conditions);
   }
 }

@@ -5,6 +5,7 @@ import { Dictionary, Many } from 'lodash';
 import { Term } from './clauses/termListStatement';
 import { SetOptions, SetProperties } from './clauses/set';
 import { DeleteOptions } from './clauses/delete';
+import { AnyConditions } from './clauses/where-utils';
 
 
 export interface Builder {
@@ -24,6 +25,7 @@ export interface Builder {
   setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean): Builder;
   skip(amount: number | string): Builder;
   limit(amount: number | string): Builder;
+  where(conditions: AnyConditions): Builder;
 }
 
 

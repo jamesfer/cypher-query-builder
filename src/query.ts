@@ -1,7 +1,7 @@
 import { Statement } from './statement';
 import { Dictionary, join, Many, map } from 'lodash';
 import { Connection } from './connection';
-import { Create, Match, NodePattern, Set, Unwind, Return, With, Delete } from './clauses/index';
+import { Create, Match, NodePattern, Set, Unwind, Return, With, Delete, Where } from './clauses/index';
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
 import { SetOptions, SetProperties } from './clauses/set';
@@ -11,6 +11,7 @@ import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './utils';
 import { Skip } from './clauses/skip';
 import { Limit } from './clauses/limit';
+import { AnyConditions } from './clauses/where-utils';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -88,6 +89,10 @@ export class Query extends Statement implements Builder {
 
   limit(amount: string | number) {
     return this.addStatement(new Limit(amount));
+  }
+
+  where(conditions: AnyConditions) {
+    return this.addStatement(new Where(conditions));
   }
 
   build() {
