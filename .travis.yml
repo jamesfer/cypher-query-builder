@@ -20,3 +20,10 @@ script: npm run test:ci
 after_success:
   - ./node_modules/.bin/nyc report --reporter=text-lcov | coveralls
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+deploy:
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
+  api_key:
+    secure: Tm6TfM1dE1kUsWk2oo9nahdWHOv214Vvujs6kSW5cbv4YuEiSP8UgkCtsmR1DvTIjtnrx60YRnM4sU3M8owLjv85tJAAas2mRv0XCiq1Ha79s7Z9zsex8aQhJkptc+y9oAnMiVvVEWS/2927XhqIofDM/FV7F0CXT92FDOfA4YQEbv5BVxT6scJ4DcTMMh6MOVY0lLiH2SoesTRGK2bVXSK8qSliHiMrV1l4p3PqZ5r2WKHI2+fwGx76U1z6QALtPGfJFzy9/BXH6LM+DtS5ccMVFgTtdHFmQ3y45HyoXKPAZi4gEwi+8W/XcJPfjOEj7/cFxpTnK3oGUVRQJ3dxkxznLZmYc9+iCPwHtftL+UlgGD/Pn1/JjizZ6GPxrHNANG9tEhyCJnWaPKBE5C/KPcQwAHeL2ShZARBcNJCy3yEGuvpRFhHXf6zXe+CcBuUw0wgK8K8D+BlduMtStaOjbdI4/R8/NYICXg16xvMYBcFoHDQK1vE9d1a9w9gieNiIKGvYSzNKvoXEDHCDnIv5LcI6fYnFkX/5y+jsJb7bOZSKfrza8auhPgeOUZkxtzv3CHEcy0uwP7FqQPf3t2dDn0QZvPumkK/bT4vhdhe5DX53ulyKzmMkk9lEPy3vDQyE35BKupkqHsG3zB0k/qZtYipDwxlAANlY9dR2Yx/S2k0=
