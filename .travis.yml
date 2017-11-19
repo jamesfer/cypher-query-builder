@@ -5,21 +5,18 @@ notifications:
   email: false
 node_js:
   - "8"
+  - "9"
 cache:
   yarn: true
   directories:
     - "node_modules"
-env:
-  global:
-    - CC_TEST_REPORTER_ID=55984b0c05cc8b416032ce32b012ccf7ac71abb49799d25348bea1198633a1cd
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-script: npm run test:ci
+
+script:
+  - "npm run build:prod"
+  - "npm run test:ci"
 after_success:
-  - ./node_modules/.bin/nyc report --reporter=text-lcov | coveralls
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
+
 deploy:
   provider: npm
   email: jamesferguson497@gmail.com

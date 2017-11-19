@@ -5,6 +5,8 @@ import {
 } from './where-utils';
 import { ParameterBag } from '../parameterBag';
 
+export const operators = { and, or, xor, not };
+
 /* istanbul ignore next */
 export class WhereOp {
   evaluate(
