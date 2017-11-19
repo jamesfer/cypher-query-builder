@@ -1,19 +1,21 @@
-// export type ComparatorFunc = (name: string, param: Parameter | string) => Many<string>;
-
 import { join, Many, last, split, capitalize } from 'lodash';
 import { ParameterBag } from '../parameterBag';
-import { Pattern } from './pattern';
-
-/* istanbul ignore next */
-// export class WhereComparator {
-//   constructor(...args: any[]) {
-//
-//   }
-//
-//   compare(params: ParameterBag, name: string): string {
-//     throw Error('Cannot compare using the base where comparator class');
-//   };
-// }
+export const comparisions = {
+  equals,
+  greaterThan,
+  greaterEqualTo,
+  lessThan,
+  lessEqualTo,
+  startsWith,
+  endsWith,
+  contains,
+  inArray,
+  hasLabel,
+  exists,
+  between,
+  isNull,
+  regexp,
+};
 
 export type Comparator = (params: ParameterBag, name: string) => Many<string>;
 
