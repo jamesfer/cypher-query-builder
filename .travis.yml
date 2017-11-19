@@ -11,7 +11,9 @@ cache:
   directories:
     - "node_modules"
 
-script: "npm run test:ci"
+script:
+  - "npm run build:prod"
+  - "npm run test:ci"
 after_success:
   - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
 
