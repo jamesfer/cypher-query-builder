@@ -6,6 +6,7 @@ import { Term } from './clauses/termListStatement';
 import { SetOptions, SetProperties } from './clauses/set';
 import { DeleteOptions } from './clauses/delete';
 import { AnyConditions } from './clauses/where-utils';
+import { Direction, OrderConstraints } from './clauses/order-by';
 
 
 export interface Builder {
@@ -26,6 +27,7 @@ export interface Builder {
   skip(amount: number | string): Builder;
   limit(amount: number | string): Builder;
   where(conditions: AnyConditions): Builder;
+  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction);
 }
 
 

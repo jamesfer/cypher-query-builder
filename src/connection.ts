@@ -10,6 +10,7 @@ import { MatchOptions } from './clauses/match';
 import { Builder } from './utils';
 import { Term } from './clauses/termListStatement';
 import { AnyConditions } from './clauses/where-utils';
+import { Direction, OrderConstraints } from './clauses/order-by';
 
 let connections: Connection[] = [];
 
@@ -160,5 +161,9 @@ export class Connection implements Builder {
 
   where(conditions: AnyConditions) {
     return this.query().where(conditions);
+  }
+
+  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
+    return this.query().orderBy(fields, dir);
   }
 }
