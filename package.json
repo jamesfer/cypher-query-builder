@@ -1,6 +1,6 @@
 {
   "name": "cypher-query-builder",
-  "version": "0.1.0-alpha.1",
+  "version": "1.0.0",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -8,7 +8,8 @@
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
     "test": "nyc --reporter=text --reporter=html mocha src/**/*.spec.ts",
-    "test:ci": "nyc --reporter=lcov --reporter=text mocha src/**/*.spec.ts"
+    "test:ci": "nyc --reporter=lcov --reporter=text mocha src/**/*.spec.ts",
+    "release": "./scripts/release.sh"
   },
   "keywords": [
     "cypher",
