@@ -25,9 +25,8 @@ export class OrderBy extends Statement {
   }
 
   build() {
-    return 'ORDER BY ' + join(map(this.constraints, constraint => {
-      let dir = constraint[1] || this.dir;
-      return constraint[0] + (dir ? ' ' + dir : '');
-    }));
+    return 'ORDER BY ' + join(map(this.constraints, (dir, prop) => {
+      return prop + (dir ? ' ' + dir : '');
+    }), ', ');
   }
 }
