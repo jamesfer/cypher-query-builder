@@ -21,6 +21,8 @@ after_success:
   - ./node_modules/.bin/nyc report --reporter=text-lcov | coveralls
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
 deploy:
+  provider: npm
+  email: jamesferguson497@gmail.com
   skip_cleanup: true
   on:
     tags: true
