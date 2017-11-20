@@ -1,47 +1,16 @@
-import { camelCase, isNumber, isArray, isString, isObject, isBoolean, isInteger, join, map, reduce, castArray } from 'lodash';
-import { PatternCollection } from './clauses/patternStatement';
-import { MatchOptions } from './clauses/match';
-import { Dictionary, Many } from 'lodash';
-import { Term } from './clauses/termListStatement';
-import { SetOptions, SetProperties } from './clauses/set';
-import { DeleteOptions } from './clauses/delete';
-import { AnyConditions } from './clauses/where-utils';
-import { Direction, OrderConstraints } from './clauses/order-by';
-
-
-export interface Builder {
-  matchNode(varName: string, labels?: Many<string>, conditions?: {}): Builder;
-  match(patterns: PatternCollection, options?: MatchOptions): Builder;
-  optionalMatch(patterns: PatternCollection, options?: MatchOptions): Builder;
-  createNode(varName: any, labels?: Many<string>, conditions?: {}): Builder;
-  create(patterns: PatternCollection): Builder;
-  return(terms: Many<Term>): Builder;
-  with(terms: Many<Term>): Builder;
-  unwind(list: any[], name: string): Builder;
-  delete(terms: Many<string>, options?: DeleteOptions): Builder;
-  detachDelete(terms: Many<string>, options?: DeleteOptions): Builder;
-  set(properties: SetProperties, options: SetOptions): Builder;
-  setLabels(labels: Dictionary<Many<string>>): Builder;
-  setValues(values: Dictionary<any>): Builder;
-  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean): Builder;
-  skip(amount: number | string): Builder;
-  limit(amount: number | string): Builder;
-  where(conditions: AnyConditions): Builder;
-  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction);
-  raw(clause: string, params?: Dictionary<any>);
-}
-
-
-
-export interface AnyClass<T> {
-  new (...args: any[]): T;
-}
-export function construct<T, R = T>(cls: AnyClass<T>, cb?: (c: T) => R): (...args: any[]) => R {
-  return function(...args) {
-    let obj = new (cls.bind.apply(cls, [cls, ...args]))();
-    return cb ? cb(obj) : obj;
-  }
-}
+import {
+  camelCase,
+  castArray,
+  isArray,
+  isBoolean,
+  isInteger,
+  isNumber,
+  isObject,
+  isString,
+  join,
+  map,
+  reduce,
+} from 'lodash';
 
 
 /**
