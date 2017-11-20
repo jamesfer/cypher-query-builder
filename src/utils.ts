@@ -28,6 +28,7 @@ export interface Builder {
   limit(amount: number | string): Builder;
   where(conditions: AnyConditions): Builder;
   orderBy(fields: Many<string> | OrderConstraints, dir?: Direction);
+  raw(clause: string, params?: Dictionary<any>);
 }
 
 

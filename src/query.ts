@@ -13,6 +13,7 @@ import { Skip } from './clauses/skip';
 import { Limit } from './clauses/limit';
 import { AnyConditions } from './clauses/where-utils';
 import { Direction, OrderBy, OrderConstraints } from './clauses/order-by';
+import { Raw } from './clauses/raw';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -98,6 +99,10 @@ export class Query extends Statement implements Builder {
 
   orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
     return this.addStatement(new OrderBy(fields, dir));
+  }
+
+  raw(clause: string, params: Dictionary<any> = {}) {
+    return this.addStatement(new Raw(clause, params));
   }
 
   build() {
