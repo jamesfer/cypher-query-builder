@@ -166,4 +166,8 @@ export class Connection implements Builder {
   orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
     return this.query().orderBy(fields, dir);
   }
+
+  raw(clause: string, params: Dictionary<any> = {}) {
+    return this.query().raw(clause, params);
+  }
 }
