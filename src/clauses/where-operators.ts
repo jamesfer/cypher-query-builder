@@ -3,7 +3,7 @@ import {
   combineAnd, combineNot, combineXor, combineOr, AndConditions,
   OrConditions, AnyConditions,
 } from './where-utils';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 
 export const operators = { and, or, xor, not };
 

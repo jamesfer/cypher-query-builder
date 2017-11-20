@@ -2,9 +2,9 @@ import { Dictionary, Many, } from 'lodash';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
 import { Direction, OrderConstraints } from './clauses/order-by';
-import { PatternCollection, } from './clauses/patternStatement';
+import { PatternCollection, } from './clauses/pattern-statement';
 import { SetOptions, SetProperties } from './clauses/set';
-import { Term } from './clauses/termListStatement';
+import { Term } from './clauses/term-list-statement';
 import { AnyConditions } from './clauses/where-utils';
 
 export interface Builder {

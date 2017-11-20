@@ -1,5 +1,5 @@
 import { join, Many, last, split, capitalize } from 'lodash';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 export const comparisions = {
   equals,
   greaterThan,

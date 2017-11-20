@@ -1,4 +1,4 @@
-import { PatternStatement } from './patternStatement';
+import { PatternStatement } from './pattern-statement';
 import { NodePattern } from './node-pattern';
 import { expect } from 'chai';
 

@@ -4,7 +4,7 @@ import {
   Many, isObject,
 } from 'lodash';
 import { stringifyLabels } from '../utils';
-import { Parameter } from '../parameterBag';
+import { Parameter } from '../parameter-bag';
 
 export type SetProperties = {
   labels?: Dictionary<Many<string>>,
