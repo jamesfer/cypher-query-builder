@@ -1,4 +1,4 @@
-import { TermListStatement } from './termListStatement';
+import { TermListStatement } from './term-list-statement';
 
 export class Return extends TermListStatement {
   /**

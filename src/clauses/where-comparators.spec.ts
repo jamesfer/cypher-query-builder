@@ -5,7 +5,7 @@ import {
   inArray,
   isNull, lessEqualTo, lessThan, regexp, startsWith,
 } from './where-comparators';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 
 
 describe('Where Comparators', function() {

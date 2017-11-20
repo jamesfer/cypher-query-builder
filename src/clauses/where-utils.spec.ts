@@ -1,6 +1,6 @@
 import { AnyConditions, stringCons } from './where-utils';
 import { expect } from 'chai';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 import { not, xor } from './where-operators';
 import { equals, greaterThan } from './where-comparators';
 

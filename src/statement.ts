@@ -1,5 +1,5 @@
 import { stringifyValue } from './utils';
-import { ParameterContainer } from './parameterContainer';
+import { ParameterContainer } from './parameter-container';
 
 export class Statement extends ParameterContainer {
   constructor() {

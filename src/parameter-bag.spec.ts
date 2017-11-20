@@ -1,5 +1,5 @@
 import { expect } from '../test-setup';
-import { ParameterBag } from './parameterBag';
+import { ParameterBag } from './parameter-bag';
 import { keys, values } from 'lodash';
 
 describe('ParameterBag', function() {

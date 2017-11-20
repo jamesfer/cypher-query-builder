@@ -1,4 +1,4 @@
-import { Parameter, ParameterBag } from './parameterBag';
+import { Parameter, ParameterBag } from './parameter-bag';
 export class ParameterContainer {
   protected parameterBag = new ParameterBag();
 
