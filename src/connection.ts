@@ -7,7 +7,7 @@ import { SetOptions, SetProperties } from './clauses/set';
 import { DeleteOptions } from './clauses/delete';
 import { PatternCollection } from './clauses/patternStatement';
 import { MatchOptions } from './clauses/match';
-import { Builder } from './utils';
+import { Builder } from './builder';
 import { Term } from './clauses/termListStatement';
 import { AnyConditions } from './clauses/where-utils';
 import { Direction, OrderConstraints } from './clauses/order-by';

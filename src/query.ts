@@ -8,7 +8,7 @@ import { SetOptions, SetProperties } from './clauses/set';
 import { Term } from './clauses/termListStatement';
 import { DeleteOptions } from './clauses/delete';
 import { SanitizedRecord, SanitizedValue } from './transformer';
-import { Builder } from './utils';
+import { Builder } from './builder';
 import { Skip } from './clauses/skip';
 import { Limit } from './clauses/limit';
 import { AnyConditions } from './clauses/where-utils';
