@@ -1,4 +1,4 @@
-import { PatternStatement } from './patternStatement';
+import { PatternStatement } from './pattern-statement';
 
 export interface MatchOptions {
   optional?: boolean,

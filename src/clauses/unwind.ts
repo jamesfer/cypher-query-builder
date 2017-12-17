@@ -1,5 +1,5 @@
 import { Statement } from '../statement';
-import { Parameter } from '../parameterBag';
+import { Parameter } from '../parameter-bag';
 
 export class Unwind extends Statement {
   protected listParam: Parameter;

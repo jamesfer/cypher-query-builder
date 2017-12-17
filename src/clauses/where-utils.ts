@@ -1,5 +1,5 @@
 import { Dictionary, isPlainObject, Many, isArray, join, map, split, last, keys, isFunction } from 'lodash';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 import { WhereOp } from './where-operators';
 import { Comparator } from './where-comparators';
 

@@ -3,7 +3,7 @@ import {
   WhereXor, xor, not, or,
 } from './where-operators';
 import { expect } from 'chai';
-import { ParameterBag } from '../parameterBag';
+import { ParameterBag } from '../parameter-bag';
 
 
 describe('WhereAnd', function() {

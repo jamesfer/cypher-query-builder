@@ -2,17 +2,18 @@ import { Statement } from './statement';
 import { Dictionary, join, Many, map } from 'lodash';
 import { Connection } from './connection';
 import { Create, Match, NodePattern, Set, Unwind, Return, With, Delete, Where } from './clauses/index';
-import { PatternCollection } from './clauses/patternStatement';
+import { PatternCollection } from './clauses/pattern-statement';
 import { MatchOptions } from './clauses/match';
 import { SetOptions, SetProperties } from './clauses/set';
-import { Term } from './clauses/termListStatement';
+import { Term } from './clauses/term-list-statement';
 import { DeleteOptions } from './clauses/delete';
 import { SanitizedRecord, SanitizedValue } from './transformer';
-import { Builder } from './utils';
+import { Builder } from './builder';
 import { Skip } from './clauses/skip';
 import { Limit } from './clauses/limit';
 import { AnyConditions } from './clauses/where-utils';
 import { Direction, OrderBy, OrderConstraints } from './clauses/order-by';
+import { Raw } from './clauses/raw';
 
 export class Query extends Statement implements Builder {
   protected statements: Statement[] = [];
@@ -98,6 +99,10 @@ export class Query extends Statement implements Builder {
 
   orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
     return this.addStatement(new OrderBy(fields, dir));
+  }
+
+  raw(clause: string, params: Dictionary<any> = {}) {
+    return this.addStatement(new Raw(clause, params));
   }
 
   build() {

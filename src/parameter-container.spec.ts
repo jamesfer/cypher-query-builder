@@ -1,5 +1,5 @@
-import { ParameterContainer } from './parameterContainer';
-import { ParameterBag } from './parameterBag';
+import { ParameterContainer } from './parameter-container';
+import { ParameterBag } from './parameter-bag';
 import { expect } from '../test-setup';
 
 describe('ParameterContainer', function() {

@@ -1,4 +1,4 @@
-import { PatternStatement } from './patternStatement';
+import { PatternStatement } from './pattern-statement';
 
 export class Create extends PatternStatement {
   constructor(patterns) {

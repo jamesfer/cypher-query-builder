@@ -1,6 +1,6 @@
 import { Statement } from '../statement';
 import { concat, mapValues, join, map, isEmpty } from 'lodash';
-import { Parameter } from '../parameterBag';
+import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
 export class Pattern extends Statement {
