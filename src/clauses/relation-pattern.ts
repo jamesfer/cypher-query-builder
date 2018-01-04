@@ -1,13 +1,13 @@
 import { Pattern } from './pattern';
-import { trim } from 'lodash';
+import { Dictionary, trim } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
 export class RelationPattern extends Pattern {
   constructor(
     protected dir: 'in' | 'out' | 'either',
-    name: string = '',
-    labels: string | string[] = [],
-    conditions = {},
+    name?: string | string[] | Dictionary<any>,
+    labels?: string | string[] | Dictionary<any>,
+    conditions?: Dictionary<any>,
     protected length?: PathLength
   ) {
     super(name, labels, conditions);

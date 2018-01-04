@@ -4,17 +4,17 @@ import { keys, values } from 'lodash';
 
 describe('Node', function() {
   describe('#build', function() {
-    it('should build a node pattern with a variable name', function() {
-      let node = new NodePattern('person');
+    it('should build a node pattern with a label', function() {
+      let node = new NodePattern('Person');
       let queryObj = node.buildQueryObject();
-      expect(queryObj.query).to.equal('(person)');
+      expect(queryObj.query).to.equal('(:Person)');
       expect(queryObj.params).to.be.empty;
     });
 
-    it('should build a node pattern with a label', function() {
-      let node = new NodePattern('', 'Person');
+    it('should build a node pattern with a variable name', function() {
+      let node = new NodePattern('person', 'Person');
       let queryObj = node.buildQueryObject();
-      expect(queryObj.query).to.equal('(:Person)');
+      expect(queryObj.query).to.equal('(person:Person)');
       expect(queryObj.params).to.be.empty;
     });
 

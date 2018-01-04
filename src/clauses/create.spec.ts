@@ -5,7 +5,7 @@ import { NodePattern } from './node-pattern';
 describe('Create', function() {
   describe('#build', function() {
     it('should start with CREATE', function() {
-      const create = new Create(new NodePattern('node'));
+      const create = new Create(new NodePattern('node', []));
       expect(create.build()).to.equal('CREATE (node)');
     });
 

@@ -1,3 +1,5 @@
+import { Dictionary } from 'lodash';
+
 export { Create } from './create';
 export { NodePattern } from './node-pattern';
 export { With } from './with';
@@ -34,18 +36,18 @@ import { RelationPattern } from './relation-pattern';
 import { PathLength } from '../utils';
 
 export function node(
-  name: string,
-  labels: string | string[] = [],
-  conditions = {}
+  name?: string | string[] | Dictionary<any>,
+  labels?: string | string[] | Dictionary<any>,
+  conditions?: Dictionary<any>,
 ) {
   return new NodePattern(name, labels, conditions);
 }
 
 export function relation(
   dir: 'in' | 'out' | 'either',
-  name: string = '',
-  labels: string | string[] = [],
-  conditions = {},
+  name?: string | string[] | Dictionary<any>,
+  labels?: string | string[] | Dictionary<any>,
+  conditions?: Dictionary<any>,
   length?: PathLength
 ) {
   return new RelationPattern(dir, name, labels, conditions, length);
