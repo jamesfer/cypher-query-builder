@@ -3,8 +3,12 @@ import { expect } from 'chai';
 import { NodePattern } from './clauses';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
-import { SinonSpy, SinonStub, spy, stub } from 'sinon';
-import { each, Many, Dictionary } from 'lodash';
+import { SinonSpy, SinonStub, spy } from 'sinon';
+import { each, Dictionary } from 'lodash';
+import {
+  defaultCredentials, defaultUrl,
+  mockConnection,
+} from './connection.mock';
 
 interface MockSession {
   close: SinonSpy,
@@ -17,22 +21,11 @@ interface MockDriver {
 }
 
 describe('Connection', function() {
-  const defaultUrl = 'bolt://localhost';
-  const defaultCredentials = { username: 'neo4j', password: 'admin' };
-
   let connection: Connection;
   let session: MockSession;
   let driver: MockDriver;
   beforeEach(function() {
-    session = {
-      close: spy(),
-      run: stub(),
-    };
-    driver = {
-      close: spy(),
-      session: stub().returns(session),
-    };
-    connection = new Connection(defaultUrl, defaultCredentials, () => driver);
+    ({ connection, session, driver } = mockConnection());
   });
 
 
