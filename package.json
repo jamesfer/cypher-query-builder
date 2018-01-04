@@ -31,7 +31,7 @@
     "node-cleanup": "^2.1.2",
     "source-map-support": "^0.5.0",
     "ts-loader": "^3.1.1",
-    "ts-node": "^3.3.0",
+    "ts-node": "^4.1.0",
     "typescript": "^2.5.3",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0"
@@ -39,7 +39,7 @@
   "devDependencies": {
     "chai": "^4.0.2",
     "mocha": "^4.0.1",
-    "nyc": "^11.2.1"
+    "nyc": "^11.4.1"
   },
   "nyc": {
     "extends": "./nyc.json"
