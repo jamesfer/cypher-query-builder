@@ -95,8 +95,8 @@ export class Connection implements Builder {
       });
   }
 
-  matchNode(varName: string, labels?: Many<string>, conditions?: {}) {
-    return this.query().matchNode(varName, labels, conditions);
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    return this.query().matchNode(name, labels, conditions);
   }
 
   match(patterns: PatternCollection, options?: MatchOptions) {
@@ -107,8 +107,8 @@ export class Connection implements Builder {
     return this.query().optionalMatch(patterns, options);
   }
 
-  createNode(varName: any, labels?: Many<string>, conditions?: {}) {
-    return this.query().createNode(varName, labels, conditions);
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    return this.query().createNode(name, labels, conditions);
   }
 
   create(patterns: PatternCollection) {
