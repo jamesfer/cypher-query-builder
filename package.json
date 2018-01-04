@@ -42,6 +42,24 @@
     "nyc": "^11.4.1"
   },
   "nyc": {
-    "extends": "./nyc.json"
+    "all": true,
+    "produce-source-map": true,
+    "report-dir": "./coverage",
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "**/*.tests.ts"
+    ]
   }
 }
