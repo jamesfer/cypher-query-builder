@@ -62,8 +62,7 @@
     "exclude": [
       "**/*.d.ts",
       "**/*.spec.ts",
-      "**/*.mock.ts",
-      "**/*.tests.ts"
+      "**/*.mock.ts"
     ]
   }
 }
