@@ -60,7 +60,7 @@ export class Query extends Statement implements Builder {
     return this.addStatement(new Delete(terms, options));
   }
 
-  detachDelete(terms: Many<string>, options?: DeleteOptions) {
+  detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
     return this.addStatement(new Delete(terms, Object.assign(options, {
       detach: true,
     })));
