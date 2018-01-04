@@ -11,6 +11,7 @@ import { Builder } from './builder';
 import { Term } from './clauses/term-list-statement';
 import { AnyConditions } from './clauses/where-utils';
 import { Direction, OrderConstraints } from './clauses/order-by';
+import { AuthToken, Config } from 'neo4j-driver/types/v1';
 
 let connections: Connection[] = [];
 
@@ -22,7 +23,21 @@ nodeCleanup(function () {
   connections = [];
 });
 
-export type Credentials = { username: string, password: string };
+export interface Credentials { username: string, password: string }
+
+export interface Session {
+  close(): void;
+  run(query: string, params: Dictionary<any>)
+}
+
+export interface Driver {
+  close(): void;
+  session(): Session;
+}
+
+export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
+  => Driver;
+
 
 export class Connection implements Builder {
   protected auth: any;
@@ -32,10 +47,11 @@ export class Connection implements Builder {
 
   constructor(
     protected url: string,
-    credentials: Credentials
+    credentials: Credentials,
+    driver: DriverConstructor = neo4j.driver,
   ) {
     this.auth = neo4j.auth.basic(credentials.username, credentials.password);
-    this.driver = neo4j.driver(this.url, this.auth);
+    this.driver = driver(this.url, this.auth);
     this.open = true;
     connections.push(this);
   }
@@ -167,7 +183,7 @@ export class Connection implements Builder {
     return this.query().orderBy(fields, dir);
   }
 
-  raw(clause: string, params: Dictionary<any> = {}) {
+  raw(clause: string, params?: Dictionary<any>) {
     return this.query().raw(clause, params);
   }
 }
