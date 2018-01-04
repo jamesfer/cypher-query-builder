@@ -1,6 +1,8 @@
 import { Statement } from '../statement';
-import { mapValues, join, map, isEmpty, Dictionary, isArray, isString,
-  castArray, isObjectLike, isNil } from 'lodash';
+import {
+  mapValues, join, map, isEmpty, Dictionary, isArray, isString,
+  castArray, isObjectLike, isNil, Many,
+} from 'lodash';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
@@ -12,8 +14,8 @@ export class Pattern extends Statement {
   protected conditions: Dictionary<any>;
 
   constructor(
-    name?: string | string[] | Dictionary<any>,
-    labels?: string | string[] | Dictionary<any>,
+    name?: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
     conditions?: Dictionary<any>,
     protected options = { expanded: true },
   ) {

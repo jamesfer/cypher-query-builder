@@ -8,13 +8,13 @@ import { Term } from './clauses/term-list-statement';
 import { AnyConditions } from './clauses/where-utils';
 
 export interface Builder {
-  matchNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
 
   match(patterns: PatternCollection, options?: MatchOptions): Builder;
 
   optionalMatch(patterns: PatternCollection, options?: MatchOptions): Builder;
 
-  createNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
 
   create(patterns: PatternCollection): Builder;
 

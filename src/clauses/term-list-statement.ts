@@ -32,7 +32,7 @@ export class TermListStatement extends Statement {
     return join(flattenDeep(map(this.terms, term => this.stringifyTerm(term))), ', ');
   }
 
-  private stringifyTerm(term: Term): string | string[]{
+  private stringifyTerm(term: Term): Many<string>{
     // Just a node
     if (isString(term)) {
       return this.stringifyProperty(term);

@@ -95,7 +95,7 @@ export class Connection implements Builder {
       });
   }
 
-  matchNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     return this.query().matchNode(name, labels, conditions);
   }
 
@@ -107,7 +107,7 @@ export class Connection implements Builder {
     return this.query().optionalMatch(patterns, options);
   }
 
-  createNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     return this.query().createNode(name, labels, conditions);
   }
 

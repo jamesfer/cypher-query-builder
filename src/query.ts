@@ -22,7 +22,7 @@ export class Query extends Statement implements Builder {
     super();
   }
 
-  matchNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     return this.addStatement(new Match(new NodePattern(name, labels, conditions)));
   }
 
@@ -36,7 +36,7 @@ export class Query extends Statement implements Builder {
     })));
   }
 
-  createNode(name?: string | string[] | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     return this.addStatement(new Create(new NodePattern(name, labels, conditions)));
   }
 
