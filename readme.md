@@ -8,7 +8,7 @@ Write queries in Javascript just as you would write them in Cypher.
     let results = await db.matchNode('user', 'User', { email: 'email@email.com' })
       .with('user')
       .create([
-        cypher.node('user'),
+        cypher.node('user', ''),
         cypher.relation('out', '', 'HasPost'),
         cypher.node('post', 'Post', { body: 'Hello!' })
       ])
