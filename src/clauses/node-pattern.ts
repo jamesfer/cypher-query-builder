@@ -1,11 +1,11 @@
 import { Pattern } from './pattern';
-import { trim } from 'lodash';
+import { Dictionary, Many, trim } from 'lodash';
 
 export class NodePattern extends Pattern {
   constructor(
-    name: string,
-    labels: string | string[] = [],
-    conditions = {}
+    name: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
+    conditions?: Dictionary<any>,
   ) {
     super(name, labels, conditions);
   }

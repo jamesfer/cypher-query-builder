@@ -1,5 +1,6 @@
 # Cypher Query Builder
 [![Build Status](https://travis-ci.org/jamesfer/cypher-query-builder.svg?branch=master)](https://travis-ci.org/jamesfer/cypher-query-builder)
+[![Coverage Status](https://coveralls.io/repos/github/jamesfer/cypher-query-builder/badge.svg?branch=master)](https://coveralls.io/github/jamesfer/cypher-query-builder?branch=master)
 
 A flexible and intuitive query builder for Neo4j and Cypher.
 Write queries in Javascript just as you would write them in Cypher.
@@ -7,7 +8,7 @@ Write queries in Javascript just as you would write them in Cypher.
     let results = await db.matchNode('user', 'User', { email: 'email@email.com' })
       .with('user')
       .create([
-        cypher.node('user'),
+        cypher.node('user', ''),
         cypher.relation('out', '', 'HasPost'),
         cypher.node('post', 'Post', { body: 'Hello!' })
       ])

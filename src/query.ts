@@ -22,8 +22,8 @@ export class Query extends Statement implements Builder {
     super();
   }
 
-  matchNode(varName: string, labels?: Many<string>, conditions?: {}) {
-    return this.addStatement(new Match(new NodePattern(varName, labels, conditions)));
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    return this.addStatement(new Match(new NodePattern(name, labels, conditions)));
   }
 
   match(patterns: PatternCollection, options?: MatchOptions) {
@@ -36,8 +36,8 @@ export class Query extends Statement implements Builder {
     })));
   }
 
-  createNode(varName: any, labels?: Many<string>, conditions?: {}) {
-    return this.addStatement(new Create(new NodePattern(varName, labels, conditions)));
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    return this.addStatement(new Create(new NodePattern(name, labels, conditions)));
   }
 
   create(patterns: PatternCollection) {
@@ -60,7 +60,7 @@ export class Query extends Statement implements Builder {
     return this.addStatement(new Delete(terms, options));
   }
 
-  detachDelete(terms: Many<string>, options?: DeleteOptions) {
+  detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
     return this.addStatement(new Delete(terms, Object.assign(options, {
       detach: true,
     })));

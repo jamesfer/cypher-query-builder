@@ -1,20 +1,69 @@
 import { Statement } from '../statement';
-import { concat, mapValues, join, map, isEmpty } from 'lodash';
+import {
+  mapValues, join, map, isEmpty, Dictionary, isArray, isString,
+  castArray, isObjectLike, isNil, Many,
+} from 'lodash';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
 export class Pattern extends Statement {
   protected useExpandedConditions: boolean;
   protected conditionParams = {};
+  protected name: string;
+  protected labels: string[];
+  protected conditions: Dictionary<any>;
 
   constructor(
-    protected name: string,
-    protected labels: string | string[] = [],
-    protected conditions: {} = {},
-    protected options = { expanded: true }
+    name?: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
+    conditions?: Dictionary<any>,
+    protected options = { expanded: true },
   ) {
     super();
-    this.labels = concat([], labels);
+
+    const isConditions = (a: any) => isObjectLike(a) && !isArray(a);
+
+    if (isNil(conditions)) {
+      if (isConditions(labels)) {
+        conditions = labels as Dictionary<any>;
+        labels = undefined;
+      }
+      else if (isNil(labels) && isConditions(name)) {
+        conditions = name as Dictionary<any>;
+        name = undefined;
+      }
+      else {
+        conditions = {};
+      }
+    }
+
+    if (isNil(labels)) {
+      if (isString(name) || isArray(name)) {
+        labels = name;
+        name = undefined;
+      }
+      else {
+        labels = [];
+      }
+    }
+
+    if (isNil(name)) {
+      name = '';
+    }
+
+    if (!isString(name)) {
+      throw new TypeError('Name must be a string.')
+    }
+    if (!isString(labels) && !isArray(labels)) {
+      throw new TypeError('Labels must be a string or an array');
+    }
+    if (!isConditions(conditions)) {
+      throw new TypeError('Conditions must be an object.');
+    }
+
+    this.labels = castArray(labels);
+    this.name = name;
+    this.conditions = conditions;
     this.setExpandedConditions(options.expanded);
   }
 
