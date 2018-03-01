@@ -28,19 +28,19 @@ describe('Relation', function() {
       expect(queryObj.params).to.be.empty;
     });
 
-    it('should build a relation pattern with a label', function() {
-      let rel = new RelationPattern('in', 'FriendsWith');
+    it('should build a relation pattern with a variable name', function() {
+      let rel = new RelationPattern('in', 'link');
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('<-[:FriendsWith]-');
+      expect(queryObj.query).to.equal('<-[link]-');
       expect(queryObj.params).to.be.empty;
     });
 
-    it('should build a relation pattern with a variable name', function() {
-      let rel = new RelationPattern('in', 'link', 'Link');
+    it('should build a relation pattern with a label', function() {
+      let rel = new RelationPattern('in', 'link', 'FriendsWith');
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('<-[link:Link]-');
+      expect(queryObj.query).to.equal('<-[link:FriendsWith]-');
       expect(queryObj.params).to.be.empty;
     });
 
@@ -56,7 +56,25 @@ describe('Relation', function() {
       let rel = new RelationPattern('out', {recent: true, years: 7});
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.match(/^-\[\{ recent: \$[a-zA-Z0-9-_]+, years: \$[a-zA-Z0-9-_]+ \}\]->$/);
+      expect(queryObj.query).to.equal('-[{ recent: $recent, years: $years }]->');
+      expect(keys(queryObj.params)).to.have.length(2);
+      expect(values(queryObj.params)).to.have.members([true, 7]);
+    });
+
+    it('should build a relation pattern with a name and conditions', function() {
+      let rel = new RelationPattern('out', 'link', {recent: true, years: 7});
+      let queryObj = rel.buildQueryObject();
+
+      expect(queryObj.query).to.equal('-[link { recent: $recent, years: $years }]->');
+      expect(keys(queryObj.params)).to.have.length(2);
+      expect(values(queryObj.params)).to.have.members([true, 7]);
+    });
+
+    it('should build a relation pattern with labels and conditions', function() {
+      let rel = new RelationPattern('out', ['FriendsWith'], {recent: true, years: 7});
+      let queryObj = rel.buildQueryObject();
+
+      expect(queryObj.query).to.equal('-[:FriendsWith { recent: $recent, years: $years }]->');
       expect(keys(queryObj.params)).to.have.length(2);
       expect(values(queryObj.params)).to.have.members([true, 7]);
     });
@@ -77,7 +95,7 @@ describe('Relation', function() {
       let rel = new RelationPattern('either', 'f', ['FriendsWith', 'WorksWith'], {recent: true, years: 7}, [2, 3]);
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.match(/^-\[f:FriendsWith:WorksWith\*2\.\.3 \{ recent: \$[a-zA-Z0-9-_]+, years: \$[a-zA-Z0-9-_]+ \}\]-$/);
+      expect(queryObj.query).to.equal('-[f:FriendsWith:WorksWith*2..3 { recent: $recent, years: $years }]-');
       expect(keys(queryObj.params)).to.have.length(2);
       expect(values(queryObj.params)).to.have.members([true, 7]);});
   });

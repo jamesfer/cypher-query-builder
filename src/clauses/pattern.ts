@@ -38,7 +38,7 @@ export class Pattern extends Statement {
     }
 
     if (isNil(labels)) {
-      if (isString(name) || isArray(name)) {
+      if (isArray(name)) {
         labels = name;
         name = undefined;
       }

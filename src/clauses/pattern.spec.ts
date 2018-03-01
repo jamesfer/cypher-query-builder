@@ -8,10 +8,10 @@ describe('Pattern', function() {
     expect(pattern.getNameString()).to.equal('');
   });
 
-  it('should accept just a label', function() {
+  it('should accept just a name', function() {
     const pattern = new Pattern('label');
-    expect(pattern.getLabelsString()).to.equal(':label');
-    expect(pattern.getNameString()).to.equal('');
+    expect(pattern.getLabelsString()).to.equal('');
+    expect(pattern.getNameString()).to.equal('label');
   });
 
   it('should accept just an array of labels', function() {
@@ -43,20 +43,25 @@ describe('Pattern', function() {
     expect(emptyLabelPattern.getNameString()).to.equal('name');
   });
 
-  it('should accept a label and conditions', function() {
+  it('should accept a name and conditions', function() {
     const conditions = { key: 'value' };
     const conditionsString = '{ key: $key }';
 
     const singleLabelPattern = new Pattern('label', conditions);
-    expect(singleLabelPattern.getLabelsString()).to.equal(':label');
-    expect(singleLabelPattern.getNameString()).to.equal('');
+    expect(singleLabelPattern.getLabelsString()).to.equal('');
+    expect(singleLabelPattern.getNameString()).to.equal('label');
     expect(singleLabelPattern.getConditionsParamString())
       .to.equal(conditionsString);
+  });
+
+  it('should accept labels and conditions', function() {
+    const conditions = { key: 'value' };
+    const conditionsString = '{ key: $key }';
 
     const multiLabelPattern = new Pattern([ 'label1', 'label2' ], conditions);
     expect(multiLabelPattern.getLabelsString()).to.equal(':label1:label2');
     expect(multiLabelPattern.getNameString()).to.equal('');
-    expect(singleLabelPattern.getConditionsParamString())
+    expect(multiLabelPattern.getConditionsParamString())
       .to.equal(conditionsString);
   });
 
