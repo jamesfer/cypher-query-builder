@@ -28,9 +28,6 @@ module.exports = env => {
       }],
     },
     resolve: {
-      modules: [
-        'node_modules',
-      ],
       extensions: ['.ts', '.js', '.json', '*'],
     },
     plugins: []
