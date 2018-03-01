@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import {
   mapValues, join, map, isEmpty, Dictionary, isArray, isString,
   castArray, isObjectLike, isNil, Many,
@@ -6,7 +6,7 @@ import {
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export class Pattern extends Statement {
+export abstract class Pattern extends Clause {
   protected useExpandedConditions: boolean;
   protected conditionParams = {};
   protected name: string;
@@ -38,7 +38,7 @@ export class Pattern extends Statement {
     }
 
     if (isNil(labels)) {
-      if (isString(name) || isArray(name)) {
+      if (isArray(name)) {
         labels = name;
         name = undefined;
       }

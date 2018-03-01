@@ -1,6 +1,6 @@
-import { TermListStatement } from './term-list-statement';
+import { TermListClause } from './term-list-clause';
 
-export class With extends TermListStatement {
+export class With extends TermListClause {
   /**
    * Creates a with clause
    * @param  {string|object|array<string|object>} terms

@@ -2,9 +2,9 @@ import { Query } from './query';
 import { expect } from '../test-setup';
 import { Dictionary, each } from 'lodash';
 import { NodePattern } from './clauses';
-import { Connection } from './connection';
 import { mockConnection } from './connection.mock';
-import { stub } from 'sinon';
+import { spy, stub } from 'sinon';
+import { ClauseCollection } from './clause-collection';
 
 describe('Query', function() {
   describe('query methods', function() {
@@ -34,8 +34,33 @@ describe('Query', function() {
     each(methods, (fn, name) => {
       it(name + ' should return a chainable query object', function() {
         expect(fn()).to.equal(query);
-        expect(query.getStatements().length === 1);
+        expect(query.getClauses().length === 1);
       });
+    });
+  });
+
+  describe('proxied methods', function() {
+    const methods: (keyof ClauseCollection)[] = [
+      'build',
+      'toString',
+      'buildQueryObject',
+      'interpolate',
+      'getClauses',
+    ];
+
+    class TestQuery extends Query {
+      getClauseCollection() {
+        return this.clauses;
+      }
+    }
+
+    const query = new TestQuery();
+
+    each(methods, method => {
+      const methodSpy = spy(query.getClauseCollection(), method);
+      query[method]();
+      expect(methodSpy.calledOnce).to.be.true;
+      methodSpy.restore();
     });
   });
 

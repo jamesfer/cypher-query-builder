@@ -1,6 +1,6 @@
-import { PatternStatement } from './pattern-statement';
+import { PatternClause } from './pattern-clause';
 
-export class Create extends PatternStatement {
+export class Create extends PatternClause {
   constructor(patterns) {
     super(patterns, { useExpandedConditions: false });
   }

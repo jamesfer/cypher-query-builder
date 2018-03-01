@@ -20,7 +20,12 @@ git merge develop --no-ff --no-commit
 
 echo "${magenta}Bumping version...${end}"
 new_version=$(npm version --no-git-tag-version $1)
-echo "${green}${new_version}${end}"
 
 git commit -am "Release version ${new_version}"
 git tag -a ${new_version} -m "${new_version}"
+
+echo "${magenta}Merging back into develop...${end}"
+git checkout develop
+git merge master
+
+echo "${green}${new_version}${end}"

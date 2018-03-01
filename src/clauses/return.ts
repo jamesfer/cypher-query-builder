@@ -1,6 +1,6 @@
-import { TermListStatement } from './term-list-statement';
+import { TermListClause } from './term-list-clause';
 
-export class Return extends TermListStatement {
+export class Return extends TermListClause {
   /**
    * Creates a return clause
    * @param  {string|object|array<string|object>|} terms [description]

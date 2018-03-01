@@ -1,48 +1,107 @@
 import { Dictionary, Many, } from 'lodash';
+import {
+  Limit, Match, NodePattern, Skip, Where, Set, Create,
+  Return, With, Unwind, Delete, Raw, OrderBy
+} from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
 import { Direction, OrderConstraints } from './clauses/order-by';
-import { PatternCollection, } from './clauses/pattern-statement';
+import { PatternCollection } from './clauses/pattern-clause';
 import { SetOptions, SetProperties } from './clauses/set';
-import { Term } from './clauses/term-list-statement';
+import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
+import { Clause } from './clause';
+import { assign } from 'lodash';
 
-export interface Builder {
-  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
 
-  match(patterns: PatternCollection, options?: MatchOptions): Builder;
+export abstract class Builder<Q> {
+  protected abstract continueChainClause(clause: Clause): Q;
 
-  optionalMatch(patterns: PatternCollection, options?: MatchOptions): Builder;
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    const clause = new Match(new NodePattern(name, labels, conditions));
+    return this.continueChainClause(clause);
+  }
 
-  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>): Builder;
+  match(patterns: PatternCollection, options?: MatchOptions) {
+    return this.continueChainClause(new Match(patterns, options));
+  }
 
-  create(patterns: PatternCollection): Builder;
+  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
+    return this.continueChainClause(new Match(patterns, assign(options, {
+      optional: true,
+    })));
+  }
 
-  return(terms: Many<Term>): Builder;
+  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    const clause = new Create(new NodePattern(name, labels, conditions));
+    return this.continueChainClause(clause);
+  }
 
-  with(terms: Many<Term>): Builder;
+  create(patterns: PatternCollection) {
+    return this.continueChainClause(new Create(patterns));
+  }
 
-  unwind(list: any[], name: string): Builder;
+  return(terms: Many<Term>) {
+    return this.continueChainClause(new Return(terms));
+  }
 
-  delete(terms: Many<string>, options?: DeleteOptions): Builder;
+  with(terms: Many<Term>) {
+    return this.continueChainClause(new With(terms));
+  }
 
-  detachDelete(terms: Many<string>, options?: DeleteOptions): Builder;
+  unwind(list: any[], name: string) {
+    return this.continueChainClause(new Unwind(list, name));
+  }
 
-  set(properties: SetProperties, options: SetOptions): Builder;
+  delete(terms: Many<string>, options?: DeleteOptions) {
+    return this.continueChainClause(new Delete(terms, options));
+  }
 
-  setLabels(labels: Dictionary<Many<string>>): Builder;
+  detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
+    return this.continueChainClause(new Delete(terms, assign(options, {
+      detach: true,
+    })));
+  }
 
-  setValues(values: Dictionary<any>): Builder;
+  set(properties: SetProperties, options: SetOptions) {
+    return this.continueChainClause(new Set(properties, options));
+  }
 
-  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean): Builder;
+  setLabels(labels: Dictionary<Many<string>>) {
+    return this.continueChainClause(new Set({ labels }));
+  }
 
-  skip(amount: number | string): Builder;
+  setValues(values: Dictionary<any>) {
+    return this.continueChainClause(new Set({ values }));
+  }
 
-  limit(amount: number | string): Builder;
+  setVariables(
+    variables: Dictionary<string | Dictionary<string>>,
+    override?: boolean
+  ) {
+    return this.continueChainClause(new Set(
+      { variables },
+      { override }
+    ));
+  }
 
-  where(conditions: AnyConditions): Builder;
+  skip(amount: string | number) {
+    return this.continueChainClause(new Skip(amount));
+  }
 
-  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction);
+  limit(amount: string | number) {
+    return this.continueChainClause(new Limit(amount));
+  }
 
-  raw(clause: string, params?: Dictionary<any>);
+  where(conditions: AnyConditions) {
+    return this.continueChainClause(new Where(conditions));
+  }
+
+  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
+    return this.continueChainClause(new OrderBy(fields, dir));
+  }
+
+  raw(clause: string, params: Dictionary<any> = {}) {
+    return this.continueChainClause(new Raw(clause, params));
+  }
 }

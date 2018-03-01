@@ -1,6 +1,6 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 
-export class Skip extends Statement {
+export class Skip extends Clause {
   constructor(public amount: number | string) {
     super();
   }

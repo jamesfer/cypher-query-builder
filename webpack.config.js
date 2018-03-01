@@ -1,4 +1,5 @@
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 
 module.exports = env => {
@@ -8,6 +9,7 @@ module.exports = env => {
     devtool: 'source-map',
     entry: './index.ts',
     target: 'node',
+    externals: [ nodeExternals() ],
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index.js',
@@ -28,9 +30,6 @@ module.exports = env => {
       }],
     },
     resolve: {
-      modules: [
-        'node_modules',
-      ],
       extensions: ['.ts', '.js', '.json', '*'],
     },
     plugins: []

@@ -12,6 +12,8 @@ export { Return } from './return';
 export { Skip } from './skip';
 export { Limit } from './limit';
 export { Where } from './where';
+export { Raw } from './raw';
+export { OrderBy } from './order-by';
 export { and, or, xor, not, operators } from './where-operators';
 export {
   equals,
