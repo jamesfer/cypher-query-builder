@@ -1,18 +1,12 @@
 import { stringifyValue } from './utils';
 import { ParameterContainer } from './parameter-container';
 
-export class Clause extends ParameterContainer {
-  constructor() {
-    super();
-  }
-
+export abstract class Clause extends ParameterContainer {
   /**
    * Turns the clause into a query string.
    * @return {string} Partial query string.
    */
-  build() {
-    return '';
-  }
+  abstract build(): string;
 
   /**
    * Turns the clause into a query string.
