@@ -6,7 +6,7 @@ import {
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export class Pattern extends Clause {
+export abstract class Pattern extends Clause {
   protected useExpandedConditions: boolean;
   protected conditionParams = {};
   protected name: string;
