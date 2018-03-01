@@ -1,17 +1,16 @@
 import { Dictionary, Many, } from 'lodash';
 import {
   Limit, Match, NodePattern, Skip, Where, Set, Create,
-  Return, With, Unwind, Delete,
+  Return, With, Unwind, Delete, Raw, OrderBy
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
-import { Direction, OrderBy, OrderConstraints } from './clauses/order-by';
+import { Direction, OrderConstraints } from './clauses/order-by';
 import { PatternCollection } from './clauses/pattern-clause';
 import { SetOptions, SetProperties } from './clauses/set';
 import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
-import { Raw } from './clauses/raw';
 import { assign } from 'lodash';
 
 
