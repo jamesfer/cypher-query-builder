@@ -34,7 +34,7 @@ describe('Query', function() {
     each(methods, (fn, name) => {
       it(name + ' should return a chainable query object', function() {
         expect(fn()).to.equal(query);
-        expect(query.getStatements().length === 1);
+        expect(query.getClauses().length === 1);
       });
     });
   });

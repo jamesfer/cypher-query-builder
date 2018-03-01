@@ -1,11 +1,11 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { join, map, Many, isString, isArray, Dictionary, reduce, mapValues } from 'lodash';
 
 
 export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING';
 export type OrderConstraints = Dictionary<Direction>;
 
-export class OrderBy extends Statement {
+export class OrderBy extends Clause {
   constraints: Dictionary<'DESC' | ''>;
 
   constructor(fields: Many<string> | OrderConstraints, dir?: Direction) {

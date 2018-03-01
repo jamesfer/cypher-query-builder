@@ -1,11 +1,11 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { join, Many, castArray } from 'lodash';
 
 export interface DeleteOptions {
   detach?: boolean;
 }
 
-export class Delete extends Statement {
+export class Delete extends Clause {
   variables: string[];
 
   constructor(

@@ -70,9 +70,9 @@ describe('Connection', function() {
   });
 
   describe('#run', function() {
-    it('should throw if there are no statements in the query', function() {
+    it('should throw if there are no clauses in the query', function() {
       const run = () => connection.run(connection.query());
-      expect(run).to.throw(Error, 'no statements');
+      expect(run).to.throw(Error, 'no clauses');
     });
 
     it('should throw if the connection has been closed', function() {

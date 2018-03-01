@@ -1,10 +1,10 @@
-import { PatternStatement } from './pattern-statement';
+import { PatternClause } from './pattern-clause';
 
 export interface MatchOptions {
   optional?: boolean,
 }
 
-export class Match extends PatternStatement {
+export class Match extends PatternClause {
   constructor(
     patterns,
     protected options: MatchOptions = { optional: false }

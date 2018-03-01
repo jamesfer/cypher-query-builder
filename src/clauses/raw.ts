@@ -1,7 +1,7 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { Dictionary } from 'lodash';
 
-export class Raw extends Statement {
+export class Raw extends Clause {
   constructor(public clause: string, public params: Dictionary<any> = {}) {
     super();
 

@@ -1,7 +1,7 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 
-export class Unwind extends Statement {
+export class Unwind extends Clause {
   protected listParam: Parameter;
 
   constructor(
