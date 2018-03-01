@@ -4,6 +4,9 @@
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "engines" : {
+    "node" : ">=6"
+  },
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
