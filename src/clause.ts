@@ -1,13 +1,13 @@
 import { stringifyValue } from './utils';
 import { ParameterContainer } from './parameter-container';
 
-export class Statement extends ParameterContainer {
+export class Clause extends ParameterContainer {
   constructor() {
     super();
   }
 
   /**
-   * Turns the statement into a query string.
+   * Turns the clause into a query string.
    * @return {string} Partial query string.
    */
   build() {
@@ -15,7 +15,7 @@ export class Statement extends ParameterContainer {
   }
 
   /**
-   * Turns the statement into a query string.
+   * Turns the clause into a query string.
    * @return {string} Partial query string.
    */
   toString() {
@@ -23,7 +23,7 @@ export class Statement extends ParameterContainer {
   }
 
   /**
-   * Turns the statement into a query object.
+   * Turns the clause into a query object.
    * @return {object} Query object with two parameters: query and params.
    */
   buildQueryObject() {
@@ -34,7 +34,7 @@ export class Statement extends ParameterContainer {
   }
 
   /**
-   * The statement into a query string with parameters
+   * Turns the clause into a query string with parameters
    * interpolated into the string. For debugging purposes only.
    * @return {string}
    */

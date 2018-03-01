@@ -20,7 +20,7 @@ describe('ParameterBag', function() {
   });
 
   describe('#getParams', function() {
-    it('should return an empty object for new statements', function() {
+    it('should return an empty object for new clauses', function() {
       expect(parameterBag.getParams()).to.be.empty;
     });
 

@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { AnyConditions, stringCons } from './where-utils';
 
 /**
@@ -17,7 +17,7 @@ import { AnyConditions, stringCons } from './where-utils';
  *   { 'n.age': gt(20) },
  * ]);
  */
-export class Where extends Statement {
+export class Where extends Clause {
   constructor(public conditions: AnyConditions) {
     super();
   }

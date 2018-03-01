@@ -5,10 +5,10 @@ import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, Many } from 'lodash';
 import { SetOptions, SetProperties } from './clauses/set';
 import { DeleteOptions } from './clauses/delete';
-import { PatternCollection } from './clauses/pattern-statement';
+import { PatternCollection } from './clauses/pattern-clause';
 import { MatchOptions } from './clauses/match';
 import { Builder } from './builder';
-import { Term } from './clauses/term-list-statement';
+import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Direction, OrderConstraints } from './clauses/order-by';
 import { AuthToken, Config } from 'neo4j-driver/types/v1';
@@ -94,8 +94,8 @@ export class Connection implements Builder {
       throw Error('Cannot run query; connection is not open.');
     }
 
-    if (!query.getStatements().length) {
-      throw Error('Cannot run query: no statements attached to the query.');
+    if (!query.getClauses().length) {
+      throw Error('Cannot run query: no clauses attached to the query.');
     }
 
     let queryObj = query.buildQueryObject();

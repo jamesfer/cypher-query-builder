@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import {
   join, concat, map, mapValues, castArray, Dictionary,
   Many, isObject,
@@ -16,7 +16,7 @@ export interface SetOptions {
   override: boolean;
 }
 
-export class Set extends Statement {
+export class Set extends Clause {
   protected labels: Dictionary<string[]>;
   protected values: Dictionary<Parameter>;
   protected variables: Dictionary<string | Dictionary<string>>;

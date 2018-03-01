@@ -1,17 +1,17 @@
-import { PatternStatement } from './pattern-statement';
+import { PatternClause } from './pattern-clause';
 import { NodePattern } from './node-pattern';
 import { expect } from 'chai';
 
-describe('PatternStatement', function() {
+describe('PatternClauses', function() {
   describe('#build', function() {
     it('should accept a single pattern', function() {
-      let pattern = new PatternStatement(new NodePattern('a', []));
+      let pattern = new PatternClause(new NodePattern('a', []));
       expect(pattern.build()).to.equal('(a)');
       expect(pattern.getParams()).to.be.empty;
     });
 
     it('should combine pattern sections with no delimiter', function() {
-      let pattern = new PatternStatement([
+      let pattern = new PatternClause([
         new NodePattern('a', []),
         new NodePattern('b', []),
         new NodePattern('c', []),
@@ -21,7 +21,7 @@ describe('PatternStatement', function() {
     });
 
     it('should combine multiple patterns with a comma', function() {
-      let pattern = new PatternStatement([
+      let pattern = new PatternClause([
         [
           new NodePattern('a', []),
           new NodePattern('b', []),

@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import { join, reduce, map, assign, castArray, isArray } from 'lodash';
 import { Pattern } from './pattern';
 
@@ -8,7 +8,7 @@ export interface PatternOptions {
 
 export type PatternCollection = Pattern | Pattern[] | Pattern[][];
 
-export class PatternStatement extends Statement {
+export class PatternClause extends Clause {
   protected patterns: Pattern[][];
 
   constructor(
@@ -26,7 +26,7 @@ export class PatternStatement extends Statement {
     this.patterns = (arr[0] instanceof Array ? arr : [arr]) as Pattern[][];
 
 
-    // Add child patterns as statements
+    // Add child patterns as clauses
     this.patterns.forEach(arr => arr.forEach(pat => {
       pat.setExpandedConditions(options.useExpandedConditions);
       pat.useParameterBag(this.parameterBag);

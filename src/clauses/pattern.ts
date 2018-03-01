@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import {
   mapValues, join, map, isEmpty, Dictionary, isArray, isString,
   castArray, isObjectLike, isNil, Many,
@@ -6,7 +6,7 @@ import {
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export class Pattern extends Statement {
+export class Pattern extends Clause {
   protected useExpandedConditions: boolean;
   protected conditionParams = {};
   protected name: string;

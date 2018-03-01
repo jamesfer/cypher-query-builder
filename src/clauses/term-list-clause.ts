@@ -1,4 +1,4 @@
-import { Statement } from '../statement';
+import { Clause } from '../clause';
 import {
   join, flattenDeep, map, isPlainObject, isString, isArray, castArray, reduce,
   Dictionary, Many,
@@ -11,7 +11,7 @@ export type Term
   | Dictionary<string>
   | Dictionary<Properties>;
 
-export class TermListStatement extends Statement {
+export class TermListClause extends Clause {
   protected terms: Term[];
 
   /**
