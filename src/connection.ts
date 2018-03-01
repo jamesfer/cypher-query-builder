@@ -2,16 +2,10 @@ import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
 import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
-import { Dictionary, Many } from 'lodash';
-import { SetOptions, SetProperties } from './clauses/set';
-import { DeleteOptions } from './clauses/delete';
-import { PatternCollection } from './clauses/pattern-clause';
-import { MatchOptions } from './clauses/match';
+import { Dictionary } from 'lodash';
 import { Builder } from './builder';
-import { Term } from './clauses/term-list-clause';
-import { AnyConditions } from './clauses/where-utils';
-import { Direction, OrderConstraints } from './clauses/order-by';
 import { AuthToken, Config } from 'neo4j-driver/types/v1';
+import { Clause } from './clause';
 
 let connections: Connection[] = [];
 
@@ -39,7 +33,7 @@ export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
   => Driver;
 
 
-export class Connection implements Builder {
+export class Connection extends Builder<Query> {
   protected auth: any;
   protected driver: any;
   protected open: boolean;
@@ -50,6 +44,7 @@ export class Connection implements Builder {
     credentials: Credentials,
     driver: DriverConstructor = neo4j.driver,
   ) {
+    super();
     this.auth = neo4j.auth.basic(credentials.username, credentials.password);
     this.driver = driver(this.url, this.auth);
     this.open = true;
@@ -84,6 +79,10 @@ export class Connection implements Builder {
     return new Query(this);
   }
 
+  protected continueChainClause(clause: Clause) {
+    return this.query().addClause(clause);
+  }
+
   /**
    * Runs a query in a session using this connection.
    * @param {Query} query
@@ -109,81 +108,5 @@ export class Connection implements Builder {
         session.close();
         return Promise.reject(error);
       });
-  }
-
-  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
-    return this.query().matchNode(name, labels, conditions);
-  }
-
-  match(patterns: PatternCollection, options?: MatchOptions) {
-    return this.query().match(patterns, options);
-  }
-
-  optionalMatch(patterns: PatternCollection, options?: MatchOptions) {
-    return this.query().optionalMatch(patterns, options);
-  }
-
-  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
-    return this.query().createNode(name, labels, conditions);
-  }
-
-  create(patterns: PatternCollection) {
-    return this.query().create(patterns);
-  }
-
-  return(terms: Many<Term>) {
-    return this.query().return(terms);
-  }
-
-  with(terms: Many<Term>) {
-    return this.query().with(terms);
-  }
-
-  unwind(list: any[], name: string) {
-    return this.query().unwind(list, name);
-  }
-
-  delete(terms: Many<string>, options?: DeleteOptions) {
-    return this.query().delete(terms, options);
-  }
-
-  detachDelete(terms: Many<string>, options?: DeleteOptions) {
-    return this.query().detachDelete(terms, options);
-  }
-
-  set(properties: SetProperties, options: SetOptions) {
-    return this.query().set(properties, options);
-  }
-
-  setLabels(labels: Dictionary<Many<string>>) {
-    return this.query().setLabels(labels);
-  }
-
-  setValues(values: Dictionary<any>) {
-    return this.query().setValues(values);
-  }
-
-  setVariables(variables: Dictionary<string | Dictionary<string>>, override: boolean) {
-    return this.query().setVariables(variables, override);
-  }
-
-  skip(amount: string | number) {
-    return this.query().skip(amount);
-  }
-
-  limit(amount: string | number) {
-    return this.query().limit(amount);
-  }
-
-  where(conditions: AnyConditions) {
-    return this.query().where(conditions);
-  }
-
-  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
-    return this.query().orderBy(fields, dir);
-  }
-
-  raw(clause: string, params?: Dictionary<any>) {
-    return this.query().raw(clause, params);
   }
 }
