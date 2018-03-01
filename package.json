@@ -8,8 +8,9 @@
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
     "test": "nyc --reporter=text --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
-    "test:ci": "nyc --reporter=lcov --reporter=text mocha src/*.spec.ts src/**/*.spec.ts",
-    "release": "./scripts/release.sh"
+    "release": "./scripts/release.sh",
+    "ci:test": "nyc --reporter=lcov --reporter=text mocha src/*.spec.ts src/**/*.spec.ts",
+    "ci:report": "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "cypher",

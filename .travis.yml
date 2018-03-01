@@ -12,10 +12,10 @@ cache:
     - "node_modules"
 
 script:
-  - "npm run build:prod"
-  - "npm run test:ci"
+  - "yarn build:prod"
+  - "yarn ci:test"
 after_success:
-  - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
+  - "yarn ci:report"
 
 deploy:
   provider: npm
