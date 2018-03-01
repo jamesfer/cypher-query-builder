@@ -4,7 +4,7 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause } from './clause';
 
-export class Query extends Builder {
+export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
 
   constructor(protected connection: Connection = null) {

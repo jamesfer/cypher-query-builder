@@ -33,7 +33,7 @@ export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
   => Driver;
 
 
-export class Connection extends Builder {
+export class Connection extends Builder<Query> {
   protected auth: any;
   protected driver: any;
   protected open: boolean;

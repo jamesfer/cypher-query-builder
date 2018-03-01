@@ -15,8 +15,8 @@ import { Raw } from './clauses/raw';
 import { assign } from 'lodash';
 
 
-export abstract class Builder {
-  protected abstract continueChainClause(clause: Clause): Builder;
+export abstract class Builder<Q> {
+  protected abstract continueChainClause(clause: Clause): Q;
 
   matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     const clause = new Match(new NodePattern(name, labels, conditions));
