@@ -1,24 +1,52 @@
 {
   "name": "cypher-query-builder",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "dist/index.js",
+  "author": "James Ferguson",
+  "license": "MIT",
+  "repository": "github:jamesfer/cypher-query-builder",
   "typings": "dist/index.d.ts",
-  "scripts": {
-    "build": "webpack --progress",
-    "build:prod": "webpack --progress --env.production",
-    "test": "nyc --reporter=text --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
-    "test:ci": "nyc --reporter=lcov --reporter=text mocha src/*.spec.ts src/**/*.spec.ts",
-    "release": "./scripts/release.sh"
+  "engines" : {
+    "node" : ">=6"
   },
   "keywords": [
     "cypher",
     "query",
     "builder",
-    "neo4j"
+    "neo4j",
+    "orm",
+    "graph"
   ],
-  "author": "James Ferguson",
-  "license": "MIT",
+  "scripts": {
+    "build": "webpack --progress",
+    "build:prod": "webpack --progress --env.production",
+    "test": "nyc --reporter=text --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
+    "release": "./scripts/release.sh",
+    "ci:test": "nyc --reporter=lcov --reporter=text mocha src/*.spec.ts src/**/*.spec.ts",
+    "ci:report": "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
+  },
+  "nyc": {
+    "all": true,
+    "produce-source-map": true,
+    "report-dir": "./coverage",
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "**/*.mock.ts"
+    ]
+  },
   "dependencies": {
     "@types/chai": "^4.0.4",
     "@types/chai-as-promised": "^7.1.0",
@@ -43,26 +71,5 @@
     "chai": "^4.0.2",
     "mocha": "^4.0.1",
     "nyc": "^11.4.1"
-  },
-  "nyc": {
-    "all": true,
-    "produce-source-map": true,
-    "report-dir": "./coverage",
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "require": [
-      "ts-node/register",
-      "source-map-support/register"
-    ],
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "**/*.d.ts",
-      "**/*.spec.ts",
-      "**/*.mock.ts"
-    ]
   }
 }
