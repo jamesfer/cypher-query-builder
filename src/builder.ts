@@ -14,67 +14,423 @@ import { Clause } from './clause';
 import { assign } from 'lodash';
 
 
+/**
+ * Root class for all query chains, namely the {@link Connection} and
+ * {@link Query} classes.
+ */
 export abstract class Builder<Q> {
+  /**
+   * Adds a clause to the current chain and returns something that can be
+   * chained with more clauses.
+   * @param {Clause} clause
+   * @returns {Q}
+   */
   protected abstract continueChainClause(clause: Clause): Q;
 
-  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
-    const clause = new Match(new NodePattern(name, labels, conditions));
-    return this.continueChainClause(clause);
+  /**
+   * Adds a [create]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/create}
+   * clause to the query.
+   *
+   * Create accepts a single pattern, a list of patterns or a list of a list of
+   * patterns. Each pattern represents a single part of a cypher pattern. For
+   * example: `(people:Person { age: 30 })` would be a node pattern and
+   * `-[:FriendsWith]->` would be a relationship pattern.
+   *
+   * If an array of patterns is provided, they are joined together to form a
+   * composite pattern. For example:
+   * ```javascript
+   * query.create([
+   *   node('people', 'Person', { age: 30 }),
+   *   relation('out', '', 'FriendsWith'),
+   *   node('friend', 'Friend'),
+   * ])
+   * ```
+   *
+   * Would equate to the cypher pattern
+   * ```
+   * CREATE (people:Person { age: 30 })-[:FriendsWith]->(friend:Friend)
+   * ```
+   *
+   * @param {PatternCollection} patterns
+   * @returns {Q}
+   */
+  create(patterns: PatternCollection) {
+    return this.continueChainClause(new Create(patterns));
   }
 
-  match(patterns: PatternCollection, options?: MatchOptions) {
-    return this.continueChainClause(new Match(patterns, options));
-  }
-
-  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
-    return this.continueChainClause(new Match(patterns, assign(options, {
-      optional: true,
-    })));
-  }
-
+  /**
+   * Shorthand for `create(node(name, labels, conditions))`. For more details
+   * the arguments see @{link node}.
+   *
+   * @param {_.Many<string> | _.Dictionary<any>} name
+   * @param {_.Many<string> | _.Dictionary<any>} labels
+   * @param {_.Dictionary<any>} conditions
+   * @returns {Q}
+   */
   createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
     const clause = new Create(new NodePattern(name, labels, conditions));
     return this.continueChainClause(clause);
   }
 
-  create(patterns: PatternCollection) {
-    return this.continueChainClause(new Create(patterns));
-  }
-
-  return(terms: Many<Term>) {
-    return this.continueChainClause(new Return(terms));
-  }
-
-  with(terms: Many<Term>) {
-    return this.continueChainClause(new With(terms));
-  }
-
-  unwind(list: any[], name: string) {
-    return this.continueChainClause(new Unwind(list, name));
-  }
-
+  /**
+   * Adds a [delete]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/delete}
+   * clause to the query.
+   *
+   * Delete accepts a single string or an array of them and all of them are
+   * joined together with commas.
+   *
+   * You can set `detach: true` in the options to make it a `DETACH DELETE`
+   * clause.
+   *
+   * @param {_.Many<string>} terms
+   * @param {DeleteOptions} options
+   * @returns {Q}
+   */
   delete(terms: Many<string>, options?: DeleteOptions) {
     return this.continueChainClause(new Delete(terms, options));
   }
 
+  /**
+   * Shorthand for `delete(terms, { detach: true })`.
+   *
+   * @param {_.Many<string>} terms
+   * @param {DeleteOptions} options
+   * @returns {Q}
+   */
   detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
     return this.continueChainClause(new Delete(terms, assign(options, {
       detach: true,
     })));
   }
 
+  /**
+   * Adds a [limit]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/limit}
+   * clause to the query.
+   *
+   * @param {string | number} amount
+   * @returns {Q}
+   */
+  limit(amount: string | number) {
+    return this.continueChainClause(new Limit(amount));
+  }
+
+  /**
+   * Adds a [match]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/match}
+   * clause to the query.
+   *
+   * Match accepts a single pattern, a list of patterns or a list of a list of
+   * patterns. Each pattern represents a single part of a cypher pattern. For
+   * example: `(people:Person { age: 30 })` would be a node pattern and
+   * `-[:FriendsWith]->` would be a relationship pattern.
+   *
+   * If an array of patterns is provided, they are joined together to form a
+   * composite pattern. For example:
+   * ```javascript
+   * query.match([
+   *   node('people', 'Person', { age: 30 }),
+   *   relation('out', '', 'FriendsWith'),
+   *   node('friends'),
+   * ])
+   * ```
+   *
+   * Would equate to the cypher pattern
+   * ```
+   * MATCH (people:Person { age: 30 })-[:FriendsWith]->(friends)
+   * ```
+   *
+   * If an array of an array of patterns is provided each array is joined
+   * together like above, and then each composite pattern is joined with a comma
+   * to allow matching of multiple distinct patterns. Note: matching many
+   * distinct patterns will produce a cross product of the results as noted in
+   * the [cypher docs]{@link https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
+   *
+   * You can also provide `optional: true` in the options to create and
+   * `OPTIONAL MATCH` clause.
+   *
+   * @param {PatternCollection} patterns List of patterns to be matched.
+   * @param {MatchOptions} options
+   * @returns {Q}
+   */
+  match(patterns: PatternCollection, options?: MatchOptions) {
+    return this.continueChainClause(new Match(patterns, options));
+  }
+
+
+  /**
+   * Shorthand for `match(node(name, labels, conditions))`. For more details on
+   * the arguments see {@link node}.
+   *
+   * @param {_.Many<string> | _.Dictionary<any>} name
+   * @param {_.Many<string> | _.Dictionary<any>} labels
+   * @param {_.Dictionary<any>} conditions
+   * @returns {Q}
+   */
+  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+    const clause = new Match(new NodePattern(name, labels, conditions));
+    return this.continueChainClause(clause);
+  }
+
+  /**
+   * Shorthand for `match(patterns, { optional: true })`.
+   *
+   * @param {PatternCollection} patterns
+   * @param {MatchOptions} options
+   * @returns {Q}
+   */
+  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
+    return this.continueChainClause(new Match(patterns, assign(options, {
+      optional: true,
+    })));
+  }
+
+  /**
+   * Adds an [order by]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/order-by}
+   * to the query.
+   *
+   * You can supply a single string or an array of strings to order by and the
+   * direction parameter can control which way all fields are sorted by.
+   * ```javascript
+   * query.orderBy([
+   *   'name',
+   *   'occupation',
+   * ], 'DESC')
+   * ```
+   *
+   * Results in a query of
+   * ```
+   * ORDER BY name DESC, occupation DESC
+   * ```
+   *
+   * If you would like to control the direction on each property individually,
+   * you can provide an object where each key is the property and the value is a
+   * direction. Eg:
+   * ```javascript
+   * query.orderBy({
+   *   name: 'DESC',
+   *   occupation: 'ASC',
+   * })
+   * ```
+   *
+   * Results in a query of
+   * ```
+   * ORDER BY name DESC, occupation
+   * ```
+   *
+   * Direction defaults to `ASC` as it does in cypher.
+   *
+   *
+   * @param {_.Many<string> | OrderConstraints} fields
+   * @param {Direction} dir
+   * @returns {Q}
+   */
+  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
+    return this.continueChainClause(new OrderBy(fields, dir));
+  }
+
+  /**
+   * Adds a clause to the query as is. You can also provide an object of params
+   * as well.
+   *
+   * ```javascript
+   * query.raw('MATCH (:Event { date: $date }', { date: '2017-01-01' })
+   * ```
+   *
+   * @param {string} clause
+   * @param {_.Dictionary<any>} params
+   * @returns {Q}
+   */
+  raw(clause: string, params: Dictionary<any> = {}) {
+    return this.continueChainClause(new Raw(clause, params));
+  }
+
+  /**
+   * Adds a [return]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/return}
+   * clause to the query.
+   *
+   * There are many different ways to pass arguments to `return` so each is
+   * documented in turn below.
+   *
+   * A single string:
+   * ```javascript
+   * query.return('people')
+   * ```
+   * ```
+   * RETURN people
+   * ```
+   *
+   * An array of strings to return multiple variables:
+   * ```javascript
+   * query.return([ 'people', 'pets' ])
+   * ```
+   * ```
+   * RETURN people, pets
+   * ```
+   *
+   * A single object to rename variables:
+   * ```javascript
+   * query.return({ people: 'employees' })
+   * ```
+   * ```
+   * RETURN people AS employees
+   * ```
+   *
+   * A single object with an array for each value:
+   * ```javascript
+   * query.return({
+   *   people: [ 'name', 'age' ],
+   *   pets: [ 'name', 'breed' ],
+   * })
+   * ```
+   * ```
+   * RETURN people.name, people.age, pets.name, pets.breed
+   * ```
+   * This gives you a shortcut to specifying many node properties. You can also
+   * rename each property by adding an object inside the array or by providing
+   * an object as the value:
+   * ```javascript
+   * query.return({
+   *   people: [{ name: 'personName' }, 'age' ],
+   * })
+   * ```
+   * ```
+   * RETURN people.name as personName, people.age
+   * ```
+   * or
+   * ```javascript
+   * query.return({
+   *   people: {
+   *     name: 'personName',
+   *     age: 'personAge',
+   *   },
+   * })
+   * ```
+   * ```
+   * RETURN people.name as personName, people.age as personAge
+   * ```
+   *
+   * You can also pass an array of any of the above methods.
+   *
+   * @param {_.Many<Term>} terms
+   * @returns {Q}
+   */
+  return(terms: Many<Term>) {
+    return this.continueChainClause(new Return(terms));
+  }
+
+  /**
+   * Adds a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause to the query.
+   *
+   * `set` lets you updates a nodes labels and properties in one clause. Most of
+   * the time it will be easier to use one of the variants such as `setLabels`,
+   * `setValues` or `setVariables`.
+   *
+   * This function accepts three different kind of properties, each of which is
+   * described in more detail in the variants.
+   *
+   * ```
+   * query.set({
+   *   labels: {
+   *     sale: 'Active',
+   *   },
+   *   variables: {
+   *     sale: {
+   *       activatedAt: 'timestamp()',
+   *     },
+   *   },
+   *   values: {
+   *     sale: {
+   *       activatedBy: user.id,
+   *     },
+   *   },
+   * })
+   * ```
+   *
+   * Will result in
+   * ```
+   * SET
+   * ```
+   *
+   * @param {SetProperties} properties
+   * @param {SetOptions} options
+   * @returns {Q}
+   */
   set(properties: SetProperties, options: SetOptions) {
     return this.continueChainClause(new Set(properties, options));
   }
 
+  /**
+   * Adds labels to a node using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause.
+   *
+   * ```
+   * query.setLabels({
+   *   sale: 'Active',
+   * })
+   * ```
+   *
+   * Will result in
+   * ```
+   * SET sale:Active
+   * ```
+   *
+   * `setLabels` accepts a dictionary where the keys are nodes to be updated
+   * and the value is a single label or an array of labels to add to the node.
+   *
+   * @param {_.Dictionary<_.Many<string>>} labels
+   * @returns {Q}
+   */
   setLabels(labels: Dictionary<Many<string>>) {
     return this.continueChainClause(new Set({ labels }));
   }
 
+  /**
+   * Updates a node from parameters using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause. This function treats all values as parameters which is different to
+   * `setVariables` which assumes values are cypher variables.
+   *
+   * ```
+   * query.setValues({
+   *   'sale.activatedBy': user.id,
+   * })
+   * ```
+   * ```
+   * SET sale.activatedBy = $userId
+   * ```
+   *
+   * `setValues` accepts a dictionary where the keys are nodes or property names
+   * to be updated.
+   *
+   * @param {_.Dictionary<any>} values
+   * @returns {Q}
+   */
   setValues(values: Dictionary<any>) {
     return this.continueChainClause(new Set({ values }));
   }
 
+  /**
+   * Updates a node from a variable that was previously declared in the query
+   * using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause. This function only accepts strings as its values which are not
+   * escaped in any way so beware. If you want to store some user supplied
+   * information in the database, `setValues` is the function you want.
+   *
+   * ```
+   * query.setVariables({
+   *   'sale.activatedAt': 'timestamp()',
+   * })
+   * ```
+   * ```
+   * SET sale.activatedAt = timestamp()
+   * ```
+   * Note that values are inserted into the query, as is.
+   *
+   * If you set override to true, it will use the `+=` operator to modify nodes.
+   *
+   * @param {_.Dictionary<string | _.Dictionary<string>>} variables
+   * @param {boolean} override
+   * @returns {Q}
+   */
   setVariables(
     variables: Dictionary<string | Dictionary<string>>,
     override?: boolean
@@ -85,23 +441,189 @@ export abstract class Builder<Q> {
     ));
   }
 
+  /**
+   * Adds a [skip]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/skip}
+   * clause to the query.
+   *
+   * @param {string | number} amount
+   * @returns {Q}
+   */
   skip(amount: string | number) {
     return this.continueChainClause(new Skip(amount));
   }
 
-  limit(amount: string | number) {
-    return this.continueChainClause(new Limit(amount));
+  /**
+   * Adds an [unwind]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/unwind}
+   * clause to the query.
+   *
+   * @param {any[]} list Any kind of array to unwind in the query
+   * @param {string} name Name of the variable to use in the unwinding
+   * @returns {Q}
+   */
+  unwind(list: any[], name: string) {
+    return this.continueChainClause(new Unwind(list, name));
   }
 
+  /**
+   * Adds a [where]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/where}
+   * clause to the query.
+   *
+   * `where` is probably the most complex clause in this package but the rule of
+   * thumb is when you see an array it becomes an `OR` and when you see a
+   * dictionary, it becomes an `AND`. The many different ways of specifying your
+   * constraints are listed below.
+   *
+   * As a simple object. The comparison of each property is just `AND`ed
+   * together.
+   * ```javascript
+   * query.where({
+   *   name: 'Alan',
+   *   age: 54,
+   * })
+   * ```
+   * ```
+   * WHERE name = 'Alan' AND age = 54
+   * ```
+   *
+   * Each property can also be an array, in which case each element of the array
+   * is considered a possible value of that property.
+   * ```javascript
+   * query.where({
+   *   name: [ 'Alan', 'Steve', 'Barry' ],
+   *   age: 54,
+   * })
+   * ```
+   * ```
+   * WHERE (name = 'Alan' OR name = 'Steve' OR name = 'Barry') AND age = 54
+   * ```
+   *
+   * For more complex comparisons, you can use the comparator functions such as:
+   * ```javascript
+   * query.where({
+   *   age: greaterThan(30),
+   * })
+   * ```
+   * ```
+   * WHERE age > 30
+   * ```
+   *
+   * You can wrap each of the above examples in another dictionary in which case
+   * the key of the outer dictionary will be considered the name of the node.
+   * ```javascript
+   * query.where({
+   *   person: {
+   *     name: [ 'Alan', 'Steve', 'Barry' ],
+   *     age: 54,
+   *   },
+   * })
+   * ```
+   * ```
+   * WHERE
+   *   (person.name = 'Alan' OR person.name = 'Steve' OR person.name = 'Barry')
+   *   AND person.age = 54
+   * ```
+   *
+   * Finally, you can also wrap your conditions in an array at most levels to
+   * produce an `OR`
+   * ```javascript
+   * query.where({
+   *   person: [
+   *     { name: 'Alan' },
+   *     { age: 54 },
+   *   ],
+   * })
+   * ```
+   * ```
+   * WHERE person.name = 'Alan' OR person.age = 54
+   * ```
+   * ```javascript
+   * query.where([
+   *   { employee: { age: lessThan(18) }},
+   *   { department: { funding: greaterThan(10000) }}
+   * })
+   * ```
+   * ```
+   * WHERE employee.age < 18 OR department.funding > 10000
+   * ```
+   *
+   * @param {AnyConditions} conditions
+   * @returns {Q}
+   */
   where(conditions: AnyConditions) {
     return this.continueChainClause(new Where(conditions));
   }
 
-  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
-    return this.continueChainClause(new OrderBy(fields, dir));
-  }
-
-  raw(clause: string, params: Dictionary<any> = {}) {
-    return this.continueChainClause(new Raw(clause, params));
+  /**
+   * Adds a [with]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/with}
+   * clause to the query.
+   *
+   * There are many different ways to pass arguments to `with` so each is
+   * documented in turn below.
+   *
+   * A single string:
+   * ```javascript
+   * query.with('people')
+   * ```
+   * ```
+   * WITH people
+   * ```
+   *
+   * An array of strings to return multiple variables:
+   * ```javascript
+   * query.with([ 'people', 'pets' ])
+   * ```
+   * ```
+   * WITH people, pets
+   * ```
+   *
+   * A single object to rename variables:
+   * ```javascript
+   * query.with({ people: 'employees' })
+   * ```
+   * ```
+   * WITH people AS employees
+   * ```
+   *
+   * A single object with an array for each value:
+   * ```javascript
+   * query.with({
+   *   people: [ 'name', 'age' ],
+   *   pets: [ 'name', 'breed' ],
+   * })
+   * ```
+   * ```
+   * WITH people.name, people.age, pets.name, pets.breed
+   * ```
+   * This gives you a shortcut to specifying many node properties. You can also
+   * rename each property by adding an object inside the array or by providing
+   * an object as the value:
+   * ```javascript
+   * query.with({
+   *   people: [{ name: 'personName' }, 'age' ],
+   * })
+   * ```
+   * ```
+   * WITH people.name as personName, people.age
+   * ```
+   * or
+   * ```javascript
+   * query.with({
+   *   people: {
+   *     name: 'personName',
+   *     age: 'personAge',
+   *   },
+   * })
+   * ```
+   * ```
+   * WITH people.name as personName, people.age as personAge
+   * ```
+   *
+   * You can also pass an array of any of the above methods.
+   *
+   * @param {_.Many<Term>} terms
+   * @returns {Q}
+   */
+  with(terms: Many<Term>) {
+    return this.continueChainClause(new With(terms));
   }
 }
