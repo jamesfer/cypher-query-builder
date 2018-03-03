@@ -11,7 +11,7 @@ export class Query extends Builder<Query> {
     super();
   }
 
-  continueChainClause(clause: Clause) {
+  protected continueChainClause(clause: Clause) {
     return this.addClause(clause);
   }
 
