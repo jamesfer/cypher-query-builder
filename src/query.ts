@@ -15,7 +15,7 @@ export class Query extends Builder<Query> {
     return this.addClause(clause);
   }
 
-  async run<R = SanitizedValue>(): Promise<SanitizedRecord<R>[]> {
+  run<R = SanitizedValue>(): Promise<SanitizedRecord<R>[]> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
