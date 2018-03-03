@@ -65,7 +65,8 @@ export class Query extends Builder<Query> {
    * If you use typescript you can use the type parameter to hint at the type of
    * the return value which is essentially `Dictionary<R>[]`.
    *
-   * Throws an exception if the query does not have a connection.
+   * Throws an exception if this query does not have a connection or has no
+   * clauses.
    *
    * @returns {Promise<SanitizedRecord<R>[]>}
    */
