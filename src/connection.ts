@@ -32,7 +32,35 @@ export interface Driver {
 export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
   => Driver;
 
-
+/**
+ * A connection lets you access the Neo4j server and run queries against it.
+ *
+ * ```
+ * const db = new Connection('bolt://localhost', {
+ *   username: 'neo4j',
+ *   password: 'password',
+ * })
+ * ```
+ *
+ * Once you've finished with the connection you should close the connection.
+ * ```
+ * db.close()
+ * ```
+ *
+ * The library will attempt to clean up all connections when the process exits,
+ * but if you are using many connections for a short period of time you should
+ * close them yourself.
+ *
+ * To use the connection, the chainable query builder methods will probably be
+ * most useful such as `match`, `create`, `matchNode` etc etc.
+ *
+ * ```
+ * db.matchNode('people', 'Person')
+ *   .where({ 'people.age': greaterThan(18) })
+ *   .return('people')
+ *   .run()
+ * ```
+ */
 export class Connection extends Builder<Query> {
   protected auth: any;
   protected driver: any;
