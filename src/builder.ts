@@ -253,25 +253,19 @@ export abstract class Builder<Q> {
    * A single string:
    * ```javascript
    * query.return('people')
-   * ```
-   * ```
-   * RETURN people
+   * // RETURN people
    * ```
    *
    * An array of strings to return multiple variables:
    * ```javascript
    * query.return([ 'people', 'pets' ])
-   * ```
-   * ```
-   * RETURN people, pets
+   * // RETURN people, pets
    * ```
    *
    * A single object to rename variables:
    * ```javascript
    * query.return({ people: 'employees' })
-   * ```
-   * ```
-   * RETURN people AS employees
+   * // RETURN people AS employees
    * ```
    *
    * A single object with an array for each value:
@@ -280,9 +274,7 @@ export abstract class Builder<Q> {
    *   people: [ 'name', 'age' ],
    *   pets: [ 'name', 'breed' ],
    * })
-   * ```
-   * ```
-   * RETURN people.name, people.age, pets.name, pets.breed
+   * // RETURN people.name, people.age, pets.name, pets.breed
    * ```
    * This gives you a shortcut to specifying many node properties. You can also
    * rename each property by adding an object inside the array or by providing
@@ -291,9 +283,7 @@ export abstract class Builder<Q> {
    * query.return({
    *   people: [{ name: 'personName' }, 'age' ],
    * })
-   * ```
-   * ```
-   * RETURN people.name as personName, people.age
+   * // RETURN people.name as personName, people.age
    * ```
    * or
    * ```javascript
@@ -303,9 +293,7 @@ export abstract class Builder<Q> {
    *     age: 'personAge',
    *   },
    * })
-   * ```
-   * ```
-   * RETURN people.name as personName, people.age as personAge
+   * // RETURN people.name as personName, people.age as personAge
    * ```
    *
    * You can also pass an array of any of the above methods.
@@ -344,11 +332,7 @@ export abstract class Builder<Q> {
    *     },
    *   },
    * })
-   * ```
-   *
-   * Will result in
-   * ```
-   * SET
+   * // SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId
    * ```
    *
    * @param {SetProperties} properties
@@ -367,11 +351,7 @@ export abstract class Builder<Q> {
    * query.setLabels({
    *   sale: 'Active',
    * })
-   * ```
-   *
-   * Will result in
-   * ```
-   * SET sale:Active
+   * // SET sale:Active
    * ```
    *
    * `setLabels` accepts a dictionary where the keys are nodes to be updated
@@ -393,9 +373,7 @@ export abstract class Builder<Q> {
    * query.setValues({
    *   'sale.activatedBy': user.id,
    * })
-   * ```
-   * ```
-   * SET sale.activatedBy = $userId
+   * // SET sale.activatedBy = $userId
    * ```
    *
    * `setValues` accepts a dictionary where the keys are nodes or property names
@@ -419,9 +397,7 @@ export abstract class Builder<Q> {
    * query.setVariables({
    *   'sale.activatedAt': 'timestamp()',
    * })
-   * ```
-   * ```
-   * SET sale.activatedAt = timestamp()
+   * // SET sale.activatedAt = timestamp()
    * ```
    * Note that values are inserted into the query, as is.
    *
@@ -480,9 +456,7 @@ export abstract class Builder<Q> {
    *   name: 'Alan',
    *   age: 54,
    * })
-   * ```
-   * ```
-   * WHERE name = 'Alan' AND age = 54
+   * // WHERE name = 'Alan' AND age = 54
    * ```
    *
    * Each property can also be an array, in which case each element of the array
@@ -492,9 +466,7 @@ export abstract class Builder<Q> {
    *   name: [ 'Alan', 'Steve', 'Barry' ],
    *   age: 54,
    * })
-   * ```
-   * ```
-   * WHERE (name = 'Alan' OR name = 'Steve' OR name = 'Barry') AND age = 54
+   * // WHERE (name = 'Alan' OR name = 'Steve' OR name = 'Barry') AND age = 54
    * ```
    *
    * For more complex comparisons, you can use the comparator functions such as:
@@ -502,9 +474,13 @@ export abstract class Builder<Q> {
    * query.where({
    *   age: greaterThan(30),
    * })
+   * // WHERE age > 30
    * ```
+   *
+   * You can import the comparisons one at a time or all at once.
    * ```
-   * WHERE age > 30
+   * import { greaterThan, regexp } from 'cypher-query-builder';
+   * import { comparisons } form 'cypher-query-builder';
    * ```
    *
    * You can wrap each of the above examples in another dictionary in which case
@@ -516,13 +492,10 @@ export abstract class Builder<Q> {
    *     age: 54,
    *   },
    * })
+   * // WHERE
+   * //   (person.name = 'Alan' OR person.name = 'Steve' OR person.name = 'Barry')
+   * //   AND person.age = 54
    * ```
-   * ```
-   * WHERE
-   *   (person.name = 'Alan' OR person.name = 'Steve' OR person.name = 'Barry')
-   *   AND person.age = 54
-   * ```
-   *
    * Finally, you can also wrap your conditions in an array at most levels to
    * produce an `OR`
    * ```javascript
@@ -532,18 +505,13 @@ export abstract class Builder<Q> {
    *     { age: 54 },
    *   ],
    * })
-   * ```
-   * ```
-   * WHERE person.name = 'Alan' OR person.age = 54
-   * ```
-   * ```javascript
+   * // WHERE person.name = 'Alan' OR person.age = 54
+   *
    * query.where([
    *   { employee: { age: lessThan(18) }},
    *   { department: { funding: greaterThan(10000) }}
    * })
-   * ```
-   * ```
-   * WHERE employee.age < 18 OR department.funding > 10000
+   * // WHERE employee.age < 18 OR department.funding > 10000
    * ```
    *
    * @param {AnyConditions} conditions
@@ -563,25 +531,19 @@ export abstract class Builder<Q> {
    * A single string:
    * ```javascript
    * query.with('people')
-   * ```
-   * ```
-   * WITH people
+   * // WITH people
    * ```
    *
    * An array of strings to return multiple variables:
    * ```javascript
    * query.with([ 'people', 'pets' ])
-   * ```
-   * ```
-   * WITH people, pets
+   * // WITH people, pets
    * ```
    *
    * A single object to rename variables:
    * ```javascript
    * query.with({ people: 'employees' })
-   * ```
-   * ```
-   * WITH people AS employees
+   * // WITH people AS employees
    * ```
    *
    * A single object with an array for each value:
@@ -590,9 +552,7 @@ export abstract class Builder<Q> {
    *   people: [ 'name', 'age' ],
    *   pets: [ 'name', 'breed' ],
    * })
-   * ```
-   * ```
-   * WITH people.name, people.age, pets.name, pets.breed
+   * // WITH people.name, people.age, pets.name, pets.breed
    * ```
    * This gives you a shortcut to specifying many node properties. You can also
    * rename each property by adding an object inside the array or by providing
@@ -601,9 +561,7 @@ export abstract class Builder<Q> {
    * query.with({
    *   people: [{ name: 'personName' }, 'age' ],
    * })
-   * ```
-   * ```
-   * WITH people.name as personName, people.age
+   * // WITH people.name as personName, people.age
    * ```
    * or
    * ```javascript
@@ -613,9 +571,7 @@ export abstract class Builder<Q> {
    *     age: 'personAge',
    *   },
    * })
-   * ```
-   * ```
-   * WITH people.name as personName, people.age as personAge
+   * // WITH people.name as personName, people.age as personAge
    * ```
    *
    * You can also pass an array of any of the above methods.
