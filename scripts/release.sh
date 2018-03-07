@@ -15,14 +15,13 @@ if [[ $# -lt 1 ]]; then
     exit 1
 fi
 
-if [ "$current_branch" == "master" ]; then
-  printf "${red}Cannot merge master. Switch to a feature branch and rerun this command.${end}\n"
+if [ "$current_branch" != "master" ]; then
+  printf "${red}Can only release from master branch.${end}\n"
   exit 1
 fi
 
-echo "${magenta}Merging...${end}"
-git checkout master
-git merge "$current_branch" --no-ff --no-commit
+yarn build:prod
+yarn test
 
 echo "${magenta}Bumping version...${end}"
 new_version=$(npm version --no-git-tag-version $1)
