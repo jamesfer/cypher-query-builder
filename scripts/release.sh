@@ -8,15 +8,20 @@ cyan=$'\e[1;36m'
 end=$'\e[0m'
 
 current_version=$(node -p "require('./package.json').version")
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 if [[ $# -lt 1 ]]; then
-    printf "${red}Don't forget to specify a release type${end}\n\n"
+    printf "${red}Don't forget to specify a release type${end}\n"
     exit 1
 fi
 
-echo "${magenta}Merging...${end}"
-git checkout master
-git merge develop --no-ff --no-commit
+if [ "$current_branch" != "master" ]; then
+  printf "${red}Can only release from master branch.${end}\n"
+  exit 1
+fi
+
+yarn build:prod
+yarn test
 
 echo "${magenta}Bumping version...${end}"
 new_version=$(npm version --no-git-tag-version $1)
@@ -24,8 +29,5 @@ new_version=$(npm version --no-git-tag-version $1)
 git commit -am "Release version ${new_version}"
 git tag -a ${new_version} -m "${new_version}"
 
-echo "${magenta}Merging back into develop...${end}"
-git checkout develop
-git merge master
-
 echo "${green}${new_version}${end}"
+echo "Push the new version with ${green}git push origin master --tags${end}"
