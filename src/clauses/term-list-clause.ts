@@ -7,7 +7,6 @@ import {
 export type Properties = (string | Dictionary<string>)[];
 export type Term
   = string
-  | string[]
   | Dictionary<string>
   | Dictionary<Properties>;
 
