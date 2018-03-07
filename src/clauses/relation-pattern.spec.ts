@@ -48,7 +48,7 @@ describe('Relation', function() {
       let rel = new RelationPattern('in', ['FriendsWith', 'WorksWith']);
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('<-[:FriendsWith:WorksWith]-');
+      expect(queryObj.query).to.equal('<-[:FriendsWith|WorksWith]-');
       expect(queryObj.params).to.be.empty;
     });
 
@@ -95,7 +95,7 @@ describe('Relation', function() {
       let rel = new RelationPattern('either', 'f', ['FriendsWith', 'WorksWith'], {recent: true, years: 7}, [2, 3]);
       let queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('-[f:FriendsWith:WorksWith*2..3 { recent: $recent, years: $years }]-');
+      expect(queryObj.query).to.equal('-[f:FriendsWith|WorksWith*2..3 { recent: $recent, years: $years }]-');
       expect(keys(queryObj.params)).to.have.length(2);
       expect(values(queryObj.params)).to.have.members([true, 7]);});
   });
