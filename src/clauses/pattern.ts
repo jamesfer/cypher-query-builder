@@ -105,8 +105,8 @@ export abstract class Pattern extends Clause {
     return this.name ? this.name : '';
   }
 
-  getLabelsString() {
-    return stringifyLabels(this.labels);
+  getLabelsString(relation = false) {
+    return stringifyLabels(this.labels, relation);
   }
 
   getConditionsParamString() {

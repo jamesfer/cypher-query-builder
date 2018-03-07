@@ -23,6 +23,7 @@ describe('Pattern', function() {
   it('should accept just an array of labels', function() {
     const pattern = new ConcretePattern([ 'label1', 'label2' ]);
     expect(pattern.getLabelsString()).to.equal(':label1:label2');
+    expect(pattern.getLabelsString(true)).to.equal(':label1|label2');
     expect(pattern.getNameString()).to.equal('');
   });
 

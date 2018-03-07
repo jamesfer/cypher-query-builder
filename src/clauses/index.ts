@@ -86,6 +86,9 @@ import { PathLength } from '../utils';
  * // (parent:Person { name: 'Gwenn' })
  * ```
  *
+ * For more details on node patterns see the cypher
+ * [docs]{@link https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-node}
+ *
  * @param {_.Many<string> | _.Dictionary<any>} name
  * @param {_.Many<string> | _.Dictionary<any>} labels
  * @param {_.Dictionary<any>} conditions A dictionary of conditions to attach
@@ -132,8 +135,10 @@ export function node(
  * relation('out', 'rel', 'FriendsWith')
  * //  -[rel:FriendsWith]->
  *
- * relation('in', [ 'FriendsWith' ])
- * // <-[:FriendsWith]-
+ * relation('in', [ 'FriendsWith', 'RelatedTo' ])
+ * // <-[:FriendsWith|RelatedTo]-
+ * // Note that this will match a relation with either the FriendsWith label or
+ * // the RelatedTo label. You cannot use this syntax when creating relations.
  *
  * relation('in', { active: true })
  * // <-[{ active: true }]
@@ -156,6 +161,9 @@ export function node(
  * relation('either', 'rel', 'FriendsWith', { active: true }, '*')
  * //  -[rel:FriendsWith* { active: true }]-
  * ```
+ *
+ * For more details on relation patterns see the cypher
+ * [docs]{@link https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-relationship}.
  *
  * @param dir Direction of the relation. `in` means to the left, `out` means to
  * the right and `either` means no direction.

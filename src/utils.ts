@@ -82,10 +82,16 @@ export function stringifyValue(value) {
  * Converts labels into a string that can be put into a pattern.
  *
  * @param {string|array<string>} labels
+ * @param relation When true, joins labels by a | instead of :
  * @return {string}
  */
-export function stringifyLabels(labels) {
-  return reduce(castArray(labels), (str, l) => str + ':' + l, '');
+export function stringifyLabels(labels, relation = false) {
+  if (labels.length === 0) {
+    return '';
+  }
+
+  const separator = relation ? '|' : ':';
+  return ':' + join(castArray(labels), separator);
 }
 
 

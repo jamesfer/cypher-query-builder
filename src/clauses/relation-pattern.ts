@@ -15,7 +15,7 @@ export class RelationPattern extends Pattern {
 
   build() {
     let query = this.getNameString();
-    query += this.getLabelsString();
+    query += this.getLabelsString(true);
     query += stringifyPathLength(this.length);
     query += ' ' + this.getConditionsParamString();
 
