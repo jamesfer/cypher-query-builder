@@ -9,6 +9,7 @@ import {
   defaultCredentials, defaultUrl,
   mockConnection,
 } from './connection.mock';
+import { Observable } from 'rxjs';
 
 interface MockSession {
   close: SinonSpy,
@@ -84,7 +85,6 @@ describe('Connection', function() {
 
     it('should run the query through a session', function() {
       session.run.returns(Promise.resolve(true));
-      console.log(session.run());
       const params = {};
       const query = (new Query()).raw('This is a query', params);
 
@@ -112,6 +112,82 @@ describe('Connection', function() {
         .then(() => {
           expect(session.close.calledOnce);
         });
+    });
+  });
+
+  describe('stream', function() {
+    const params = {};
+    const query = (new Query()).raw('This is a query', params);
+    const expectedResults = [
+      { number: 1 },
+      { number: 2 },
+      { number: 3 }
+    ];
+    // Convert the expected results into a 'record'
+    const records = expectedResults.map(value => ({
+      toObject() { return value },
+    }));
+
+    beforeEach('setup session run return value', function() {
+      session.run.returns(Observable.from(records));
+    });
+
+    it('should throw if there are no clauses in the query', function() {
+      const stream = () => connection.stream(connection.query());
+      expect(stream).to.throw(Error, 'no clauses');
+    });
+
+    it('should throw if the connection has been closed', function() {
+      connection.close();
+      const stream = () => connection.stream(query);
+      expect(stream).to.throw(Error, 'connection is not open');
+    });
+
+    it('should run the query through a session', function(done) {
+      const observable = connection.stream(query);
+      expect(observable).to.be.an.instanceOf(Observable);
+
+      let count = 0;
+      observable.subscribe(
+        // On next
+        row => {
+          expect(row).to.deep.equal(expectedResults[count]);
+          count += 1;
+        },
+        // On error
+        undefined,
+        // On complete
+        () => {
+          expect(session.run.calledOnce);
+          expect(session.run.calledWith('This is a query', params));
+          done();
+        },
+      );
+    });
+
+    it('should close the session after running a query', function(done) {
+      const observable = connection.stream(query);
+
+      expect(observable).to.be.an.instanceOf(Observable);
+      observable.subscribe(undefined, undefined, () => {
+        expect(session.close.calledOnce);
+        done();
+      });
+    });
+
+    it('should close the session when run() throws', function(done) {
+      session.run.returns(Observable.throw('error'));
+      const observable = connection.stream(query);
+
+      expect(observable).to.be.an.instanceOf(Observable);
+      observable.subscribe(() => {
+        expect.fail(null, null, 'Observable should not emit any items');
+      }, () => {
+        expect(session.close.calledOnce);
+        done();
+      }, () => {
+        expect.fail(null, null, 'Observable should not complete without an error');
+      });
     });
   });
 

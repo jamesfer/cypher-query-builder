@@ -80,6 +80,21 @@ describe('Query', function() {
     });
   });
 
+  describe('#stream', function() {
+    it('should throw if there is no attached connection object', function () {
+      let query = new Query();
+      expect(() => query.stream()).to.throw(Error, 'no connection object available');
+    });
+
+    it('should run the query on its connection', function () {
+      const { connection } = mockConnection();
+      const streamStub = stub(connection, 'stream');
+      const query = (new Query(connection)).raw('Query');
+      query.stream();
+      expect(streamStub.calledOnce);
+    });
+  });
+
   describe('#first', function() {
     it('should reject the promise if there is no attached connection object', function() {
       let query = new Query();

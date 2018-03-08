@@ -1,3 +1,4 @@
+import Record from 'neo4j-driver/types/v1/record';
 import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
 import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
@@ -6,6 +7,7 @@ import { Dictionary } from 'lodash';
 import { Builder } from './builder';
 import { AuthToken, Config } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
+import { Observable, Subject, Observer, Subscription } from 'rxjs';
 
 let connections: Connection[] = [];
 
@@ -186,8 +188,8 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
-    let queryObj = query.buildQueryObject();
-    let session = this.session();
+    const queryObj = query.buildQueryObject();
+    const session = this.session();
     return session.run(queryObj.query, queryObj.params)
       .then(result => {
         session.close();
@@ -197,5 +199,87 @@ export class Connection extends Builder<Query> {
         session.close();
         return Promise.reject(error);
       });
+  }
+
+  /**
+   * Runs the provided query on this connection, regardless of which connection
+   * the query was created from. Each query is run on it's own session.
+   *
+   * Returns an observable that emits each record as it is received from the
+   * database. This is the most efficient way of working with very large
+   * datasets. Each record is an object where each key is the name of a variable
+   * that you specified in your return clause.
+   *
+   * Eg:
+   * ```typescript
+   * const results$ = connection.match([
+   *   node('steve', { name: 'Steve' }),
+   *   relation('out', [ 'FriendsWith' ]),
+   *   node('friends'),
+   * ])
+   *   .return([ 'steve', 'friends' ])
+   *   .stream();
+   *
+   * // Emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // Then emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // And so on
+   * ```
+   *
+   * Notice how the steve record is returned for each row, this is how cypher
+   * works. You can extract all of steve's friends from the query by using RxJS
+   * operators:
+   * ```
+   * const friends$ = results$.map(row => row.friends);
+   * ```
+   *
+   * If you use typescript you can use the type parameter to hint at the type of
+   * the return value which is essentially `Dictionary<R>`.
+   *
+   * Throws an exception if this connection is not open or there are no clauses
+   * in the query.
+   */
+  stream<R = SanitizedValue>(query: Query): Observable<SanitizedRecord<R>> {
+    if (!this.open) {
+      throw Error('Cannot run query; connection is not open.');
+    }
+
+    if (!query.getClauses().length) {
+      throw Error('Cannot run query: no clauses attached to the query.');
+    }
+
+    const queryObj = query.buildQueryObject();
+    const session = this.session();
+
+    // Run the query
+    const result = session.run(queryObj.query, queryObj.params);
+
+    // Subscribe to the result and clean up the session
+    return Observable.create((subscriber: Observer<SanitizedRecord<R>>): Subscription => {
+      return result.subscribe(
+        // On next
+        record => {
+          const sanitizedRecord = this.transformer.transformRecord(record);
+          subscriber.next(sanitizedRecord as any);
+        },
+        // On error
+        error => {
+          session.close();
+          subscriber.error(error);
+        },
+        // On complete
+        () => {
+          session.close();
+          subscriber.complete();
+        },
+      )
+    });
   }
 }
