@@ -201,6 +201,51 @@ export class Connection extends Builder<Query> {
       });
   }
 
+  /**
+   * Runs the provided query on this connection, regardless of which connection
+   * the query was created from. Each query is run on it's own session.
+   *
+   * Returns an observable that emits each record as it is received from the
+   * database. This is the most efficient way of working with very large
+   * datasets. Each record is an object where each key is the name of a variable
+   * that you specified in your return clause.
+   *
+   * Eg:
+   * ```typescript
+   * const results$ = connection.match([
+   *   node('steve', { name: 'Steve' }),
+   *   relation('out', [ 'FriendsWith' ]),
+   *   node('friends'),
+   * ])
+   *   .return([ 'steve', 'friends' ])
+   *   .stream();
+   *
+   * // Emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // Then emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // And so on
+   * ```
+   *
+   * Notice how the steve record is returned for each row, this is how cypher
+   * works. You can extract all of steve's friends from the query by using RxJS
+   * operators:
+   * ```
+   * const friends$ = results$.map(row => row.friends);
+   * ```
+   *
+   * If you use typescript you can use the type parameter to hint at the type of
+   * the return value which is essentially `Dictionary<R>`.
+   *
+   * Throws an exception if this connection is not open or there are no clauses
+   * in the query.
+   */
   stream<R = SanitizedValue>(query: Query): Observable<SanitizedRecord<R>> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
