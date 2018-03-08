@@ -65,9 +65,9 @@ describe('Query', function() {
   });
 
   describe('#run', function() {
-    it('should throw if there is no attached connection object', function() {
+    it('should reject the promise if there is no attached connection object', function() {
       let query = new Query();
-      expect(query.run()).to.be.rejectedWith(Error, 'no connection object available');
+      return expect(query.run()).to.be.rejectedWith(Error, 'no connection object available');
     });
 
     it('should run the query on its connection', function() {
@@ -81,17 +81,49 @@ describe('Query', function() {
   });
 
   describe('#stream', function() {
-    it('should throw if there is no attached connection object', function() {
+    it('should throw if there is no attached connection object', function () {
       let query = new Query();
       expect(() => query.stream()).to.throw(Error, 'no connection object available');
     });
 
-    it('should run the query on its connection', function() {
+    it('should run the query on its connection', function () {
       const { connection } = mockConnection();
       const streamStub = stub(connection, 'stream');
       const query = (new Query(connection)).raw('Query');
       query.stream();
       expect(streamStub.calledOnce);
     });
+  });
+
+  describe('#first', function() {
+    it('should reject the promise if there is no attached connection object', function() {
+      let query = new Query();
+      return expect(query.first()).to.be.rejectedWith(Error, 'no connection object available');
+    });
+
+    it('should run the query on its connection and return the first result', function() {
+      const { connection } = mockConnection();
+      const runStub = stub(connection, 'run');
+      const firstRecord = { number: 1 };
+      runStub.returns([ firstRecord, { number: 2 }, { number: 3 } ]);
+
+      const query = (new Query(connection)).raw('Query');
+      return expect(query.first()).to.be.fulfilled.then(result => {
+        expect(runStub.calledOnce);
+        expect(result).to.equal(firstRecord);
+      });
+    });
+
+    it('should return undefined if the query returns no results', function() {
+      const { connection } = mockConnection();
+      const runStub = stub(connection, 'run');
+      runStub.returns([]);
+
+      const query = (new Query(connection)).raw('Query');
+      return expect(query.first()).to.be.fulfilled.then(result => {
+        expect(runStub.calledOnce);
+        expect(result).to.equal(undefined);
+      });
+    })
   });
 });
