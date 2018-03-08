@@ -25,7 +25,7 @@ export class Query extends Builder<Query> {
    * calling a chainable method of a connection, the query's connection was
    * automatically set.
    *
-   * Run returns a promise that resolves to an array of records. Each key of the
+   * Returns a promise that resolves to an array of records. Each key of the
    * record is the name of a variable that you specified in your `RETURN`
    * clause.
    * Eg:
@@ -76,6 +76,28 @@ export class Query extends Builder<Query> {
     }
 
     return this.connection.run<R>(this);
+  }
+
+  /**
+   * Runs the current query on its connection and returns the first result.
+   * If the query was created by calling a chainable method of a connection,
+   * the query's connection was automatically set.
+   *
+   * If 0 results were returned from the database, returns `undefined`.
+   *
+   * Returns a promise that resolves to a single record. Each key of the
+   * record is the name of a variable that you specified in your `RETURN`
+   * clause.
+   *
+   * If you use typescript you can use the type parameter to hint at the type of
+   * the return value which is essentially `Dictionary<R>`.
+   *
+   * Throws an exception if this query does not have a connection or has no
+   * clauses.
+   */
+  async first<R = SanitizedValue>(): Promise<SanitizedRecord<R>> {
+    return this.run<R>()
+      .then(results => results && results.length ? results[0] : undefined)
   }
 
   // Clause proxied methods
