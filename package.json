@@ -21,7 +21,7 @@
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
-    "test": "nyc --reporter=text --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
+    "test": "nyc --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
     "release": "./scripts/release.sh",
     "merge": "./scripts/merge.sh",
     "docs": "typedoc src/builder.ts src/query.ts src/connection.ts src/clauses/index.ts src/clauses/where-comparators.ts src/clauses/where-operators.ts --mode file --theme minimal --out ./docs --excludeExternals --excludeProtected --excludePrivate --ignoreCompilerErrors",
@@ -75,5 +75,8 @@
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0"
+  },
+  "peerDependencies": {
+    "rxjs": "^5.5.6"
   }
 }
