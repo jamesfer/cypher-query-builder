@@ -3,6 +3,7 @@ import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause } from './clause';
+import { Observable } from 'rxjs';
 
 export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
@@ -21,9 +22,9 @@ export class Query extends Builder<Query> {
   }
 
   /**
-   * Runs the current query on its connection. If the query was created by
-   * calling a chainable method of a connection, the query's connection was
-   * automatically set.
+   * Runs this query on its connection. If this query was created by calling a
+   * chainable method of a connection, then its connection was automatically
+   * set.
    *
    * Run returns a promise that resolves to an array of records. Each key of the
    * record is the name of a variable that you specified in your `RETURN`
@@ -76,6 +77,60 @@ export class Query extends Builder<Query> {
     }
 
     return this.connection.run<R>(this);
+  }
+
+  /**
+   * Runs this query on its connection. If this query was created by calling a
+   * chainable method of a connection, then its connection was automatically
+   * set.
+   *
+   * Returns an observable that emits each record as it is received from the
+   * database. This is the most efficient way of working with very large
+   * datasets. Each record is an object where each key is the name of a variable
+   * that you specified in your return clause.
+   *
+   * Eg:
+   * ```typescript
+   * const result$ = connection.match([
+   *   node('steve', { name: 'Steve' }),
+   *   relation('out', [ 'FriendsWith' ]),
+   *   node('friends'),
+   * ])
+   *   .return([ 'steve', 'friends' ])
+   *   .stream();
+   *
+   * // Emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // Then emits
+   * // {
+   * //   steve: { ... } // steve node,
+   * //   friends: { ... } // first friend,
+   * // },
+   * // And so on
+   * ```
+   *
+   * Notice how the steve record is returned for each row, this is how cypher
+   * works. You can extract all of steve's friends from the query by using RxJS
+   * operators:
+   * ```
+   * const friends$ = results$.map(row => row.friends);
+   * ```
+   *
+   * If you use typescript you can use the type parameter to hint at the type of
+   * the return value which is essentially `Dictionary<R>`.
+   *
+   * Throws an exception if this query does not have a connection or has no
+   * clauses.
+   */
+  stream<R = SanitizedValue>(): Observable<SanitizedRecord<R>> {
+    if (!this.connection) {
+      throw Error('Cannot run query; no connection object available.');
+    }
+
+    return this.connection.stream<R>(this);
   }
 
   // Clause proxied methods
