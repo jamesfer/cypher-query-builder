@@ -15,7 +15,7 @@ cache:
     - "node_modules"
 
 after_install:
-  - "yarn install --peer rxjs"
+  - "yarn add --peer rxjs"
 script:
   - "yarn build:prod"
   - "yarn ci:test"
