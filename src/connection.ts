@@ -1,3 +1,4 @@
+import Record from 'neo4j-driver/types/v1/record';
 import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
 import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
@@ -6,6 +7,7 @@ import { Dictionary } from 'lodash';
 import { Builder } from './builder';
 import { AuthToken, Config } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
+import { Observable, Subject, Observer, Subscription } from 'rxjs';
 
 let connections: Connection[] = [];
 
@@ -186,8 +188,8 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
-    let queryObj = query.buildQueryObject();
-    let session = this.session();
+    const queryObj = query.buildQueryObject();
+    const session = this.session();
     return session.run(queryObj.query, queryObj.params)
       .then(result => {
         session.close();
@@ -197,5 +199,42 @@ export class Connection extends Builder<Query> {
         session.close();
         return Promise.reject(error);
       });
+  }
+
+  stream<R = SanitizedValue>(query: Query): Observable<SanitizedRecord<R>> {
+    if (!this.open) {
+      throw Error('Cannot run query; connection is not open.');
+    }
+
+    if (!query.getClauses().length) {
+      throw Error('Cannot run query: no clauses attached to the query.');
+    }
+
+    const queryObj = query.buildQueryObject();
+    const session = this.session();
+
+    // Run the query
+    const result = session.run(queryObj.query, queryObj.params);
+
+    // Subscribe to the result and clean up the session
+    return Observable.create((subscriber: Observer<SanitizedRecord<R>>): Subscription => {
+      return result.subscribe(
+        // On next
+        record => {
+          const sanitizedRecord = this.transformer.transformRecord(record);
+          subscriber.next(sanitizedRecord as any);
+        },
+        // On error
+        error => {
+          session.close();
+          subscriber.error(error);
+        },
+        // On complete
+        () => {
+          session.close();
+          subscriber.complete();
+        },
+      )
+    });
   }
 }
