@@ -41,7 +41,7 @@ describe('TermListClause', function() {
 
     it('should produce a complete term list', function() {
       let termList = new TermListClause([
-        ['startNode', 'anotherNode'],
+        'startNode',
         'count(rel)',
         {
           'endNode': [
@@ -50,7 +50,7 @@ describe('TermListClause', function() {
           ],
         },
       ]);
-      expect(termList.build()).to.equal('startNode, anotherNode, count(rel), endNode.score, endNode.timestamp AS created_at');
+      expect(termList.build()).to.equal('startNode, count(rel), endNode.score, endNode.timestamp AS created_at');
       expect(termList.getParams()).to.be.empty;
     });
   });
