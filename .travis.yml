@@ -17,6 +17,7 @@ cache:
 before_script:
   - "yarn add --peer rxjs"
 script:
+  - "yarn lint"
   - "yarn build:prod"
   - "yarn ci:test"
 after_success:
