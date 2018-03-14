@@ -4,6 +4,7 @@
     "allowJs": false,
     "sourceMap": true,
     "moduleResolution": "node",
+    "outDir": "dist",
     "target": "es5",
     "module": "commonjs",
     "alwaysStrict": true,
@@ -17,5 +18,9 @@
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts"
   ]
 }
