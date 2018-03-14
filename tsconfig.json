@@ -15,9 +15,8 @@
       "es2016"
     ]
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.tests.ts",
-    "test-setup.ts"
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.spec.ts"
   ]
 }

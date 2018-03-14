@@ -21,6 +21,7 @@
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
+    "lint": "tslint --project . src/**/*.ts",
     "test": "nyc --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
     "release": "./scripts/release.sh",
     "merge": "./scripts/merge.sh",
@@ -70,6 +71,8 @@
     "source-map-support": "^0.5.0",
     "ts-loader": "^3.1.1",
     "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.7.0",
     "typedoc": "^0.10.0",
     "typescript": "^2.5.3",
     "uglifyjs-webpack-plugin": "^0.4.6",
