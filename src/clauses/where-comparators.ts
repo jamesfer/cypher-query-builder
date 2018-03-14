@@ -22,12 +22,13 @@ export type Comparator = (params: ParameterBag, name: string) => Many<string>;
 
 function compare(operator: string, value: any, variable?: boolean, paramName?: string): Comparator {
   return (params: ParameterBag, name: string): string => {
-    paramName = paramName || last(split(name, '.'));
-    return join([
+    const baseParamName = paramName || last(split(name, '.'));
+    const parts = [
       name,
       operator,
-      variable ? value : params.addParam(value, paramName),
-    ], ' ');
+      variable ? value : params.addParam(value, baseParamName),
+    ];
+    return join(parts, ' ');
   };
 }
 
@@ -229,7 +230,8 @@ export function inArray(value: any[], variable?: boolean) {
  * malformed.
  *
  * The regexp syntax is inherited from the
- * [java regexp syntax]{@link https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html}.
+ * [java regexp syntax]{@link
+ * https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html}.
  *
  * If you want to compare against a Neo4j variable you can set `variable` to
  * true and the value will be inserted literally into the query.
@@ -287,17 +289,10 @@ export function regexp(exp: string, insensitive?: boolean, variable?: boolean) {
 export function between(
   lower: any,
   upper: any,
-  lowerInclusive?: boolean,
-  upperInclusive?: boolean,
-  variables?: boolean
+  lowerInclusive = true,
+  upperInclusive = lowerInclusive,
+  variables?: boolean,
 ): Comparator {
-  if (lowerInclusive === undefined) {
-    lowerInclusive = true;
-  }
-  if (upperInclusive === undefined) {
-    upperInclusive = lowerInclusive;
-  }
-
   const lowerOp = lowerInclusive ? '>=' : '>';
   const upperOp = upperInclusive ? '<=' : '<';
   return (params: ParameterBag, name) => {
@@ -308,7 +303,7 @@ export function between(
     return []
       .concat(lowerComp(params, name))
       .concat(upperComp(params, name));
-  }
+  };
 }
 
 /**

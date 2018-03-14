@@ -19,10 +19,10 @@ export class RelationPattern extends Pattern {
     query += stringifyPathLength(this.length);
     query += ' ' + this.getConditionsParamString();
 
-    let arrows = {
-      'in': ['<-[', ']-'],
-      'out': ['-[', ']->'],
-      'either': ['-[', ']-'],
+    const arrows = {
+      in: ['<-[', ']-'],
+      out: ['-[', ']->'],
+      either: ['-[', ']-'],
     };
     return arrows[this.dir][0] + trim(query) + arrows[this.dir][1];
   }

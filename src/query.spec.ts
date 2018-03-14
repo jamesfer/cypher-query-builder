@@ -6,8 +6,8 @@ import { mockConnection } from './connection.mock';
 import { spy, stub } from 'sinon';
 import { ClauseCollection } from './clause-collection';
 
-describe('Query', function() {
-  describe('query methods', function() {
+describe('Query', () => {
+  describe('query methods', () => {
     const query = new Query();
     const methods: Dictionary<Function> = {
       matchNode: () => query.matchNode('Node'),
@@ -17,7 +17,7 @@ describe('Query', function() {
       create: () => query.create(new NodePattern('Node')),
       return: () => query.return('node'),
       with: () => query.with('node'),
-      unwind: () => query.unwind([ 1, 2, 3 ], 'number'),
+      unwind: () => query.unwind([1, 2, 3], 'number'),
       delete: () => query.delete('node'),
       detachDelete: () => query.detachDelete('node'),
       set: () => query.set({}, { override: false }),
@@ -32,22 +32,14 @@ describe('Query', function() {
     };
 
     each(methods, (fn, name) => {
-      it(name + ' should return a chainable query object', function() {
+      it(name + ' should return a chainable query object', () => {
         expect(fn()).to.equal(query);
         expect(query.getClauses().length === 1);
       });
     });
   });
 
-  describe('proxied methods', function() {
-    const methods: (keyof ClauseCollection)[] = [
-      'build',
-      'toString',
-      'buildQueryObject',
-      'interpolate',
-      'getClauses',
-    ];
-
+  describe('proxied methods', () => {
     class TestQuery extends Query {
       getClauseCollection() {
         return this.clauses;
@@ -56,7 +48,15 @@ describe('Query', function() {
 
     const query = new TestQuery();
 
-    each(methods, method => {
+    const methods: (keyof ClauseCollection)[] = [
+      'build',
+      'toString',
+      'buildQueryObject',
+      'interpolate',
+      'getClauses',
+    ];
+
+    each(methods, (method) => {
       const methodSpy = spy(query.getClauseCollection(), method);
       query[method]();
       expect(methodSpy.calledOnce).to.be.true;
@@ -64,13 +64,13 @@ describe('Query', function() {
     });
   });
 
-  describe('#run', function() {
-    it('should reject the promise if there is no attached connection object', function() {
-      let query = new Query();
+  describe('#run', () => {
+    it('should reject the promise if there is no attached connection object', () => {
+      const query = new Query();
       return expect(query.run()).to.be.rejectedWith(Error, 'no connection object available');
     });
 
-    it('should run the query on its connection', function() {
+    it('should run the query on its connection', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
       const query = (new Query(connection)).raw('Query');
@@ -80,13 +80,13 @@ describe('Query', function() {
     });
   });
 
-  describe('#stream', function() {
-    it('should throw if there is no attached connection object', function () {
-      let query = new Query();
+  describe('#stream', () => {
+    it('should throw if there is no attached connection object', () => {
+      const query = new Query();
       expect(() => query.stream()).to.throw(Error, 'no connection object available');
     });
 
-    it('should run the query on its connection', function () {
+    it('should run the query on its connection', () => {
       const { connection } = mockConnection();
       const streamStub = stub(connection, 'stream');
       const query = (new Query(connection)).raw('Query');
@@ -95,35 +95,35 @@ describe('Query', function() {
     });
   });
 
-  describe('#first', function() {
-    it('should reject the promise if there is no attached connection object', function() {
-      let query = new Query();
+  describe('#first', () => {
+    it('should reject the promise if there is no attached connection object', () => {
+      const query = new Query();
       return expect(query.first()).to.be.rejectedWith(Error, 'no connection object available');
     });
 
-    it('should run the query on its connection and return the first result', function() {
+    it('should run the query on its connection and return the first result', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
       const firstRecord = { number: 1 };
-      runStub.returns([ firstRecord, { number: 2 }, { number: 3 } ]);
+      runStub.returns([firstRecord, { number: 2 }, { number: 3 }]);
 
       const query = (new Query(connection)).raw('Query');
-      return expect(query.first()).to.be.fulfilled.then(result => {
+      return expect(query.first()).to.be.fulfilled.then((result) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(firstRecord);
       });
     });
 
-    it('should return undefined if the query returns no results', function() {
+    it('should return undefined if the query returns no results', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
       runStub.returns([]);
 
       const query = (new Query(connection)).raw('Query');
-      return expect(query.first()).to.be.fulfilled.then(result => {
+      return expect(query.first()).to.be.fulfilled.then((result) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(undefined);
       });
-    })
+    });
   });
 });

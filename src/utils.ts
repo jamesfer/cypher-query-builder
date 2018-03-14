@@ -10,6 +10,7 @@ import {
   join,
   map,
   reduce,
+  isNil,
 } from 'lodash';
 
 
@@ -21,25 +22,26 @@ import {
  * @return {string}
  */
 export function uniqueString(str, existing: string[]) {
-  str = camelCase(str);
+  let camelString = camelCase(str);
 
   // Check if the string already has a number extension
   let number = null;
-  let matches = str.match(/[0-9]+$/);
+  const matches = camelString.match(/[0-9]+$/);
   if (matches) {
     number = +matches[0];
-    str = str.substr(0, str.length - matches[0].length);
+    camelString = camelString.substr(0, camelString.length - matches[0].length);
   }
 
   // Compute all taken suffixes that are similar to the given string
-  let regex = new RegExp('^' + str + '([0-9]*)$');
-  let takenSuffixes = reduce(existing, (suffixes, existingString) => {
-    let matches = existingString.match(regex);
+  const regex = new RegExp('^' + camelString + '([0-9]*)$');
+  const collectSuffixes = (suffixes, existingString) => {
+    const matches = existingString.match(regex);
     if (matches) {
       return [...suffixes, matches[1] ? +matches[1] : 1];
     }
     return suffixes;
-  }, []);
+  };
+  const takenSuffixes = reduce(existing, collectSuffixes, []);
 
   // If there was no suffix on the given string or it was already taken,
   // compute the new suffix.
@@ -48,7 +50,7 @@ export function uniqueString(str, existing: string[]) {
   }
 
   // Append the suffix if it is not 1
-  return str + (number === 1 ? '' : number);
+  return camelString + (number === 1 ? '' : number);
 }
 
 
@@ -65,13 +67,12 @@ export function stringifyValue(value) {
     return `'` + value + `'`;
   }
   if (isArray(value)) {
-    let str = join(map(value, el => stringifyValue), ', ');
+    const str = join(map(value, stringifyValue), ', ');
     return `[ ${str} ]`;
   }
   if (isObject(value)) {
-    let str = join(map(value, (el, key) => {
-      return key + ': ' + stringifyValue(el);
-    }), ', ');
+    const pairs = map(value, (el, key) => key + ': ' + stringifyValue(el));
+    const str = join(pairs, ', ');
     return `{ ${str} }`;
   }
   return '';
@@ -95,22 +96,21 @@ export function stringifyLabels(labels, relation = false) {
 }
 
 
-export type PathLength = number | number[] | '*'
+export type PathLength = number | number[] | '*';
 /**
  * Converts a path length bounds into a string to put into a relationship.
  * @param  {Array<int>|int} bounds An array of bounds
  * @return {string}
  */
 export function stringifyPathLength(bounds?: PathLength): string {
-  if (!bounds) {
+  if (isNil(bounds)) {
     return '';
   }
 
   let str = '*';
   if (isInteger(bounds)) {
     str += bounds;
-  }
-  else if (isArray(bounds)) {
+  } else if (isArray(bounds)) {
     if (bounds.length >= 1) {
       str += bounds[0];
     }

@@ -1,2 +1,2 @@
-describe('Clause', function() {
+describe('Clause', () => {
 });

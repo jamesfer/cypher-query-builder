@@ -1,6 +1,5 @@
 import { Clause } from '../clause';
-import { join, map, Many, isString, isArray, Dictionary, reduce, mapValues } from 'lodash';
-
+import { join, map, Many, isString, isArray, Dictionary, reduce, mapValues, assign } from 'lodash';
 
 export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING';
 export type OrderConstraints = Dictionary<Direction>;
@@ -14,21 +13,16 @@ export class OrderBy extends Clause {
 
     if (isString(fields)) {
       this.constraints = { [fields]: reverse };
-    }
-    else if (isArray(fields)) {
-      this.constraints = reduce(fields, (obj, field) => {
-        obj[field] = reverse;
-        return obj;
-      }, {});
-    }
-    else {
+    } else if (isArray(fields)) {
+      this.constraints = reduce(fields, (obj, field) => assign(obj, { [field]: reverse }), {});
+    } else {
       this.constraints = mapValues(fields, OrderBy.normalizeDirection);
     }
   }
 
   build() {
     const contraints = map(this.constraints, (dir, prop) => {
-      return prop + (dir.length ? ` ${dir}` : '');
+      return prop + (dir.length > 0 ? ` ${dir}` : '');
     });
     return 'ORDER BY ' + join(contraints, ', ');
   }

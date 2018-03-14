@@ -16,26 +16,27 @@ export class PatternClause extends Clause {
     options: PatternOptions = { useExpandedConditions: false },
   ) {
     super();
-
-    options = assign({
+    const defaultOptions = {
       useExpandedConditions: true,
-    }, options);
+    };
+    const { useExpandedConditions } = assign(defaultOptions, options);
 
     // Ensure patterns is a two dimensional array.
-    let arr = castArray<Pattern | Pattern[]>(patterns);
+    const arr = castArray<Pattern | Pattern[]>(patterns);
     this.patterns = (arr[0] instanceof Array ? arr : [arr]) as Pattern[][];
 
 
     // Add child patterns as clauses
-    this.patterns.forEach(arr => arr.forEach(pat => {
-      pat.setExpandedConditions(options.useExpandedConditions);
+    this.patterns.forEach(arr => arr.forEach((pat) => {
+      pat.setExpandedConditions(useExpandedConditions);
       pat.useParameterBag(this.parameterBag);
     }));
   }
 
   build() {
-    return join(map(this.patterns, pattern => {
+    const patternStrings = map(this.patterns, (pattern) => {
       return reduce(pattern, (str, clause) => str + clause.build(), '');
-    }), ', ');
+    });
+    return join(patternStrings, ', ');
   }
 }

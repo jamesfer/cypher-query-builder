@@ -2,8 +2,8 @@ import { ParameterContainer } from './parameter-container';
 import { ParameterBag } from './parameter-bag';
 import { expect } from '../test-setup';
 
-describe('ParameterContainer', function() {
-  describe('#useParameterBag', function() {
+describe('ParameterContainer', () => {
+  describe('#useParameterBag', () => {
     // it('should store the new bag in the class', function() {
     //   let bag = new ParameterBag();
     //   let container = new ParameterContainer();
@@ -12,24 +12,24 @@ describe('ParameterContainer', function() {
     //   expect(container.parameterBag).to.equal(bag);
     // });
 
-    it('should merge properties from the existing bag to the new one', function() {
-      let container = new ParameterContainer();
+    it('should merge properties from the existing bag to the new one', () => {
+      const container = new ParameterContainer();
       container.addParam('container value', 'name');
 
-      let bag = new ParameterBag();
+      const bag = new ParameterBag();
       bag.addParam('bag value', 'name');
       container.useParameterBag(bag);
 
-      let params = container.getParams();
+      const params = container.getParams();
       expect(params).to.have.property('name', 'bag value');
       expect(params).to.have.property('name2', 'container value');
     });
 
-    it('should not recreate the Parameter objects', function() {
-      let container = new ParameterContainer();
-      let param = container.addParam('container value', 'name');
+    it('should not recreate the Parameter objects', () => {
+      const container = new ParameterContainer();
+      const param = container.addParam('container value', 'name');
 
-      let bag = new ParameterBag();
+      const bag = new ParameterBag();
       bag.addParam('bag value', 'name');
       container.useParameterBag(bag);
 
@@ -38,15 +38,15 @@ describe('ParameterContainer', function() {
     });
   });
 
-  describe('#getParams', function() {
-    it('should return the params', function() {
-      let container = new ParameterContainer();
+  describe('#getParams', () => {
+    it('should return the params', () => {
+      const container = new ParameterContainer();
       container.addParam('value1', 'string');
       container.addParam(7, 'number');
 
       expect(container.getParams()).to.deep.equal({
-        'string': 'value1',
-        'number': 7,
+        string: 'value1',
+        number: 7,
       });
     });
   });

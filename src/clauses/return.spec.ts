@@ -1,10 +1,10 @@
 import { Return } from './return';
 import { expect } from 'chai';
 
-describe('Return', function() {
-  describe('#build', function() {
-    it('should start with RETURN', function() {
-      let query = new Return('node');
+describe('Return', () => {
+  describe('#build', () => {
+    it('should start with RETURN', () => {
+      const query = new Return('node');
       expect(query.build()).to.equal('RETURN node');
     });
   });

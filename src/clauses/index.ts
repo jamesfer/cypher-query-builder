@@ -87,7 +87,8 @@ import { PathLength } from '../utils';
  * ```
  *
  * For more details on node patterns see the cypher
- * [docs]{@link https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-node}
+ * [docs]{@link
+ * https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-node}
  *
  * @param {_.Many<string> | _.Dictionary<any>} name
  * @param {_.Many<string> | _.Dictionary<any>} labels
@@ -104,6 +105,8 @@ export function node(
   return new NodePattern(name, labels, conditions);
 }
 
+// Need to disable line length because there is a long link in the documentation
+/* tslint:disable:max-line-length */
 /**
  * Creates a relation pattern like `-[rel:FriendsWith { active: true }]->`.
  *
@@ -117,7 +120,8 @@ export function node(
  * relation(dir: 'in' | 'out' | 'either', conditions: Dictionary<any>)
  * relation(dir: 'in' | 'out' | 'either', labels: string[], conditions?: Dictionary<any>)
  * relation(dir: 'in' | 'out' | 'either', name: string, conditions?: Dictionary<any>)
- * relation(dir: 'in' | 'out' | 'either', name: string, labels?: string | string[], conditions?: Dictionary<any>, length: number | number[] | '*')
+ * relation(dir: 'in' | 'out' | 'either', name: string, labels?: string | string[],
+ *   conditions?: Dictionary<any>, length?: number | number[] | '*')
  * ```
  * *Note that labels must be an array when it is the first argument after dir.*
  *
@@ -163,7 +167,8 @@ export function node(
  * ```
  *
  * For more details on relation patterns see the cypher
- * [docs]{@link https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-relationship}.
+ * [docs]{@link
+ * https://neo4j.com/docs/developer-manual/current/cypher/syntax/patterns/#cypher-pattern-relationship}.
  *
  * @param dir Direction of the relation. `in` means to the left, `out` means to
  * the right and `either` means no direction.
@@ -177,12 +182,13 @@ export function node(
  * number is optional, see the examples above.
  * @returns {RelationPattern} An object representing the relation pattern.
  */
+/* tslint:disable:max-line-length */
 export function relation(
   dir: 'in' | 'out' | 'either',
   name?: Many<string> | Dictionary<any>,
   labels?: Many<string> | Dictionary<any>,
   conditions?: Dictionary<any>,
-  length?: PathLength
+  length?: PathLength,
 ) {
   return new RelationPattern(dir, name, labels, conditions, length);
 }

@@ -20,50 +20,49 @@ export abstract class Pattern extends Clause {
     protected options = { expanded: true },
   ) {
     super();
+    const isConditions = (a: any): a is Dictionary<any> => isObjectLike(a) && !isArray(a);
+    let tempName = name;
+    let tempLabels = labels;
+    let tempConditions = conditions;
 
-    const isConditions = (a: any) => isObjectLike(a) && !isArray(a);
-
-    if (isNil(conditions)) {
-      if (isConditions(labels)) {
-        conditions = labels as Dictionary<any>;
-        labels = undefined;
-      }
-      else if (isNil(labels) && isConditions(name)) {
-        conditions = name as Dictionary<any>;
-        name = undefined;
-      }
-      else {
-        conditions = {};
-      }
-    }
-
-    if (isNil(labels)) {
-      if (isArray(name)) {
-        labels = name;
-        name = undefined;
-      }
-      else {
-        labels = [];
+    if (isNil(tempConditions)) {
+      if (isConditions(tempLabels)) {
+        tempConditions = tempLabels;
+        tempLabels = undefined;
+      } else if (isNil(tempLabels) && isConditions(tempName)) {
+        tempConditions = tempName;
+        tempName = undefined;
+      } else {
+        tempConditions = {};
       }
     }
 
-    if (isNil(name)) {
-      name = '';
+    if (isNil(tempLabels)) {
+      if (isArray(tempName)) {
+        tempLabels = tempName;
+        tempName = undefined;
+      } else {
+        tempLabels = [];
+      }
     }
 
-    if (!isString(name)) {
-      throw new TypeError('Name must be a string.')
+    if (isNil(tempName)) {
+      tempName = '';
     }
-    if (!isString(labels) && !isArray(labels)) {
+
+    if (!isString(tempName)) {
+      throw new TypeError('Name must be a string.');
+    }
+    if (!isString(tempLabels) && !isArray(tempLabels)) {
       throw new TypeError('Labels must be a string or an array');
     }
-    if (!isConditions(conditions)) {
+    if (!isConditions(tempConditions)) {
       throw new TypeError('Conditions must be an object.');
     }
 
-    this.labels = castArray(labels);
-    this.name = name;
-    this.conditions = conditions;
+    this.labels = castArray(tempLabels);
+    this.name = tempName;
+    this.conditions = tempConditions;
     this.setExpandedConditions(options.expanded);
   }
 
@@ -78,9 +77,8 @@ export abstract class Pattern extends Clause {
     // Delete old bindings
     if (this.conditionParams instanceof Parameter) {
       this.parameterBag.deleteParam(this.conditionParams.name);
-    }
-    else {
-      for (let key in this.conditionParams) {
+    } else {
+      for (const key in this.conditionParams) {
         this.parameterBag.deleteParam(this.conditionParams[key].name);
       }
     }
@@ -91,12 +89,10 @@ export abstract class Pattern extends Clause {
         this.conditionParams = mapValues(this.conditions, (value, name) => {
           return this.parameterBag.addParam(value, name);
         });
-      }
-      else {
+      } else {
         this.conditionParams = this.parameterBag.addParam(this.conditions, 'conditions');
       }
-    }
-    else {
+    } else {
       this.conditionParams = {};
     }
   }
@@ -115,7 +111,7 @@ export abstract class Pattern extends Clause {
     }
 
     if (this.useExpandedConditions) {
-      let strings = map(this.conditionParams, (param, name) => {
+      const strings = map(this.conditionParams, (param, name) => {
         return `${name}: ${param}`;
       });
       return '{ ' + join(strings, ', ') + ' }';

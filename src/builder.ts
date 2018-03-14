@@ -1,7 +1,7 @@
-import { Dictionary, Many, } from 'lodash';
+import { Dictionary, Many, assign } from 'lodash';
 import {
   Limit, Match, NodePattern, Skip, Where, Set, Create,
-  Return, With, Unwind, Delete, Raw, OrderBy
+  Return, With, Unwind, Delete, Raw, OrderBy,
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
@@ -11,7 +11,6 @@ import { SetOptions, SetProperties } from './clauses/set';
 import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
-import { assign } from 'lodash';
 
 
 /**
@@ -67,7 +66,11 @@ export abstract class Builder<Q> {
    * @param {_.Dictionary<any>} conditions
    * @returns {Q}
    */
-  createNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  createNode(
+    name?: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
+    conditions?: Dictionary<any>,
+  ) {
     const clause = new Create(new NodePattern(name, labels, conditions));
     return this.continueChainClause(clause);
   }
@@ -142,7 +145,8 @@ export abstract class Builder<Q> {
    * together like above, and then each composite pattern is joined with a comma
    * to allow matching of multiple distinct patterns. Note: matching many
    * distinct patterns will produce a cross product of the results as noted in
-   * the [cypher docs]{@link https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
+   * the [cypher docs]{@link
+   * https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
    *
    * You can also provide `optional: true` in the options to create and
    * `OPTIONAL MATCH` clause.
@@ -165,7 +169,11 @@ export abstract class Builder<Q> {
    * @param {_.Dictionary<any>} conditions
    * @returns {Q}
    */
-  matchNode(name?: Many<string> | Dictionary<any>, labels?: Many<string> | Dictionary<any>, conditions?: Dictionary<any>) {
+  matchNode(
+    name?: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
+    conditions?: Dictionary<any>,
+  ) {
     const clause = new Match(new NodePattern(name, labels, conditions));
     return this.continueChainClause(clause);
   }
@@ -184,7 +192,8 @@ export abstract class Builder<Q> {
   }
 
   /**
-   * Adds an [order by]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/order-by}
+   * Adds an [order by]{@link
+   * https://neo4j.com/docs/developer-manual/current/cypher/clauses/order-by}
    * to the query.
    *
    * You can supply a single string or an array of strings to order by and the
@@ -344,7 +353,8 @@ export abstract class Builder<Q> {
   }
 
   /**
-   * Adds labels to a node using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * Adds labels to a node using a [set]{@link
+   * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
    * clause.
    *
    * ```
@@ -365,7 +375,8 @@ export abstract class Builder<Q> {
   }
 
   /**
-   * Updates a node from parameters using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * Updates a node from parameters using a [set]{@link
+   * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
    * clause. This function treats all values as parameters which is different to
    * `setVariables` which assumes values are cypher variables.
    *
@@ -409,11 +420,11 @@ export abstract class Builder<Q> {
    */
   setVariables(
     variables: Dictionary<string | Dictionary<string>>,
-    override?: boolean
+    override?: boolean,
   ) {
     return this.continueChainClause(new Set(
       { variables },
-      { override }
+      { override },
     ));
   }
 

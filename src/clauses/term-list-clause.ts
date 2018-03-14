@@ -31,7 +31,7 @@ export class TermListClause extends Clause {
     return join(flattenDeep(map(this.terms, term => this.stringifyTerm(term))), ', ');
   }
 
-  private stringifyTerm(term: Term): Many<string>{
+  private stringifyTerm(term: Term): Many<string> {
     // Just a node
     if (isString(term)) {
       return this.stringifyProperty(term);
@@ -57,33 +57,31 @@ export class TermListClause extends Clause {
   }
 
   private stringifyProperties(props: Properties, alias?: string, node?: string): string[] {
-    return reduce(props, (list, prop) => {
-      // Single node property
+    const convertToString = (list: string[], prop: string | Dictionary<string>) => {
       if (isString(prop)) {
+        // Single node property
         list.push(this.stringifyProperty(prop, alias, node));
-      }
-      // Node properties with aliases
-      else {
-        list.push(...map(prop, (name, alias) => {
-          return this.stringifyProperty(name, alias, node);
-        }));
+      } else {
+        // Node properties with aliases
+        list.push(...map(prop, (name, alias) => this.stringifyProperty(name, alias, node)));
       }
       return list;
-    }, []);
+    };
+    return reduce(props, convertToString, []);
   }
 
   private stringifyDictionary(node: Dictionary<string | Properties>): string[] {
-    return reduce(node, (list, prop, key) => {
-      // Alias
+    const convertToString = (list, prop, key) => {
       if (isString(prop)) {
+        // Alias
         list.push(this.stringifyProperty(prop, key));
-      }
-      // Node with properties
-      else {
+      } else {
+        // Node with properties
         list.push(...this.stringifyProperties(prop, null, key));
       }
       return list;
-    }, [])
+    };
+    return reduce(node, convertToString, []);
   }
 
   build() {
