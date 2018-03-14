@@ -1,13 +1,13 @@
 import { PatternClause } from './pattern-clause';
 
 export interface MatchOptions {
-  optional?: boolean,
+  optional?: boolean;
 }
 
 export class Match extends PatternClause {
   constructor(
     patterns,
-    protected options: MatchOptions = { optional: false }
+    protected options: MatchOptions = { optional: false },
   ) {
     super(patterns, { useExpandedConditions: true });
   }

@@ -4,7 +4,7 @@ import { Dictionary, keys, mapValues } from 'lodash';
 export class Parameter {
   constructor(
     public name: string,
-    public value: string
+    public value: string,
   ) { }
 
   toString() {
@@ -30,8 +30,8 @@ export class ParameterBag {
    * @return {Parameter} Newly created parameter object.
    */
   addParam(value: any, name?: string) {
-    let actualName = this.getName(name);
-    let param = new Parameter(actualName, value);
+    const actualName = this.getName(name);
+    const param = new Parameter(actualName, value);
     this.parameterMap[actualName] = param;
     return param;
   }
@@ -69,7 +69,7 @@ export class ParameterBag {
    * Copies all parameters from another bag into this bag.
    */
   importParams(other: ParameterBag) {
-    for (let key in other.parameterMap) {
+    for (const key in other.parameterMap) {
       this.addExistingParam(other.parameterMap[key]);
     }
   }

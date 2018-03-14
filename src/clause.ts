@@ -24,7 +24,7 @@ export abstract class Clause extends ParameterContainer {
     return {
       query: this.build(),
       params: this.getParams(),
-    }
+    };
   }
 
   /**
@@ -33,8 +33,9 @@ export abstract class Clause extends ParameterContainer {
    * @return {string}
    */
   interpolate() {
-    let { params, query } = this.buildQueryObject();
-    for (let name in params) {
+    const params = this.getParams();
+    let query = this.build();
+    for (const name in params) {
       query = query.replace('$' + name, stringifyValue(params[name]));
     }
     return query;

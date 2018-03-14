@@ -1,4 +1,3 @@
-import Record from 'neo4j-driver/types/v1/record';
 import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
 import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
@@ -7,23 +6,21 @@ import { Dictionary } from 'lodash';
 import { Builder } from './builder';
 import { AuthToken, Config } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
-import { Observable, Subject, Observer, Subscription } from 'rxjs';
+import { Observable, Observer, Subscription } from 'rxjs';
 
 let connections: Connection[] = [];
 
 // Closes all open connections
-nodeCleanup(function () {
-  connections.forEach(con => {
-    con.close();
-  });
+nodeCleanup(() => {
+  connections.forEach(con => con.close());
   connections = [];
 });
 
-export interface Credentials { username: string, password: string }
+export interface Credentials { username: string; password: string; }
 
 export interface Session {
   close(): void;
-  run(query: string, params: Dictionary<any>)
+  run(query: string, params: Dictionary<any>);
 }
 
 export interface Driver {
@@ -78,8 +75,8 @@ export class Connection extends Builder<Query> {
    * @param {DriverConstructor} driver An optional driver constructor to use for
    * this connection. Defaults to the official Neo4j driver. The constructor is
    * given the url you pass to this constructor and an auth token that is
-   * generated from calling
-   * [`neo4j.auth.basic`]{@link https://neo4j.com/docs/api/javascript-driver/current#usage-examples}.
+   * generated from calling [`neo4j.auth.basic`]{@link
+   * https://neo4j.com/docs/api/javascript-driver/current#usage-examples}.
    */
   constructor(
     protected url: string,
@@ -184,18 +181,18 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query; connection is not open.');
     }
 
-    if (!query.getClauses().length) {
+    if (query.getClauses().length > 0) {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
     const queryObj = query.buildQueryObject();
     const session = this.session();
     return session.run(queryObj.query, queryObj.params)
-      .then(result => {
+      .then((result) => {
         session.close();
         return this.transformer.transformResult(result);
       })
-      .catch(error => {
+      .catch((error) => {
         session.close();
         return Promise.reject(error);
       });
@@ -251,7 +248,7 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query; connection is not open.');
     }
 
-    if (!query.getClauses().length) {
+    if (query.getClauses().length > 0) {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
@@ -265,12 +262,12 @@ export class Connection extends Builder<Query> {
     return Observable.create((subscriber: Observer<SanitizedRecord<R>>): Subscription => {
       return result.subscribe(
         // On next
-        record => {
+        (record) => {
           const sanitizedRecord = this.transformer.transformRecord(record);
           subscriber.next(sanitizedRecord as any);
         },
         // On error
-        error => {
+        (error) => {
           session.close();
           subscriber.error(error);
         },
@@ -279,7 +276,7 @@ export class Connection extends Builder<Query> {
           session.close();
           subscriber.complete();
         },
-      )
+      );
     });
   }
 }

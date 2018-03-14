@@ -10,7 +10,7 @@ export type SetProperties = {
   labels?: Dictionary<Many<string>>,
   values?: Dictionary<any>,
   variables?: Dictionary<string | Dictionary<string>>,
-}
+};
 
 export interface SetOptions {
   override: boolean;
@@ -36,11 +36,11 @@ export class Set extends Clause {
   }
 
   build() {
-    let labels = map(this.labels, (labels, key) => {
-      return key + stringifyLabels(labels)
+    const labels = map(this.labels, (labels, key) => {
+      return key + stringifyLabels(labels);
     });
-    let values = this.makeSetStatements(this.values);
-    let variables = this.makeSetStatements(this.variables, true);
+    const values = this.makeSetStatements(this.values);
+    const variables = this.makeSetStatements(this.variables, true);
 
     return 'SET ' + join(concat(labels, values, variables), ', ');
   }
@@ -53,11 +53,10 @@ export class Set extends Clause {
   }
 
   protected setStatement(value, key, recursive: boolean = false) {
-    let op = this.override ? ' = ' : ' += ';
+    const op = this.override ? ' = ' : ' += ';
     if (isObject(value) && recursive) {
-      return join(map(value, (value, prop) => {
-        return key + '.' + prop + op + value;
-      }), ', ');
+      const operationStrings = map(value, (value, prop) => key + '.' + prop + op + value);
+      return join(operationStrings, ', ');
     }
     return key + op + value;
   }

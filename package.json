@@ -21,7 +21,7 @@
   "scripts": {
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
-    "lint": "tslint --project . src/**/*.ts",
+    "lint": "tslint --project .",
     "test": "nyc --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
     "release": "./scripts/release.sh",
     "merge": "./scripts/merge.sh",

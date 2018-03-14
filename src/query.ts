@@ -145,8 +145,7 @@ export class Query extends Builder<Query> {
    * clause.
    */
   async first<R = SanitizedValue>(): Promise<SanitizedRecord<R>> {
-    return this.run<R>()
-      .then(results => results && results.length ? results[0] : undefined)
+    return this.run<R>().then(results => results && results.length > 0 ? results[0] : undefined);
   }
 
   // Clause proxied methods

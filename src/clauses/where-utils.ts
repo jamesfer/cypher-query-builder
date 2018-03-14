@@ -1,4 +1,15 @@
-import { Dictionary, isPlainObject, Many, isArray, join, map, split, last, keys, isFunction } from 'lodash';
+import {
+  Dictionary,
+  isPlainObject,
+  Many,
+  isArray,
+  join,
+  map,
+  split,
+  last,
+  keys,
+  isFunction,
+} from 'lodash';
 import { ParameterBag } from '../parameter-bag';
 import { WhereOp } from './where-operators';
 import { Comparator } from './where-comparators';
@@ -15,15 +26,18 @@ export const enum Precedence {
   Or,
   Xor,
   And,
-  Not
+  Not,
 }
 
-
-export function stringifyCondition(params: ParameterBag, condition: Condition, name: string = ''): string {
+export function stringifyCondition(
+  params: ParameterBag,
+  condition: Condition,
+  name: string = '',
+): string {
   if (isFunction(condition)) {
     return condition(params, name);
   }
-  let conditionName = last(split(name, '.'));
+  const conditionName = last(split(name, '.'));
   return name + ' = ' + params.addParam(condition, conditionName);
 }
 
@@ -32,7 +46,7 @@ export function stringCons(
   params: ParameterBag,
   conditions: Many<NodeConditions | Conditions | Condition>,
   precedence: Precedence = Precedence.None,
-  name: string = ''
+  name: string = '',
 ): string {
   if (isArray(conditions)) {
     return combineOr(params, conditions, precedence, name);
@@ -52,8 +66,8 @@ export function combineNot(
   precedence: Precedence = Precedence.None,
   name: string = '',
 ): string {
-  let string = 'NOT ' + stringCons(params, conditions, Precedence.Not, name);
-  let braces = precedence && precedence > Precedence.Not;
+  const string = 'NOT ' + stringCons(params, conditions, Precedence.Not, name);
+  const braces = precedence !== Precedence.None && precedence > Precedence.Not;
   return braces ? '(' + string + ')' : string;
 }
 
@@ -64,13 +78,11 @@ export function combineOr(
   name: string = '',
 ): string {
   // If this operator will not be used, precedence should not be altered
-  let newPrecedence = conditions.length < 2 ? precedence : Precedence.Or;
-  let strings = map(conditions, condition => {
-    return stringCons(params, condition, newPrecedence, name)
-  });
+  const newPrecedence = conditions.length < 2 ? precedence : Precedence.Or;
+  const strings = map(conditions, condition => stringCons(params, condition, newPrecedence, name));
 
-  let string = join(strings, ' OR ');
-  let braces = precedence && precedence > newPrecedence;
+  const string = join(strings, ' OR ');
+  const braces = precedence !== Precedence.None && precedence > newPrecedence;
   return braces ? '(' + string + ')' : string;
 }
 
@@ -81,13 +93,11 @@ export function combineXor(
   name: string = '',
 ): string {
   // If this operator will not be used, precedence should not be altered
-  let newPrecedence = conditions.length < 2 ? precedence : Precedence.Xor;
-  let strings = map(conditions, condition => {
-    return stringCons(params, condition, newPrecedence, name)
-  });
+  const newPrecedence = conditions.length < 2 ? precedence : Precedence.Xor;
+  const strings = map(conditions, condition => stringCons(params, condition, newPrecedence, name));
 
-  let string = join(strings, ' XOR ');
-  let braces = precedence && precedence > newPrecedence;
+  const string = join(strings, ' XOR ');
+  const braces = precedence !== Precedence.None && precedence > newPrecedence;
   return braces ? '(' + string + ')' : string;
 }
 
@@ -98,15 +108,15 @@ export function combineAnd(
   name: string = '',
 ): string {
   // Prepare name to be joined with the key of the object
-  name = name.length ? name + '.' : '';
+  const namePrefix = name.length > 0 ? name + '.' : '';
 
   // If this operator will not be used, precedence should not be altered
-  let newPrecedence = keys(conditions).length < 2 ? precedence : Precedence.And;
-  let strings = map(conditions, (condition, key) => {
-    return stringCons(params, condition, newPrecedence, name + key);
+  const newPrecedence = keys(conditions).length < 2 ? precedence : Precedence.And;
+  const strings = map(conditions, (condition, key) => {
+    return stringCons(params, condition, newPrecedence, namePrefix + key);
   });
 
-  let string = join(strings, ' AND ');
-  let braces = precedence && precedence > newPrecedence;
+  const string = join(strings, ' AND ');
+  const braces = precedence !== Precedence.None && precedence > newPrecedence;
   return braces ? '(' + string + ')' : string;
 }

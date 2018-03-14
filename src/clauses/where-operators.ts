@@ -12,7 +12,7 @@ export class WhereOp {
   evaluate(
     params: ParameterBag,
     precedence: Precedence = Precedence.None,
-    name: string = ''
+    name: string = '',
   ): string {
     throw Error('Cannot evaluate base where operator class.');
   }
