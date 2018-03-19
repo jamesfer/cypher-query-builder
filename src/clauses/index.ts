@@ -110,28 +110,15 @@ export function node(
 /**
  * Creates a relation pattern like `-[rel:FriendsWith { active: true }]->`.
  *
- * All of the arguments except the direction are optional and most of the time
- * you can supply only the ones you want, assuming you keep the order the same
- * of course.
- *
- * Use the following signatures as a reference:
- *
- * ```typescript
- * relation(dir: 'in' | 'out' | 'either', conditions: Dictionary<any>)
- * relation(dir: 'in' | 'out' | 'either', labels: string[], conditions?: Dictionary<any>)
- * relation(dir: 'in' | 'out' | 'either', name: string, conditions?: Dictionary<any>)
- * relation(dir: 'in' | 'out' | 'either', name: string, labels?: string | string[],
- *   conditions?: Dictionary<any>, length?: number | number[] | '*')
- * ```
- * *Note that labels must be an array when it is the first argument after dir.*
- *
- *
+ * The only required argument is direction. All other arguments are optional and all combinations of
+ * them are valid. The only exception is that when labels is the first argument after direction, it
+ * must be an array, otherwise it will be interpreted as the relation name.
  *
  * Some examples
  *
  * ```typescript
  * relation('either')
- * //  -[]-
+ * //  --
  *
  * relation('out', 'rel')
  * //  -[rel]->
@@ -144,6 +131,9 @@ export function node(
  * // Note that this will match a relation with either the FriendsWith label or
  * // the RelatedTo label. You cannot use this syntax when creating relations.
  *
+ * relation('in', [4, 10])
+ * // <-[*4..10]-
+ * 
  * relation('in', { active: true })
  * // <-[{ active: true }]
  *
