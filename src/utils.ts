@@ -3,7 +3,6 @@ import {
   castArray,
   isArray,
   isBoolean,
-  isInteger,
   isNumber,
   isObject,
   isString,
@@ -96,7 +95,11 @@ export function stringifyLabels(labels, relation = false) {
 }
 
 
-export type PathLength = number | [number] | [number, number] | '*';
+export type PathLength = '*'
+  | number
+  | [number | null | undefined]
+  | [number | null | undefined, number | null | undefined];
+
 /**
  * Converts a path length bounds into a string to put into a relationship.
  * @param  {Array<int>|int} bounds An array of bounds
@@ -107,18 +110,15 @@ export function stringifyPathLength(bounds?: PathLength): string {
     return '';
   }
 
-  let str = '*';
-  if (isInteger(bounds)) {
-    str += bounds;
-  } else if (isArray(bounds)) {
-    if (bounds.length >= 1) {
-      str += bounds[0];
-    }
-    str += '..';
-    if (bounds.length >= 2) {
-      str += bounds[1];
-    }
+  if (bounds === '*') {
+    return '*';
   }
 
-  return str;
+  if (isNumber(bounds)) {
+    return `*${bounds}`;
+  }
+
+  const lower = isNil(bounds[0]) ? '' : `${bounds[0]}`;
+  const upper = isNil(bounds[1]) ? '' : `${bounds[1]}`;
+  return lower || upper ? `*${lower}..${upper}` : '*';
 }

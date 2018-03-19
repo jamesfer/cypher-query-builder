@@ -1,16 +1,52 @@
 import { Pattern } from './pattern';
-import { Dictionary, trim, Many, join } from 'lodash';
+import { Dictionary, trim, Many, join, isNil, isNumber, isArray, every } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
+const isPathLengthArray = value => (
+  isArray(value) && every(value, item => isNumber(item) || isNil(item)) && value.length > 0
+);
+const isPathLength = (value: any): value is PathLength => (
+  value === '*' || isNumber(value) || isPathLengthArray(value)
+);
+
+export type RelationDirection = 'in' | 'out' | 'either';
+
 export class RelationPattern extends Pattern {
+  dir: RelationDirection;
+  length: PathLength | undefined;
+
   constructor(
-    protected dir: 'in' | 'out' | 'either',
-    name?: Many<string> | Dictionary<any>,
-    labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
-    protected length?: PathLength,
+    dir: RelationDirection,
+    name?: Many<string> | Dictionary<any> | PathLength,
+    labels?: Many<string> | Dictionary<any> | PathLength,
+    conditions?: Dictionary<any> | PathLength,
+    length?: PathLength,
   ) {
-    super(name, labels, conditions);
+    let tempName = name;
+    let tempLabels = labels;
+    let tempConditions = conditions;
+    let tempLength = length;
+
+    if (isNil(tempLength)) {
+      if (isPathLength(tempConditions)) {
+        tempLength = tempConditions;
+        tempConditions = undefined;
+      } else if (isNil(tempConditions) && isPathLength(tempLabels)) {
+        tempLength = tempLabels;
+        tempLabels = undefined;
+      } else if (isNil(tempConditions) && isNil(tempLabels) && isPathLength(tempName)) {
+        tempLength = tempName;
+        tempName = undefined;
+      }
+    }
+
+    if (isPathLength(tempName) || isPathLength(tempLabels) || isPathLength(tempConditions)) {
+      throw new TypeError('Invalid argument combination.');
+    }
+
+    super(tempName, tempLabels, tempConditions);
+    this.dir = dir;
+    this.length = tempLength;
   }
 
   build() {
