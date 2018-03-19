@@ -2,8 +2,11 @@ import { Pattern } from './pattern';
 import { Dictionary, trim, Many, join, isNil, isNumber, isArray, every } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
+const isPathLengthArray = value => (
+  isArray(value) && every(value, item => isNumber(item) || isNil(item)) && value.length > 0
+);
 const isPathLength = (value: any): value is PathLength => (
-  value === '*' || isNumber(value) || isArray(value) && every(value, isNumber) && value.length > 0
+  value === '*' || isNumber(value) || isPathLengthArray(value)
 );
 
 export type RelationDirection = 'in' | 'out' | 'either';

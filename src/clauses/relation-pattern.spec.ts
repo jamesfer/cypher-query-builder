@@ -66,6 +66,7 @@ describe('Relation', () => {
         [4, '*4'],
         [[2, 4], '*2..4'],
         ['*', '*'],
+        [[2, null], '*2..'],
       ].forEach(([length, expected]) => {
         const rel = new RelationPattern('out', length);
         const queryObj = rel.buildQueryObject();
