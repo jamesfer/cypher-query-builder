@@ -96,7 +96,7 @@ export function stringifyLabels(labels, relation = false) {
 }
 
 
-export type PathLength = number | number[] | '*';
+export type PathLength = number | [number] | [number, number] | '*';
 /**
  * Converts a path length bounds into a string to put into a relationship.
  * @param  {Array<int>|int} bounds An array of bounds

@@ -25,6 +25,6 @@ export class RelationPattern extends Pattern {
       out: ['-', '->'],
       either: ['-', '-'],
     };
-    return join(arrows[this.dir], query.length ? `[${query}]` : '');
+    return join(arrows[this.dir], query.length > 0 ? `[${query}]` : '');
   }
 }
