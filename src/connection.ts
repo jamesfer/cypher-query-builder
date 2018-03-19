@@ -181,7 +181,7 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query; connection is not open.');
     }
 
-    if (query.getClauses().length > 0) {
+    if (query.getClauses().length === 0) {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
@@ -248,7 +248,7 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query; connection is not open.');
     }
 
-    if (query.getClauses().length > 0) {
+    if (query.getClauses().length === 0) {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
