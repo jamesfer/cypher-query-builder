@@ -133,7 +133,7 @@ export function node(
  *
  * relation('in', [4, 10])
  * // <-[*4..10]-
- * 
+ *
  * relation('in', { active: true })
  * // <-[{ active: true }]
  *
@@ -175,9 +175,9 @@ export function node(
 /* tslint:disable:max-line-length */
 export function relation(
   dir: 'in' | 'out' | 'either',
-  name?: Many<string> | Dictionary<any>,
-  labels?: Many<string> | Dictionary<any>,
-  conditions?: Dictionary<any>,
+  name?: Many<string> | Dictionary<any> | PathLength,
+  labels?: Many<string> | Dictionary<any> | PathLength,
+  conditions?: Dictionary<any> | PathLength,
   length?: PathLength,
 ) {
   return new RelationPattern(dir, name, labels, conditions, length);
