@@ -6,7 +6,7 @@ export { With } from './with';
 export { Unwind } from './unwind';
 export { Delete } from './delete';
 export { Set } from './set';
-export { RelationPattern } from './relation-pattern';
+export { RelationPattern, RelationDirection } from './relation-pattern';
 export { Match } from './match';
 export { Return } from './return';
 export { Skip } from './skip';
@@ -34,7 +34,7 @@ export {
 } from './where-comparators';
 
 import { NodePattern } from './node-pattern';
-import { RelationPattern } from './relation-pattern';
+import { RelationDirection, RelationPattern } from './relation-pattern';
 import { PathLength } from '../utils';
 
 /**
@@ -174,7 +174,7 @@ export function node(
  */
 /* tslint:disable:max-line-length */
 export function relation(
-  dir: 'in' | 'out' | 'either',
+  dir: RelationDirection,
   name?: Many<string> | Dictionary<any> | PathLength,
   labels?: Many<string> | Dictionary<any> | PathLength,
   conditions?: Dictionary<any> | PathLength,

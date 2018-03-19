@@ -6,12 +6,14 @@ const isPathLength = (value: any): value is PathLength => (
   value === '*' || isNumber(value) || isArray(value) && every(value, isNumber) && value.length > 0
 );
 
+export type RelationDirection = 'in' | 'out' | 'either';
+
 export class RelationPattern extends Pattern {
-  dir: 'in' | 'out' | 'either';
+  dir: RelationDirection;
   length: PathLength | undefined;
 
   constructor(
-    dir: 'in' | 'out' | 'either',
+    dir: RelationDirection,
     name?: Many<string> | Dictionary<any> | PathLength,
     labels?: Many<string> | Dictionary<any> | PathLength,
     conditions?: Dictionary<any> | PathLength,
