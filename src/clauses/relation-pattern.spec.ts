@@ -61,6 +61,28 @@ describe('Relation', () => {
       expect(values(queryObj.params)).to.have.members([true, 7]);
     });
 
+    it('should build a relation pattern with path length', () => {
+      [
+        [4, '*4'],
+        [[2, 4], '*2..4'],
+        ['*', '*'],
+      ].forEach(([length, expected]) => {
+        const rel = new RelationPattern('out', length);
+        const queryObj = rel.buildQueryObject();
+
+        expect(queryObj.query).to.equal(`-[${expected}]->`);
+        expect(queryObj.params).to.be.empty;
+      });
+    });
+
+    it('should build a relation pattern with an empty label list', () => {
+      const rel = new RelationPattern('in', []);
+      const queryObj = rel.buildQueryObject();
+
+      expect(queryObj.query).to.equal('<--');
+      expect(queryObj.params).to.be.empty;
+    });
+
     it('should build a relation pattern with a name and conditions', () => {
       const rel = new RelationPattern('out', 'link', { recent: true, years: 7 });
       const queryObj = rel.buildQueryObject();
