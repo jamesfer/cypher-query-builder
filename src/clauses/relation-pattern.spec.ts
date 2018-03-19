@@ -8,7 +8,7 @@ describe('Relation', () => {
       const rel = new RelationPattern('in');
       const queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('<-[]-');
+      expect(queryObj.query).to.equal('<--');
       expect(queryObj.params).to.be.empty;
     });
 
@@ -16,7 +16,7 @@ describe('Relation', () => {
       const rel = new RelationPattern('out');
       const queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('-[]->');
+      expect(queryObj.query).to.equal('-->');
       expect(queryObj.params).to.be.empty;
     });
 
@@ -24,7 +24,7 @@ describe('Relation', () => {
       const rel = new RelationPattern('either');
       const queryObj = rel.buildQueryObject();
 
-      expect(queryObj.query).to.equal('-[]-');
+      expect(queryObj.query).to.equal('--');
       expect(queryObj.params).to.be.empty;
     });
 

@@ -1,5 +1,5 @@
 import { Pattern } from './pattern';
-import { Dictionary, trim, Many } from 'lodash';
+import { Dictionary, trim, Many, join } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
 export class RelationPattern extends Pattern {
@@ -14,16 +14,17 @@ export class RelationPattern extends Pattern {
   }
 
   build() {
-    let query = this.getNameString();
-    query += this.getLabelsString(true);
-    query += stringifyPathLength(this.length);
-    query += ' ' + this.getConditionsParamString();
+    const name = this.getNameString();
+    const labels = this.getLabelsString(true);
+    const length = stringifyPathLength(this.length);
+    const conditions = this.getConditionsParamString();
+    const query = trim(`${name}${labels}${length} ${conditions}`);
 
-    const arrows = {
-      in: ['<-[', ']-'],
-      out: ['-[', ']->'],
-      either: ['-[', ']-'],
+    const arrows: Record<'in' | 'out' | 'either', string[]> = {
+      in: ['<-', '-'],
+      out: ['-', '->'],
+      either: ['-', '-'],
     };
-    return arrows[this.dir][0] + trim(query) + arrows[this.dir][1];
+    return join(arrows[this.dir], query.length ? `[${query}]` : '');
   }
 }
