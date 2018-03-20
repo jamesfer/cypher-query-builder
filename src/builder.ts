@@ -244,12 +244,28 @@ export abstract class Builder<Q> {
    * query.raw('MATCH (:Event { date: $date }', { date: '2017-01-01' })
    * ```
    *
+   * `raw` can also be used as a template tag
+   *
+   * ```javascript
+   * query.matchNode('event', 'Event', { id: 1 })
+   *  .raw`SET event.finishedAt = ${Date.now()}`
+   * ```
+   *
+   * But note that using template parameters where they are not supported in a query will produce
+   * an malformed query.
+   *
+   * ```javascript
+   * query.raw`SET node.${property} = 'value'`
+   * // Invalid query:
+   * // SET node.$param1 = 'value'
+   * ```
+   *
    * @param {string} clause
-   * @param {_.Dictionary<any>} params
+   * @param args
    * @returns {Q}
    */
-  raw(clause: string, params: Dictionary<any> = {}) {
-    return this.continueChainClause(new Raw(clause, params));
+  raw(clause: string | TemplateStringsArray, ...args: any[]) {
+    return this.continueChainClause(new Raw(clause, ...args));
   }
 
   /**
