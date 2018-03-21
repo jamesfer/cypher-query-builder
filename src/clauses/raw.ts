@@ -1,12 +1,39 @@
 import { Clause } from '../clause';
-import { Dictionary } from 'lodash';
+import {
+  Dictionary,
+  isString,
+  isArray,
+  isObjectLike,
+  map,
+  join,
+  flatten,
+  zip,
+  isNil,
+} from 'lodash';
 
 export class Raw extends Clause {
-  constructor(public clause: string, public params: Dictionary<any> = {}) {
+  clause: string;
+
+  constructor(clause: string | TemplateStringsArray, ...args: any[]) {
     super();
 
-    for (const key in params) {
-      this.addParam(params[key], key);
+    if (isString(clause)) {
+      this.clause = clause;
+      const params = args[0];
+      if (isObjectLike(params)) {
+        for (const key in params) {
+          if (Object.hasOwnProperty.call(params, key)) {
+            this.addParam(params[key], key);
+          }
+        }
+      } else if (!isNil(params)) {
+        throw new TypeError('When passing a string clause to Raw, params should be an object');
+      }
+    } else if (isArray(clause)) {
+      const queryParams = map(args, param => this.addParam(param));
+      this.clause = join(flatten(zip(clause, queryParams)), '');
+    } else {
+      throw new TypeError('Clause should be a string or an array');
     }
   }
 
