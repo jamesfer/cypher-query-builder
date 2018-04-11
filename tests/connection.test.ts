@@ -1,39 +1,57 @@
-import { Connection } from './connection';
-import { expect } from 'chai';
-import { NodePattern } from './clauses';
-import { Query } from './query';
+import { Connection, Credentials, Node, Query } from '../src';
+import { NodePattern } from '../src/clauses';
+import { expect } from '../test-setup';
 import { v1 as neo4j } from 'neo4j-driver';
-import { SinonSpy, SinonStub, spy } from 'sinon';
+import { SinonSpy, spy } from 'sinon';
 import { each, Dictionary } from 'lodash';
-import {
-  defaultCredentials, defaultUrl,
-  mockConnection,
-} from './connection.mock';
 import { Observable } from 'rxjs';
+import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
+import { Driver } from 'neo4j-driver/types/v1';
 
-interface MockSession {
-  close: SinonSpy;
-  run: SinonStub;
-}
 
-interface MockDriver {
-  close: SinonSpy;
-  session: SinonStub;
-}
+const neo4jUrl: string = process.env.NEO4J_URL;
+const neo4jCredentials: Credentials = {
+  username: process.env.NEO4J_USER,
+  password: process.env.NEO4J_PASS,
+};
 
 describe('Connection', () => {
   let connection: Connection;
-  let session: MockSession;
-  let driver: MockDriver;
+  let driver: Driver;
+  let driverCloseSpy: SinonSpy;
+  let driverSessionSpy: SinonSpy;
+  let sessionRunSpy: SinonSpy;
+  let sessionCloseSpy: SinonSpy;
+
+  function makeSessionMock(driver: Driver): Driver {
+    const defaultSessionConstructor = driver.session;
+    driver.session = function (mode?, bookmark?) {
+      const session = defaultSessionConstructor.call(this, mode, bookmark);
+      sessionRunSpy = spy(session, 'run');
+      sessionCloseSpy = spy(session, 'close');
+      return session;
+    };
+    return driver;
+  }
+
+  function driverConstructor(url: string, authToken?: AuthToken, config?: Config) {
+    driver = makeSessionMock(neo4j.driver(url, authToken, config));
+    driverCloseSpy = spy(driver, 'close');
+    driverSessionSpy = spy(driver, 'session');
+    return driver;
+  }
+
   beforeEach(() => {
-    ({ connection, session, driver } = mockConnection());
+    connection = new Connection(neo4jUrl, neo4jCredentials, driverConstructor);
   });
+
+  afterEach(() => connection.close());
 
 
   describe('#constructor', () => {
     it('should default to neo4j driver', () => {
       const driverSpy = spy(neo4j, 'driver');
-      const connection = new Connection(defaultUrl, defaultCredentials);
+      const connection = new Connection(neo4jUrl, neo4jCredentials);
 
       expect(driverSpy.calledOnce);
 
@@ -45,27 +63,27 @@ describe('Connection', () => {
   describe('#close', () => {
     it('should close the driver', () => {
       connection.close();
-      expect(driver.close.calledOnce);
+      expect(driverCloseSpy.calledOnce);
     });
 
     it('should only close the driver once', () => {
       connection.close();
       connection.close();
-      expect(driver.close.calledOnce);
+      expect(driverCloseSpy.calledOnce);
     });
   });
 
   describe('#session', () => {
     it('should use the driver to create a session', () => {
       connection.session();
-      expect(driver.session.calledOnce);
+      expect(driverSessionSpy.calledOnce);
     });
 
     it('should return null if the connection has been closed', () => {
       connection.close();
       const result = connection.session();
 
-      expect(driver.session.notCalled);
+      expect(driverSessionSpy.notCalled);
       expect(result).to.equal(null);
     });
   });
@@ -78,58 +96,60 @@ describe('Connection', () => {
 
     it('should throw if the connection has been closed', () => {
       connection.close();
-
       const run = () => connection.run(connection.query());
       expect(run).to.throw(Error, 'connection is not open');
     });
 
     it('should run the query through a session', () => {
-      session.run.returns(Promise.resolve(true));
       const params = {};
-      const query = (new Query()).raw('This is a query', params);
+      const query = (new Query()).raw('RETURN 1', params);
 
       const promise = connection.run(query);
       return expect(promise).to.be.fulfilled.then(() => {
-        expect(session.run.calledOnce);
-        expect(session.run.calledWith('This is a query', params));
+        expect(sessionRunSpy.calledOnce);
+        expect(sessionRunSpy.calledWith('RETURN 1', params));
       });
     });
 
     it('should close the session after running a query', () => {
-      session.run.returns(Promise.resolve(true));
-      const promise = connection.run((new Query()).raw(''));
-
-      return expect(promise).to.be.fulfilled.then(() => {
-        expect(session.close.calledOnce);
-      });
+      const promise = connection.run((new Query()).raw('RETURN 1'));
+      return expect(promise).to.be.fulfilled
+        .then(() => expect(sessionCloseSpy.calledOnce));
     });
 
     it('should close the session when run() throws', async () => {
-      session.run.returns(Promise.reject('Error'));
-      const promise = connection.run((new Query()).raw(''));
-
-      return expect(promise).to.be.rejectedWith('Error')
-        .then(() => {
-          expect(session.close.calledOnce);
-        });
+      const promise = connection.run((new Query()).raw('RETURN a'));
+      return expect(promise).to.be.rejectedWith(Error)
+        .then(() => expect(sessionCloseSpy.calledOnce));
     });
   });
 
   describe('stream', () => {
     const params = {};
-    const query = (new Query()).raw('This is a query', params);
-    const expectedResults = [
+    const query = (new Query()).matchNode('n', 'TestStreamRecord').return('n');
+    const records = [
       { number: 1 },
       { number: 2 },
       { number: 3 },
     ];
-    // Convert the expected results into a 'record'
-    const records = expectedResults.map(value => ({
-      toObject() { return value; },
-    }));
 
-    beforeEach('setup session run return value', () => {
-      session.run.returns(Observable.from(records));
+    before('setup session run return value', async () => {
+      const connection = new Connection(neo4jUrl, neo4jCredentials);
+      await connection
+        .unwind(records, 'map')
+        .createNode('n', 'TestStreamRecord')
+        .setVariables({ n: 'map' })
+        .run();
+      connection.close();
+    });
+
+    after('clear the database', async () => {
+      const connection = new Connection(neo4jUrl, neo4jCredentials);
+      await connection
+        .matchNode('n', 'TestStreamRecord')
+        .delete('n')
+        .run();
+      connection.close();
     });
 
     it('should throw if there are no clauses in the query', () => {
@@ -143,51 +163,45 @@ describe('Connection', () => {
       expect(stream).to.throw(Error, 'connection is not open');
     });
 
-    it('should run the query through a session', (done) => {
-      const observable = connection.stream(query);
+    it('should run the query through a session', () => {
+      const observable = connection.stream<Node>(query);
       expect(observable).to.be.an.instanceOf(Observable);
 
       let count = 0;
-      observable.subscribe(
-        // On next
-        (row) => {
-          expect(row).to.deep.equal(expectedResults[count]);
+      return observable
+        .do(row => {
+          expect(row.n.properties).to.deep.equal(records[count]);
+          expect(row.n.labels).to.deep.equal(['TestStreamRecord']);
           count += 1;
-        },
-        // On error
-        undefined,
-        // On complete
-        () => {
-          expect(session.run.calledOnce);
-          expect(session.run.calledWith('This is a query', params));
-          done();
-        },
-      );
+        })
+        .toPromise()
+        .then(() => {
+          expect(count).to.equal(records.length);
+          expect(sessionRunSpy.calledOnce);
+          expect(sessionRunSpy.calledWith(query.build(), params));
+        });
     });
 
-    it('should close the session after running a query', (done) => {
+    it('should close the session after running a query', () => {
       const observable = connection.stream(query);
 
       expect(observable).to.be.an.instanceOf(Observable);
-      observable.subscribe(undefined, undefined, () => {
-        expect(session.close.calledOnce);
-        done();
-      });
+      return observable.toPromise().then(() => expect(sessionCloseSpy.calledOnce));
     });
 
     it('should close the session when run() throws', (done) => {
-      session.run.returns(Observable.throw('error'));
+      const query = connection.query().return('a');
       const observable = connection.stream(query);
 
       expect(observable).to.be.an.instanceOf(Observable);
-      observable.subscribe(
-        () => expect.fail(null, null, 'Observable should not emit any items'),
-        () => {
-          expect(session.close.calledOnce);
+      observable.subscribe({
+        next: () => expect.fail(null, null, 'Observable should not emit any items'),
+        error: () => {
+          expect(sessionCloseSpy.calledOnce);
           done();
         },
-        () => expect.fail(null, null, 'Observable should not complete without an error'),
-      );
+        complete: () => expect.fail(null, null, 'Observable should not complete without an error'),
+      });
     });
   });
 
