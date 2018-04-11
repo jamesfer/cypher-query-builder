@@ -1,12 +1,12 @@
 import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
-import nodeCleanup = require('node-cleanup');
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
-import { Dictionary } from 'lodash';
 import { Builder } from './builder';
-import { AuthToken, Config } from 'neo4j-driver/types/v1';
+import { AuthToken, Driver, Session } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
-import { Observable, Observer, Subscription } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
+import { TeardownLogic } from 'rxjs/Subscription';
+import nodeCleanup = require('node-cleanup');
 
 let connections: Connection[] = [];
 
@@ -17,19 +17,7 @@ nodeCleanup(() => {
 });
 
 export interface Credentials { username: string; password: string; }
-
-export interface Session {
-  close(): void;
-  run(query: string, params: Dictionary<any>);
-}
-
-export interface Driver {
-  close(): void;
-  session(): Session;
-}
-
-export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
-  => Driver;
+export type DriverConstructor = typeof neo4j.driver;
 
 /**
  * A connection lets you access the Neo4j server and run queries against it.
@@ -61,8 +49,8 @@ export type DriverConstructor = (url: string, auth?: AuthToken, config?: Config)
  * ```
  */
 export class Connection extends Builder<Query> {
-  protected auth: any;
-  protected driver: any;
+  protected auth: AuthToken;
+  protected driver: Driver;
   protected open: boolean;
   protected transformer = new Transformer();
 
@@ -105,7 +93,7 @@ export class Connection extends Builder<Query> {
    * Opens and returns a session. You should never need to use this directly.
    * Your probably better off with `run` instead.
    */
-  session() {
+  session(): Session | null {
     if (this.open) {
       return this.driver.session();
     }
@@ -190,7 +178,8 @@ export class Connection extends Builder<Query> {
     return session.run(queryObj.query, queryObj.params)
       .then((result) => {
         session.close();
-        return this.transformer.transformResult(result);
+        // TODO transformer needs to accept a type parameter
+        return this.transformer.transformResult(result) as any;
       })
       .catch((error) => {
         session.close();
