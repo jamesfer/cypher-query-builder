@@ -259,24 +259,22 @@ export class Connection extends Builder<Query> {
     const result = session.run(queryObj.query, queryObj.params);
 
     // Subscribe to the result and clean up the session
-    return Observable.create((subscriber: Observer<SanitizedRecord<R>>): Subscription => {
-      return result.subscribe(
-        // On next
-        (record) => {
+    return Observable.create((subscriber: Observer<SanitizedRecord<R>>): TeardownLogic => {
+      // Note: Neo4j observable uses a different syntax to RxJS observables
+      result.subscribe({
+        onNext: (record) => {
           const sanitizedRecord = this.transformer.transformRecord(record);
           subscriber.next(sanitizedRecord as any);
         },
-        // On error
-        (error) => {
+        onError: (error) => {
           session.close();
           subscriber.error(error);
         },
-        // On complete
-        () => {
+        onCompleted: () => {
           session.close();
           subscriber.complete();
         },
-      );
+      });
     });
   }
 }
