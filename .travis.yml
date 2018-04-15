@@ -6,11 +6,7 @@ notifications:
 node_js:
   - "8"
 services: docker
-
-cache:
-  yarn: true
-  directories:
-    - "node_modules"
+cache: yarn
 
 before_script:
   - "yarn add --peer rxjs"
