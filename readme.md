@@ -9,63 +9,75 @@ Write queries in Javascript just as you would write them in Cypher.
 - Support for streaming records using RxJS
 - Full Typescript declarations included in package
 
+```javascript
+let results = await db.matchNode('user', 'User', { active: true })
+  .where({ 'user.age': greaterThan(18) })
+  .with('user')
+  .create([
+    cypher.node('user', ''),
+    cypher.relation('out', '', 'HasVehicle'),
+    cypher.node('vehicle', 'Vehicle', { colour: 'red' })
+  ])
+  .ret(['user', 'vehicle'])
+  .run();
 
-    let results = await db.matchNode('user', 'User', { active: true })
-      .where({ 'user.age': greaterThan(18) })
-      .with('user')
-      .create([
-        cypher.node('user', ''),
-        cypher.relation('out', '', 'HasVehicle'),
-        cypher.node('vehicle', 'Vehicle', { colour: 'red' })
-      ])
-      .ret(['user', 'vehicle'])
-      .run();
-
-    // Results:
-    // [{
-    //   user: {
-    //     identity: 1234,
-    //     labels: [ 'User' ],
-    //     properites: { ... },
-    //   },
-    //   vehicle: {
-    //     identity: 4321,
-    //     labels: [ 'Vehicle' ],
-    //     properties: { ... },
-    //   },
-    // }]
+// Results:
+// [{
+//   user: {
+//     identity: 1234,
+//     labels: [ 'User' ],
+//     properties: { ... },
+//   },
+//   vehicle: {
+//     identity: 4321,
+//     labels: [ 'Vehicle' ],
+//     properties: { ... },
+//   },
+// }]
+```
 
 ## Quick start
 
-### Installing
+### Installation
 
-    npm install --save cypher-query-builder
+```
+npm install --save cypher-query-builder
+```
 or
 
-    yarn install cypher-query-builder
-    
+```
+yarn install cypher-query-builder
+```
+
 ### Importing
+
 CommonJS/Node
 
-    const cypher = require('cypher-query-builder');
-    // cypher.Connection
-    // cypher.greaterThan
-    // ....
-    
+```javascript
+const cypher = require('cypher-query-builder');
+// cypher.Connection
+// cypher.greaterThan
+// ....
+```
+
 ES6
 
-    import { Connection, greaterThan } from 'cypher-query-builder';
+```javascript
+import { Connection, greaterThan } from 'cypher-query-builder';
+```
 
 ### Connecting
 
-    const cypher = require('cypher-query-builder');
-    
-    // Make sure to include the protocol in the hostname
-    let db = new cypher.Connection('bolt://localhost', {
-      username: 'root',
-      password: 'password',
-    });
-    
+```javascript
+const cypher = require('cypher-query-builder');
+
+// Make sure to include the protocol in the hostname
+let db = new cypher.Connection('bolt://localhost', {
+  username: 'root',
+  password: 'password',
+});
+```
+
 Cypher query builder uses the official Neo4j Nodejs driver over the bolt
 protocol in the background so you can pass any values into connection that
 are accepted by that driver.
@@ -74,59 +86,67 @@ are accepted by that driver.
 
 ES5
 
-    db.matchNode('projects', 'Project')
-      .ret('projects')
-      .run()
-      .then(function (results) {
-        // Do something with results
-      });
+```javascript
+db.matchNode('projects', 'Project')
+  .ret('projects')
+  .run()
+  .then(function (results) {
+    // Do something with results
+  });
+```
 
 ES6
 
-    const results = await db.matchNode('projects', 'Project')
-      .ret('projects')
-      .run();
+```javascript
+const results = await db.matchNode('projects', 'Project')
+  .ret('projects')
+  .run();
+```
 
 `run` will execute the query and return a promise. The results are in the
 _standardish_ Neo4j form an array of records:
 
-    [
-      {
-        projects: {
-          // Internal Neo4j node id, don't rely on this to stay constant.
-          identity: 1,
+```javascript
+results = [
+  {
+    projects: {
+      // Internal Neo4j node id, don't rely on this to stay constant.
+      identity: 1,
 
-          // All labels attached to the node
-          labels: [ 'Project' ],
+      // All labels attached to the node
+      labels: [ 'Project' ],
 
-          // Actual properties of the node.
-          // Note that Neo4j numbers will automatically be converted to
-          // Javascript numbers. This may cause issues because Neo4j can
-          // store larger numbers than can be represented in Javascript.
-          // This behaviour is currently in consideration and may change
-          // in the future.
-          properties: { name: 'Project 1' },
-        },
-      },
-      ...
-    ]
+      // Actual properties of the node.
+      // Note that Neo4j numbers will automatically be converted to
+      // Javascript numbers. This may cause issues because Neo4j can
+      // store larger numbers than can be represented in Javascript.
+      // This behaviour is currently in consideration and may change
+      // in the future.
+      properties: { name: 'Project 1' },
+    },
+  },
+  // ...
+]
+```
 
 ### Processing
 
 To extract the results, you can use ES5 array methods or a library like lodash:
 
-    // Get all the project nodes (including their id, labels and properties).
-    let projects = results.map(row => row.projects);
+```javascript
+// Get all the project nodes (including their id, labels and properties).
+let projects = results.map(row => row.projects);
 
-    // Get just the properties of the nodes
-    let projectProps = results.map(row => row.projects.properties);
-    
+// Get just the properties of the nodes
+let projectProps = results.map(row => row.projects.properties);
+```
+
 ## Documentation
 
-For more details on creating a connection, see the 
+For more details on creating a connection, see the
 [Connection](http://jamesfer.me/cypher-query-builder/classes/connection.html) class.
 
-For more details on clauses and running queries, see the 
+For more details on clauses and running queries, see the
 [Query](http://jamesfer.me/cypher-query-builder/classes/query.html) class.
 
 ## License
