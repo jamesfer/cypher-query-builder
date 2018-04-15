@@ -15,6 +15,6 @@ services:
       - NEO4J_URL=bolt://neo4j
       - NEO4J_USER=neo4j
       - NEO4J_PASS=admin
-    command: yarn nyc --reporter=html --reporter=lcov --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts tests/**/*.test.ts
+    command: yarn nyc --reporter=html --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts tests/**/*.test.ts
     volumes:
       - ..:/app
