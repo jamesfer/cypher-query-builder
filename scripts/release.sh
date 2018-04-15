@@ -20,8 +20,7 @@ if [ "$current_branch" != "master" ]; then
   exit 1
 fi
 
-yarn build:prod
-yarn test
+yarn validate
 
 echo "${magenta}Bumping version...${end}"
 new_version=$(npm version --no-git-tag-version $1)
