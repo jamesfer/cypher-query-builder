@@ -129,6 +129,17 @@ results = [
 ]
 ```
 
+You can also use the `stream` method to download the results as an RxJS 
+observable.
+
+```javascript
+const results = db.matchNode('project', 'Project')
+  .ret('project')
+  .stream();
+
+results.subscribe(row => console.log(row.project.properties.name));
+```
+
 ### Processing
 
 To extract the results, you can use ES5 array methods or a library like lodash:
