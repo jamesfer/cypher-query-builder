@@ -22,12 +22,12 @@
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
     "lint": "tslint --project ./tsconfig.lint.json",
-    "test": "nyc --reporter=html mocha src/*.spec.ts src/**/*.spec.ts",
+    "test": "docker-compose -f docker/docker-compose.test.yml up --exit-code-from tests",
+    "test:unit": "nyc --reporter=html --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts",
     "validate": "yarn --silent lint && yarn --silent build:prod && yarn --silent test",
     "release": "./scripts/release.sh",
     "merge": "./scripts/merge.sh",
     "docs": "typedoc src/builder.ts src/query.ts src/connection.ts src/clauses/index.ts src/clauses/where-comparators.ts src/clauses/where-operators.ts --mode file --theme minimal --out ./docs --excludeExternals --excludeProtected --excludePrivate --ignoreCompilerErrors",
-    "ci:test": "nyc --reporter=lcov --reporter=text mocha src/*.spec.ts src/**/*.spec.ts",
     "ci:report": "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {

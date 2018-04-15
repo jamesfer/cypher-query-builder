@@ -8,6 +8,7 @@ node_js:
   - "7"
   - "8"
   - "9"
+services: docker
 
 cache:
   yarn: true
@@ -17,9 +18,7 @@ cache:
 before_script:
   - "yarn add --peer rxjs"
 script:
-  - "yarn lint"
-  - "yarn build:prod"
-  - "yarn ci:test"
+  - "yarn validate"
 after_success:
   - "yarn ci:report"
 
