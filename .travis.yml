@@ -13,7 +13,7 @@ before_script:
 script:
   - "yarn validate"
 after_success:
-  - "yarn ci:report"
+  - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
 
 deploy:
   provider: npm
