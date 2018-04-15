@@ -5,6 +5,11 @@
 A flexible and intuitive query builder for Neo4j and Cypher.
 Write queries in Javascript just as you would write them in Cypher.
 
+- Easy to use fluent interface
+- Support for streaming records using RxJS
+- Full Typescript declarations included in package
+
+
     let results = await db.matchNode('user', 'User', { active: true })
       .where({ 'user.age': greaterThan(18) })
       .with('user')
