@@ -4,24 +4,16 @@ git:
 notifications:
   email: false
 node_js:
-  - "6"
-  - "7"
   - "8"
-  - "9"
-
-cache:
-  yarn: true
-  directories:
-    - "node_modules"
+services: docker
+cache: yarn
 
 before_script:
   - "yarn add --peer rxjs"
 script:
-  - "yarn lint"
-  - "yarn build:prod"
-  - "yarn ci:test"
+  - "yarn validate"
 after_success:
-  - "yarn ci:report"
+  - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
 
 deploy:
   provider: npm
