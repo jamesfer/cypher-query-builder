@@ -9,11 +9,11 @@ services: docker
 cache: yarn
 
 before_script:
-  - "yarn add --peer rxjs"
+  - yarn add --peer rxjs
 script:
-  - "yarn validate"
+  - yarn validate
 after_success:
-  - "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
+  - yarn --silent nyc report --reporter=text-lcov | sed "s|/app|$(pwd)|" | ./node_modules/.bin/coveralls
 
 deploy:
   provider: npm
