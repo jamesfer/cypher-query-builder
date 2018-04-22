@@ -179,7 +179,7 @@ export class Connection extends Builder<Query> {
       .then((result) => {
         session.close();
         // TODO transformer needs to accept a type parameter
-        return this.transformer.transformResult(result) as any;
+        return this.transformer.transformRecords(result.records) as any;
       })
       .catch((error) => {
         session.close();

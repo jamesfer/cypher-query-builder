@@ -1,5 +1,4 @@
 import { v1 as neo4j } from 'neo4j-driver';
-import { Dictionary, map, mapValues } from 'lodash';
 import { Dictionary, map, mapValues, isArray } from 'lodash';
 import Record from 'neo4j-driver/types/v1/record';
 import Integer from 'neo4j-driver/types/v1/integer';
@@ -37,8 +36,8 @@ export type SanitizedRecord<T = SanitizedValue> = Dictionary<T>;
 
 
 export class Transformer {
-  transformResult(result: { records: Record[] }): SanitizedRecord[] {
-    return map(result.records, rec => this.transformRecord(rec));
+  transformRecords(records: Record[]): SanitizedRecord[] {
+    return map(records, rec => this.transformRecord(rec));
   }
 
   transformRecord(record: Record): SanitizedRecord {
@@ -46,14 +45,9 @@ export class Transformer {
     return mapValues(recordObj, node => this.transformValue(node));
   }
 
-  transformValue(value: NeoValue | Dictionary<NeoValue>): SanitizedValue {
-    if (
-      value === null
-      || typeof value === 'string'
-      || typeof value === 'boolean'
-      || typeof value === 'number'
-    ) {
-      return value as SanitizedValue;
+  private transformValue(value: NeoValue | Dictionary<NeoValue>): SanitizedValue {
+    if (this.isPlainValue(value)) {
+      return value;
     }
     if (isArray(value)) {
       return map(value, this.transformValue.bind(this)) as any;
@@ -73,11 +67,21 @@ export class Transformer {
     return null;
   }
 
-  isNode(node: Dictionary<any>) {
-    return node.identity && node.labels && node.properties;
+  private isPlainValue(value: any): value is PlainValue {
+    const type = typeof value;
+    return value === null || type === 'string' || type === 'boolean' || type === 'number';
   }
 
-  transformNode(node: NeoNode): Node {
+  private isNode(node: any): node is NeoNode {
+    return node !== null
+      && typeof node === 'object'
+      && !isArray(node)
+      && node.identity
+      && node.labels
+      && node.properties;
+  }
+
+  private transformNode(node: NeoNode): Node {
     return {
       identity: neo4j.integer.toString(node.identity),
       labels: node.labels,
@@ -85,11 +89,11 @@ export class Transformer {
     };
   }
 
-  isRelation(rel: Dictionary<any>) {
+  private isRelation(rel: Dictionary<any>) {
     return rel.identity && rel.type && rel.properties && rel.start && rel.end;
   }
 
-  transformRelation(rel: NeoRelation): Relation {
+  private transformRelation(rel: NeoRelation): Relation {
     return {
       identity: neo4j.integer.toString(rel.identity),
       start: neo4j.integer.toString(rel.start),
@@ -99,21 +103,7 @@ export class Transformer {
     };
   }
 
-  // convertNumbers(object: Dictionary<NeoValue>): Dictionary<PlainValue> {
-  //   return mapValues(object, (value: NeoValue): PlainValue => {
-  //     if (
-  //       value === null
-  //       || typeof value === 'string'
-  //       || typeof value === 'boolean'
-  //       || typeof value === 'number'
-  //     ) {
-  //       return value as PlainValue;
-  //     }
-  //     return this.convertInteger(value);
-  //   });
-  // }
-
-  convertInteger(num: NeoInteger) {
+  private convertInteger(num: NeoInteger) {
     if (neo4j.integer.inSafeRange(num)) {
       return neo4j.integer.toNumber(num);
     }
