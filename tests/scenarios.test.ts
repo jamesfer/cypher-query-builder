@@ -146,7 +146,7 @@ describe('scenarios', () => {
       });
     });
 
-    it.only('should handle an array of nodes and relationships', async () => {
+    it('should handle an array of nodes and relationships', async () => {
       // Create relationships
       await db.create([
         node(['City'], { name: 'Cityburg' }),
