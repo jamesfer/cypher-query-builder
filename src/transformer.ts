@@ -1,5 +1,6 @@
 import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, map, mapValues } from 'lodash';
+import { Dictionary, map, mapValues, isArray } from 'lodash';
 import record from 'neo4j-driver/types/v1/record';
 import integer from 'neo4j-driver/types/v1/integer';
 
@@ -53,6 +54,9 @@ export class Transformer {
       || typeof value === 'number'
     ) {
       return value as SanitizedValue;
+    }
+    if (isArray(value)) {
+      return map(value, this.transformValue.bind(this)) as any;
     }
     if (neo4j.isInt(value)) {
       return this.convertInteger(value as NeoInteger);
