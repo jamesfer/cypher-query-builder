@@ -3,66 +3,62 @@ import { Dictionary, map, mapValues, isArray } from 'lodash';
 import Record from 'neo4j-driver/types/v1/record';
 import Integer from 'neo4j-driver/types/v1/integer';
 
-export type NeoInteger = Integer | { low: number, high: number };
-export type NeoValue = string | boolean | null | number | NeoInteger;
+export type NeoValue = string | boolean | null | number | Integer;
 export interface NeoNode {
-  identity: NeoInteger;
+  identity: Integer;
   labels: string[];
   properties: Dictionary<NeoValue>;
 }
 export interface NeoRelation {
-  identity: NeoInteger;
-  start: NeoInteger;
-  end: NeoInteger;
+  identity: Integer;
+  start: Integer;
+  end: Integer;
   type: string;
   properties: Dictionary<NeoValue>;
 }
 
 export type PlainValue = string | boolean | null | number;
-export interface Node<P = Dictionary<PlainValue>> {
+export type PlainArray = string[] | boolean[] | number[];
+export interface Node<P = Dictionary<PlainValue | PlainArray>> {
   identity: string;
   labels: string[];
   properties: P;
 }
-export interface Relation<P = Dictionary<PlainValue>> {
+export interface Relation<P = Dictionary<PlainValue | PlainArray>> {
   identity: string;
   start: string;
   end: string;
   label: string;
   properties: P;
 }
-export type SanitizedValue = PlainValue | Node | Relation;
-export type SanitizedRecord<T = SanitizedValue> = Dictionary<T>;
-
 
 export class Transformer {
-  transformRecords(records: Record[]): SanitizedRecord[] {
+  transformRecords<T= any>(records: Record[]): Dictionary<T>[] {
     return map(records, rec => this.transformRecord(rec));
   }
 
-  transformRecord(record: Record): SanitizedRecord {
-    const recordObj = record.toObject() as Dictionary<NeoValue>;
-    return mapValues(recordObj, node => this.transformValue(node));
+  transformRecord<T = any>(record: Record): Dictionary<T> {
+    return mapValues(record.toObject() as any, node => this.transformValue(node));
   }
 
-  private transformValue(value: NeoValue | Dictionary<NeoValue>): SanitizedValue {
+  private transformValue(value: any): any {
     if (this.isPlainValue(value)) {
       return value;
     }
     if (isArray(value)) {
-      return map(value, this.transformValue.bind(this)) as any;
+      return map(value, v => this.transformValue(v));
     }
     if (neo4j.isInt(value)) {
-      return this.convertInteger(value as NeoInteger);
+      return this.convertInteger(value);
     }
     if (this.isNode(value)) {
-      return this.transformNode(value as any);
+      return this.transformNode(value);
     }
     if (this.isRelation(value)) {
-      return this.transformRelation(value as any);
+      return this.transformRelation(value);
     }
     if (typeof value === 'object') {
-      return mapValues(value, this.transformValue.bind(this));
+      return mapValues(value, v => this.transformValue(v));
     }
     return null;
   }
@@ -89,7 +85,7 @@ export class Transformer {
     };
   }
 
-  private isRelation(rel: Dictionary<any>) {
+  private isRelation(rel: Dictionary<any>): rel is NeoRelation {
     return rel.identity && rel.type && rel.properties && rel.start && rel.end;
   }
 
@@ -103,7 +99,7 @@ export class Transformer {
     };
   }
 
-  private convertInteger(num: NeoInteger) {
+  private convertInteger(num: Integer) {
     if (neo4j.integer.inSafeRange(num)) {
       return neo4j.integer.toNumber(num);
     }

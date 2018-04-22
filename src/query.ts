@@ -1,9 +1,9 @@
 import { Connection } from './connection';
-import { SanitizedRecord, SanitizedValue } from './transformer';
 import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause } from './clause';
 import { Observable } from 'rxjs';
+import { Dictionary } from 'lodash';
 
 export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
@@ -64,14 +64,14 @@ export class Query extends Builder<Query> {
    * ES2015/ES6: `results.map(record => record.friends)`.
    *
    * If you use typescript you can use the type parameter to hint at the type of
-   * the return value which is essentially `Dictionary<R>[]`.
+   * the return value which is `Dictionary<R>[]`.
    *
    * Throws an exception if this query does not have a connection or has no
    * clauses.
    *
-   * @returns {Promise<SanitizedRecord<R>[]>}
+   * @returns {Promise<Dictionary<R>[]>}
    */
-  async run<R = SanitizedValue>(): Promise<SanitizedRecord<R>[]> {
+  async run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
@@ -120,12 +120,12 @@ export class Query extends Builder<Query> {
    * ```
    *
    * If you use typescript you can use the type parameter to hint at the type of
-   * the return value which is essentially `Dictionary<R>`.
+   * the return value which is `Observable<Dictionary<R>>`.
    *
    * Throws an exception if this query does not have a connection or has no
    * clauses.
    */
-  stream<R = SanitizedValue>(): Observable<SanitizedRecord<R>> {
+  stream<R = any>(): Observable<Dictionary<R>> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
@@ -134,7 +134,7 @@ export class Query extends Builder<Query> {
   }
 
   /**
-   * * Runs the current query on its connection and returns the first result.
+   * Runs the current query on its connection and returns the first result.
    * If the query was created by calling a chainable method of a connection,
    * the query's connection was automatically set.
    *
@@ -143,8 +143,12 @@ export class Query extends Builder<Query> {
    * Returns a promise that resolves to a single record. Each key of the
    * record is the name of a variable that you specified in your `RETURN`
    * clause.
+   *
+   * If you use typescript you can use the type parameter to hint at the type of
+   * the return value which is `Dictionary<R>`. Note that this function returns
+   * `undefined` if the result set was empty.
    */
-  async first<R = SanitizedValue>(): Promise<SanitizedRecord<R>> {
+  async first<R = any>(): Promise<Dictionary<R>> {
     return this.run<R>().then(results => results && results.length > 0 ? results[0] : undefined);
   }
 
@@ -184,8 +188,6 @@ export class Query extends Builder<Query> {
   /**
    * Returns an object that includes both the query and the params ready to be
    * passed to the neo4j driver.
-   *
-   * @returns {{query: string; params: _.Dictionary<any>}}
    */
   buildQueryObject() {
     return this.clauses.buildQueryObject();

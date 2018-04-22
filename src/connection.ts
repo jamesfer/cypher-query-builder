@@ -1,4 +1,4 @@
-import { SanitizedRecord, SanitizedValue, Transformer } from './transformer';
+import { Transformer } from './transformer';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
@@ -7,6 +7,7 @@ import { Clause } from './clause';
 import { Observable, Observer } from 'rxjs';
 import { TeardownLogic } from 'rxjs/Subscription';
 import nodeCleanup = require('node-cleanup');
+import { Dictionary } from 'lodash';
 
 let connections: Connection[] = [];
 
@@ -156,15 +157,15 @@ export class Connection extends Builder<Query> {
    * ES2015/ES6: `results.map(record => record.friends)`.
    *
    * If you use typescript you can use the type parameter to hint at the type of
-   * the return value which is essentially `Dictionary<R>[]`.
+   * the return value which is `Dictionary<R>[]`.
    *
    * Throws an exception if this connection is not open or there are no clauses
    * in the query.
    *
    * @param {Query} query
-   * @returns {Promise<SanitizedRecord<R>[]>}
+   * @returns {Promise<Dictionary<R>[]>}
    */
-  run<R = SanitizedValue>(query: Query): Promise<SanitizedRecord<R>[]> {
+  run<R = any>(query: Query): Promise<Dictionary<R>[]> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }
@@ -178,8 +179,7 @@ export class Connection extends Builder<Query> {
     return session.run(queryObj.query, queryObj.params)
       .then((result) => {
         session.close();
-        // TODO transformer needs to accept a type parameter
-        return this.transformer.transformRecords(result.records) as any;
+        return this.transformer.transformRecords<R>(result.records);
       })
       .catch((error) => {
         session.close();
@@ -227,12 +227,12 @@ export class Connection extends Builder<Query> {
    * ```
    *
    * If you use typescript you can use the type parameter to hint at the type of
-   * the return value which is essentially `Dictionary<R>`.
+   * the return value which is `Dictionary<R>`.
    *
    * Throws an exception if this connection is not open or there are no clauses
    * in the query.
    */
-  stream<R = SanitizedValue>(query: Query): Observable<SanitizedRecord<R>> {
+  stream<R = any>(query: Query): Observable<Dictionary<R>> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }
@@ -248,12 +248,11 @@ export class Connection extends Builder<Query> {
     const result = session.run(queryObj.query, queryObj.params);
 
     // Subscribe to the result and clean up the session
-    return Observable.create((subscriber: Observer<SanitizedRecord<R>>): TeardownLogic => {
+    return Observable.create((subscriber: Observer<Dictionary<R>>): TeardownLogic => {
       // Note: Neo4j observable uses a different syntax to RxJS observables
       result.subscribe({
         onNext: (record) => {
-          const sanitizedRecord = this.transformer.transformRecord(record);
-          subscriber.next(sanitizedRecord as any);
+          subscriber.next(this.transformer.transformRecord<R>(record));
         },
         onError: (error) => {
           session.close();
