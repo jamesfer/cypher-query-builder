@@ -4,14 +4,19 @@ import { expect } from '../test-setup';
 import { Dictionary, isNil } from 'lodash';
 import { node, relation } from '../src/clauses';
 
-function expectResults(results, length?: number | null, properties?: string[] | null, cb?: null | ((row: any) => any)) {
+function expectResults(
+  results: any,
+  length?: number | null,
+  properties?: string[] | null,
+  cb?: null | ((row: any) => any),
+) {
   expect(results).to.be.an.instanceOf(Array);
 
   if (!isNil(length)) {
     expect(results).to.have.lengthOf(length);
   }
 
-  results.forEach(row => {
+  results.forEach((row) => {
     expect(row).to.be.an.instanceOf(Object);
 
     if (!isNil(properties)) {
@@ -26,7 +31,7 @@ function expectResults(results, length?: number | null, properties?: string[] | 
 
 function expectNode(record: any, labels?: string[], properties?: Dictionary<any>) {
   expect(record).to.be.an.instanceOf(Object)
-    .and.to.have.keys([ 'identity', 'properties', 'labels']);
+    .and.to.have.keys(['identity', 'properties', 'labels']);
 
   expect(record.identity).to.be.a('string')
     .and.to.match(/[0-9]+/);
@@ -45,7 +50,7 @@ function expectNode(record: any, labels?: string[], properties?: Dictionary<any>
 
 function expectRelation(relation: any, label?: string, properties?: Dictionary<any>) {
   expect(relation).to.be.an.instanceOf(Object)
-    .and.to.have.keys([ 'identity', 'properties', 'label', 'start', 'end']);
+    .and.to.have.keys(['identity', 'properties', 'label', 'start', 'end']);
 
   expect(relation.identity).to.be.a('string')
     .and.to.match(/[0-9]+/);
@@ -80,7 +85,7 @@ describe('scenarios', () => {
         .return('person')
         .run();
 
-      expectResults(results, 1, ['person'], row => {
+      expectResults(results, 1, ['person'], (row) => {
         expectNode(row.person, ['Person'], { name: 'Alan', age: 45 });
       });
     });
@@ -97,7 +102,7 @@ describe('scenarios', () => {
         .return('person')
         .run();
 
-      expectResults(results, 2, ['person'], row => {
+      expectResults(results, 2, ['person'], (row) => {
         expectNode(row.person, ['Person']);
         expect(row.person.properties).to.have.keys(['name', 'age']);
       });
@@ -118,7 +123,7 @@ describe('scenarios', () => {
         .return('arrNode')
         .run();
 
-      expectResults(results, 1, ['arrNode'], row => {
+      expectResults(results, 1, ['arrNode'], (row) => {
         expectNode(row.arrNode, ['ArrNode'], {
           values: [1, 2, 3],
         });
@@ -129,12 +134,12 @@ describe('scenarios', () => {
       const results = await db.create([
         node('person', 'Person', { name: 'Alfred', age: 64 }),
         relation('out', 'hasJob', 'HasJob', { since: 2004 }),
-        node('job', 'Job', { name: 'Butler' })
+        node('job', 'Job', { name: 'Butler' }),
       ])
         .return(['person', 'hasJob', 'job'])
         .run();
 
-      expectResults(results, 1, ['person', 'hasJob', 'job'], row => {
+      expectResults(results, 1, ['person', 'hasJob', 'job'], (row) => {
         expectNode(row.person, ['Person'], { name: 'Alfred', age: 64 });
         expectRelation(row.hasJob, 'HasJob', { since: 2004 });
         expectNode(row.job, ['Job'], { name: 'Butler' });
@@ -158,17 +163,17 @@ describe('scenarios', () => {
         .return({ 'relationships(p)': 'rels', 'nodes(p)': 'nodes' })
         .run();
 
-      expectResults(results, 1, ['rels', 'nodes'], row => {
+      expectResults(results, 1, ['rels', 'nodes'], (row) => {
         expect(row.rels).to.be.an.instanceOf(Array)
           .and.to.have.a.lengthOf(3);
-        row.rels.forEach(rel => {
+        row.rels.forEach((rel) => {
           expectRelation(rel, 'Road');
           expect(rel.properties).to.have.own.keys(['length']);
         });
 
         expect(row.nodes).to.be.an.instanceOf(Array)
           .and.to.have.a.lengthOf(4);
-        row.nodes.forEach(node => {
+        row.nodes.forEach((node) => {
           expectNode(node, ['City']);
           expect(node.properties).to.have.own.keys(['name']);
         });
@@ -186,7 +191,7 @@ describe('scenarios', () => {
       ])
         .run();
 
-      expectResults(results, 1, null, row => {
+      expectResults(results, 1, null, (row) => {
         expect(row).to.have.own.property('numberVal', 1);
         expect(row).to.have.own.property('stringVal', 'string');
         expect(row).to.have.own.property('nullVal', null);
@@ -197,7 +202,7 @@ describe('scenarios', () => {
     it('should handle an array literal', async () => {
       const results = await db.return('range(0, 5)').run();
 
-      expectResults(results, 1, ['range(0, 5)'], row => {
+      expectResults(results, 1, ['range(0, 5)'], (row) => {
         expect(row['range(0, 5)']).to.eql([0, 1, 2, 3, 4, 5]);
       });
     });
@@ -205,7 +210,7 @@ describe('scenarios', () => {
     it('should handle a map literal', async () => {
       const results = await db.return('{ a: 1, b: true, c: "a string" } as map').run();
 
-      expectResults(results, 1, ['map'], row => {
+      expectResults(results, 1, ['map'], (row) => {
         expect(row.map).to.eql({ a: 1, b: true, c: 'a string' });
       });
     });
@@ -213,7 +218,7 @@ describe('scenarios', () => {
     it('should handle a nested array literal', async () => {
       const results = await db.return('{ a: [1, 2, 3], b: [4, 5, 6] } as map').run();
 
-      expectResults(results, 1, ['map'], row => {
+      expectResults(results, 1, ['map'], (row) => {
         expect(row.map).to.eql({ a: [1, 2, 3], b: [4, 5, 6] });
       });
     });
@@ -221,7 +226,7 @@ describe('scenarios', () => {
     it('should handle a nested map literal', async () => {
       const results = await db.return('[{ a: "name", b: true }, { c: 1, d: null }] as arr').run();
 
-      expectResults(results, 1, ['arr'], row => {
+      expectResults(results, 1, ['arr'], (row) => {
         expect(row.arr).to.eql([
           { a: 'name', b: true },
           { c: 1, d: null },

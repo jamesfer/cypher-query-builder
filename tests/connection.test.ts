@@ -166,7 +166,7 @@ describe('Connection', () => {
 
       let count = 0;
       return observable
-        .do(row => {
+        .do((row) => {
           expect(row.n.properties).to.deep.equal(records[count]);
           expect(row.n.labels).to.deep.equal(['TestStreamRecord']);
           count += 1;
