@@ -81,7 +81,7 @@ export class Transformer {
     return {
       identity: neo4j.integer.toString(node.identity),
       labels: node.labels,
-      properties: this.convertNumbers(node.properties),
+      properties: mapValues(node.properties, this.transformValue.bind(this)),
     };
   }
 
@@ -95,23 +95,23 @@ export class Transformer {
       start: neo4j.integer.toString(rel.start),
       end: neo4j.integer.toString(rel.end),
       label: rel.type,
-      properties: this.convertNumbers(rel.properties),
+      properties: mapValues(rel.properties, this.transformValue.bind(this)),
     };
   }
 
-  convertNumbers(object: Dictionary<NeoValue>): Dictionary<PlainValue> {
-    return mapValues(object, (value: NeoValue): PlainValue => {
-      if (
-        value === null
-        || typeof value === 'string'
-        || typeof value === 'boolean'
-        || typeof value === 'number'
-      ) {
-        return value as PlainValue;
-      }
-      return this.convertInteger(value);
-    });
-  }
+  // convertNumbers(object: Dictionary<NeoValue>): Dictionary<PlainValue> {
+  //   return mapValues(object, (value: NeoValue): PlainValue => {
+  //     if (
+  //       value === null
+  //       || typeof value === 'string'
+  //       || typeof value === 'boolean'
+  //       || typeof value === 'number'
+  //     ) {
+  //       return value as PlainValue;
+  //     }
+  //     return this.convertInteger(value);
+  //   });
+  // }
 
   convertInteger(num: NeoInteger) {
     if (neo4j.integer.inSafeRange(num)) {
