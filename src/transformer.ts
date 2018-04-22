@@ -67,6 +67,9 @@ export class Transformer {
     if (this.isRelation(value)) {
       return this.transformRelation(value as any);
     }
+    if (typeof value === 'object') {
+      return mapValues(value, this.transformValue.bind(this));
+    }
     return null;
   }
 
