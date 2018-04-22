@@ -1,10 +1,10 @@
 import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, map, mapValues } from 'lodash';
 import { Dictionary, map, mapValues, isArray } from 'lodash';
-import record from 'neo4j-driver/types/v1/record';
-import integer from 'neo4j-driver/types/v1/integer';
+import Record from 'neo4j-driver/types/v1/record';
+import Integer from 'neo4j-driver/types/v1/integer';
 
-export type NeoInteger = integer | { low: number, high: number };
+export type NeoInteger = Integer | { low: number, high: number };
 export type NeoValue = string | boolean | null | number | NeoInteger;
 export interface NeoNode {
   identity: NeoInteger;
@@ -37,11 +37,11 @@ export type SanitizedRecord<T = SanitizedValue> = Dictionary<T>;
 
 
 export class Transformer {
-  transformResult(result: { records: record[] }): SanitizedRecord[] {
+  transformResult(result: { records: Record[] }): SanitizedRecord[] {
     return map(result.records, rec => this.transformRecord(rec));
   }
 
-  transformRecord(record: record): SanitizedRecord {
+  transformRecord(record: Record): SanitizedRecord {
     const recordObj = record.toObject() as Dictionary<NeoValue>;
     return mapValues(recordObj, node => this.transformValue(node));
   }
