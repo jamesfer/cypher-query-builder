@@ -7,13 +7,7 @@ import { each, Dictionary } from 'lodash';
 import { Observable } from 'rxjs';
 import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
 import { Driver } from 'neo4j-driver/types/v1';
-
-
-const neo4jUrl: string = process.env.NEO4J_URL;
-const neo4jCredentials: Credentials = {
-  username: process.env.NEO4J_USER,
-  password: process.env.NEO4J_PASS,
-};
+import { neo4jCredentials, neo4jUrl, waitForNeo } from './utils';
 
 describe('Connection', () => {
   let connection: Connection;
@@ -42,23 +36,7 @@ describe('Connection', () => {
   }
 
   // Wait for neo4j to be ready before testing
-  before(async function () {
-    this.timeout(40000);
-    let attempts = 0;
-    const connection = new Connection(neo4jUrl, neo4jCredentials);
-    while (attempts < 20) {
-      // Wait a short time before trying again
-      if (attempts > 0) await new Promise(res => setTimeout(res, 100));
-
-      try {
-        // Attempt a query and exit the loop if it succeeds
-        attempts += 1;
-        await connection.query().return('1').run();
-        break;
-      } catch {}
-    }
-    connection.close();
-  });
+  before(waitForNeo);
 
   beforeEach(() => {
     connection = new Connection(neo4jUrl, neo4jCredentials, driverConstructor);
@@ -188,7 +166,7 @@ describe('Connection', () => {
 
       let count = 0;
       return observable
-        .do(row => {
+        .do((row) => {
           expect(row.n.properties).to.deep.equal(records[count]);
           expect(row.n.labels).to.deep.equal(['TestStreamRecord']);
           count += 1;
