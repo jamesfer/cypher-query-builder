@@ -9,7 +9,7 @@ services: docker
 cache: yarn
 
 before_script:
-  - yarn add --peer rxjs
+  - yarn install-peers
 script:
   - yarn validate
 after_success:

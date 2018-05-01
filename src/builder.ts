@@ -406,11 +406,14 @@ export abstract class Builder<Q> {
    * `setValues` accepts a dictionary where the keys are nodes or property names
    * to be updated.
    *
+   * If you set override to true, it will use the `+=` operator to modify nodes.
+   *
    * @param {_.Dictionary<any>} values
+   * @param {boolean} override
    * @returns {Q}
    */
-  setValues(values: Dictionary<any>) {
-    return this.continueChainClause(new Set({ values }));
+  setValues(values: Dictionary<any>, override?: boolean) {
+    return this.continueChainClause(new Set({ values }, { override }));
   }
 
   /**
@@ -438,10 +441,7 @@ export abstract class Builder<Q> {
     variables: Dictionary<string | Dictionary<string>>,
     override?: boolean,
   ) {
-    return this.continueChainClause(new Set(
-      { variables },
-      { override },
-    ));
+    return this.continueChainClause(new Set({ variables }, { override }));
   }
 
   /**
