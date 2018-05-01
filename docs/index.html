@@ -934,12 +934,6 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-interface">
 			<a href="interfaces/credentials.html" class="tsd-kind-icon">Credentials</a>
 		</li>
-		<li class=" tsd-kind-interface">
-			<a href="interfaces/driver.html" class="tsd-kind-icon">Driver</a>
-		</li>
-		<li class=" tsd-kind-interface">
-			<a href="interfaces/session.html" class="tsd-kind-icon">Session</a>
-		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#comparator" class="tsd-kind-icon">Comparator</a>
 		</li>
@@ -1028,13 +1022,18 @@ img { max-width: 100%; }
 			<a href="https://coveralls.io/github/jamesfer/cypher-query-builder?branch=master"><img src="https://coveralls.io/repos/github/jamesfer/cypher-query-builder/badge.svg?branch=master" alt="Coverage Status"></a></p>
 			<p>A flexible and intuitive query builder for Neo4j and Cypher.
 			Write queries in Javascript just as you would write them in Cypher.</p>
-			<pre><code><span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> db.matchNode(<span class="hljs-string">'user'</span>, <span class="hljs-string">'User'</span>, { active: <span class="hljs-literal">true</span> })
-  .<span class="hljs-keyword">where</span>({ <span class="hljs-string">'user.age'</span>: greaterThan(<span class="hljs-number">18</span>) })
+			<ul>
+				<li>Easy to use fluent interface</li>
+				<li>Support for streaming records using RxJS</li>
+				<li>Full Typescript declarations included in package</li>
+			</ul>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> db.matchNode(<span class="hljs-string">'user'</span>, <span class="hljs-string">'User'</span>, { <span class="hljs-attr">active</span>: <span class="hljs-literal">true</span> })
+  .where({ <span class="hljs-string">'user.age'</span>: greaterThan(<span class="hljs-number">18</span>) })
   .with(<span class="hljs-string">'user'</span>)
   .create([
     cypher.node(<span class="hljs-string">'user'</span>, <span class="hljs-string">''</span>),
     cypher.relation(<span class="hljs-string">'out'</span>, <span class="hljs-string">''</span>, <span class="hljs-string">'HasVehicle'</span>),
-    cypher.node(<span class="hljs-string">'vehicle'</span>, <span class="hljs-string">'Vehicle'</span>, { colour: <span class="hljs-string">'red'</span> })
+    cypher.node(<span class="hljs-string">'vehicle'</span>, <span class="hljs-string">'Vehicle'</span>, { <span class="hljs-attr">colour</span>: <span class="hljs-string">'red'</span> })
   ])
   .ret([<span class="hljs-string">'user'</span>, <span class="hljs-string">'vehicle'</span>])
   .run();
@@ -1044,7 +1043,7 @@ img { max-width: 100%; }
 <span class="hljs-comment">//   user: {</span>
 <span class="hljs-comment">//     identity: 1234,</span>
 <span class="hljs-comment">//     labels: [ 'User' ],</span>
-<span class="hljs-comment">//     properites: { ... },</span>
+<span class="hljs-comment">//     properties: { ... },</span>
 <span class="hljs-comment">//   },</span>
 <span class="hljs-comment">//   vehicle: {</span>
 <span class="hljs-comment">//     identity: 4321,</span>
@@ -1052,47 +1051,53 @@ img { max-width: 100%; }
 <span class="hljs-comment">//     properties: { ... },</span>
 <span class="hljs-comment">//   },</span>
 <span class="hljs-comment">// }]</span>
-</code></pre><h2 id="quick-start">Quick start</h2>
-			<h3 id="installing">Installing</h3>
+</code></pre>
+			<h2 id="quick-start">Quick start</h2>
+			<h3 id="installation">Installation</h3>
 			<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save cypher-query-builder</span>
 </code></pre><p>or</p>
 			<pre><code>yarn <span class="hljs-keyword">install</span> cypher-<span class="hljs-keyword">query</span>-builder
 </code></pre><h3 id="importing">Importing</h3>
 			<p>CommonJS/Node</p>
-			<pre><code><span class="hljs-keyword">const</span> cypher = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cypher-query-builder'</span>);
+			<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> cypher = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cypher-query-builder'</span>);
 <span class="hljs-comment">// cypher.Connection</span>
 <span class="hljs-comment">// cypher.greaterThan</span>
 <span class="hljs-comment">// ....</span>
-</code></pre><p>ES6</p>
-			<pre><code><span class="hljs-keyword">import</span> { Connection, greaterThan } <span class="hljs-keyword">from</span> <span class="hljs-string">'cypher-query-builder'</span>;
-</code></pre><h3 id="connecting">Connecting</h3>
-			<pre><code><span class="hljs-keyword">const</span> cypher = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cypher-query-builder'</span>);
+</code></pre>
+			<p>ES6</p>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> { Connection, greaterThan } <span class="hljs-keyword">from</span> <span class="hljs-string">'cypher-query-builder'</span>;
+</code></pre>
+			<h3 id="connecting">Connecting</h3>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> cypher = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cypher-query-builder'</span>);
 
 <span class="hljs-comment">// Make sure to include the protocol in the hostname</span>
 <span class="hljs-keyword">let</span> db = <span class="hljs-keyword">new</span> cypher.Connection(<span class="hljs-string">'bolt://localhost'</span>, {
   <span class="hljs-attr">username</span>: <span class="hljs-string">'root'</span>,
   <span class="hljs-attr">password</span>: <span class="hljs-string">'password'</span>,
 });
-</code></pre><p>Cypher query builder uses the official Neo4j Nodejs driver over the bolt
+</code></pre>
+			<p>Cypher query builder uses the official Neo4j Nodejs driver over the bolt
 				protocol in the background so you can pass any values into connection that
 			are accepted by that driver.</p>
 			<h3 id="querying">Querying</h3>
 			<p>ES5</p>
-			<pre><code><span class="hljs-selector-tag">db</span><span class="hljs-selector-class">.matchNode</span>(<span class="hljs-string">'projects'</span>, <span class="hljs-string">'Project'</span>)
-  <span class="hljs-selector-class">.ret</span>(<span class="hljs-string">'projects'</span>)
-  <span class="hljs-selector-class">.run</span>()
-  <span class="hljs-selector-class">.then</span>(function (results) {
+			<pre><code class="lang-javascript">db.matchNode(<span class="hljs-string">'projects'</span>, <span class="hljs-string">'Project'</span>)
+  .ret(<span class="hljs-string">'projects'</span>)
+  .run()
+  .then(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">results</span>) </span>{
     <span class="hljs-comment">// Do something with results</span>
   });
-</code></pre><p>ES6</p>
-			<pre><code><span class="hljs-keyword">const</span> results = await db.matchNode(<span class="hljs-string">'projects'</span>, <span class="hljs-string">'Project'</span>)
+</code></pre>
+			<p>ES6</p>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> results = <span class="hljs-keyword">await</span> db.matchNode(<span class="hljs-string">'projects'</span>, <span class="hljs-string">'Project'</span>)
   .ret(<span class="hljs-string">'projects'</span>)
-  .<span class="hljs-built_in">run</span>();
-</code></pre><p><code>run</code> will execute the query and return a promise. The results are in the
+  .run();
+</code></pre>
+			<p><code>run</code> will execute the query and return a promise. The results are in the
 			<em>standardish</em> Neo4j form an array of records:</p>
-			<pre><code>[
+			<pre><code class="lang-javascript">results = [
   {
-    projects: {
+    <span class="hljs-attr">projects</span>: {
       <span class="hljs-comment">// Internal Neo4j node id, don't rely on this to stay constant.</span>
       identity: <span class="hljs-number">1</span>,
 
@@ -1105,19 +1110,29 @@ img { max-width: 100%; }
       <span class="hljs-comment">// store larger numbers than can be represented in Javascript.</span>
       <span class="hljs-comment">// This behaviour is currently in consideration and may change</span>
       <span class="hljs-comment">// in the future.</span>
-      properties: { name: <span class="hljs-string">'Project 1'</span> },
+      properties: { <span class="hljs-attr">name</span>: <span class="hljs-string">'Project 1'</span> },
     },
   },
-  ...
+  <span class="hljs-comment">// ...</span>
 ]
-</code></pre><h3 id="processing">Processing</h3>
-			<p>To extract the results, you can use ES5 array methods or a library like lodash:</p>
-			<pre><code>// Get all the project nodes (including their id, <span class="hljs-built_in">labels</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">properties</span>).
-<span class="hljs-built_in">let</span> projects = results.<span class="hljs-built_in">map</span>(<span class="hljs-built_in">row</span> =&gt; <span class="hljs-built_in">row</span>.projects);
+</code></pre>
+			<p>You can also use the <code>stream</code> method to download the results as an RxJS
+			observable.</p>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> results = db.matchNode(<span class="hljs-string">'project'</span>, <span class="hljs-string">'Project'</span>)
+  .ret(<span class="hljs-string">'project'</span>)
+  .stream();
 
-// Get just the <span class="hljs-built_in">properties</span> of the nodes
-<span class="hljs-built_in">let</span> projectProps = results.<span class="hljs-built_in">map</span>(<span class="hljs-built_in">row</span> =&gt; <span class="hljs-built_in">row</span>.projects.<span class="hljs-built_in">properties</span>);
-</code></pre><h2 id="documentation">Documentation</h2>
+results.subscribe(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(row.project.properties.name));
+</code></pre>
+			<h3 id="processing">Processing</h3>
+			<p>To extract the results, you can use ES5 array methods or a library like lodash:</p>
+			<pre><code class="lang-javascript"><span class="hljs-comment">// Get all the project nodes (including their id, labels and properties).</span>
+<span class="hljs-keyword">let</span> projects = results.map(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> row.projects);
+
+<span class="hljs-comment">// Get just the properties of the nodes</span>
+<span class="hljs-keyword">let</span> projectProps = results.map(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> row.projects.properties);
+</code></pre>
+			<h2 id="documentation">Documentation</h2>
 			<p>For more details on creating a connection, see the
 			<a href="http://jamesfer.me/cypher-query-builder/classes/connection.html">Connection</a> class.</p>
 			<p>For more details on clauses and running queries, see the
@@ -1163,8 +1178,6 @@ img { max-width: 100%; }
 						<h3>Interfaces</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-interface"><a href="interfaces/credentials.html" class="tsd-kind-icon">Credentials</a></li>
-							<li class="tsd-kind-interface"><a href="interfaces/driver.html" class="tsd-kind-icon">Driver</a></li>
-							<li class="tsd-kind-interface"><a href="interfaces/session.html" class="tsd-kind-icon">Session</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -1224,7 +1237,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Comparator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L21">clauses/where-comparators.ts:21</a></li>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L21">clauses/where-comparators.ts:21</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1255,39 +1268,12 @@ img { max-width: 100%; }
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="driverconstructor" class="tsd-anchor"></a>
 				<h3>Driver<wbr>Constructor</h3>
-				<div class="tsd-signature tsd-kind-icon">Driver<wbr>Constructor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+				<div class="tsd-signature tsd-kind-icon">Driver<wbr>Constructor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">driver</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/connection.ts#L31">connection.ts:31</a></li>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L21">connection.ts:21</a></li>
 					</ul>
 				</aside>
-				<div class="tsd-type-declaration">
-					<h4>Type declaration</h4>
-					<ul class="tsd-parameters">
-						<li class="tsd-parameter-siganture">
-							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, auth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AuthToken</span>, config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Config</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/driver.html" class="tsd-signature-type">Driver</a></li>
-							</ul>
-							<ul class="tsd-descriptions">
-								<li class="tsd-description">
-									<h4 class="tsd-parameters-title">Parameters</h4>
-									<ul class="tsd-parameters">
-										<li>
-											<h5>url: <span class="tsd-signature-type">string</span></h5>
-										</li>
-										<li>
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> auth: <span class="tsd-signature-type">AuthToken</span></h5>
-										</li>
-										<li>
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> config: <span class="tsd-signature-type">Config</span></h5>
-										</li>
-									</ul>
-									<h4 class="tsd-returns-title">Returns <a href="interfaces/driver.html" class="tsd-signature-type">Driver</a></h4>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -1298,7 +1284,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <a href="classes/connection.html" class="tsd-signature-type">Connection</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/connection.ts#L11">connection.ts:11</a></li>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L12">connection.ts:12</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1315,7 +1301,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L38">clauses/where-operators.ts:38</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L38">clauses/where-operators.ts:38</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1351,7 +1337,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L289">clauses/where-comparators.ts:289</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L289">clauses/where-comparators.ts:289</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1410,7 +1396,7 @@ query.<span class="hljs-keyword">where</span>({ age: between(<span class="hljs-s
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L23">clauses/where-comparators.ts:23</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L23">clauses/where-comparators.ts:23</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1442,7 +1428,7 @@ query.<span class="hljs-keyword">where</span>({ age: between(<span class="hljs-s
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L200">clauses/where-comparators.ts:200</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L200">clauses/where-comparators.ts:200</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1502,7 +1488,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L179">clauses/where-comparators.ts:179</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L179">clauses/where-comparators.ts:179</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1562,7 +1548,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L53">clauses/where-comparators.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L53">clauses/where-comparators.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1623,7 +1609,7 @@ query.<span class="hljs-keyword">where</span>({ name: <span class="hljs-keyword"
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L347">clauses/where-comparators.ts:347</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L347">clauses/where-comparators.ts:347</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1649,7 +1635,7 @@ query.<span class="hljs-keyword">where</span>({ name: <span class="hljs-keyword"
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L95">clauses/where-comparators.ts:95</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L95">clauses/where-comparators.ts:95</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1709,7 +1695,7 @@ query.<span class="hljs-keyword">where</span>({ age: greaterEqualTo(<span class=
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L74">clauses/where-comparators.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L74">clauses/where-comparators.ts:74</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1769,7 +1755,7 @@ query.<span class="hljs-keyword">where</span>({ age: greaterThan(<span class="hl
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L333">clauses/where-comparators.ts:333</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L333">clauses/where-comparators.ts:333</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1800,7 +1786,7 @@ query.<span class="hljs-keyword">where</span>({ age: greaterThan(<span class="hl
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L221">clauses/where-comparators.ts:221</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L221">clauses/where-comparators.ts:221</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1860,7 +1846,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L319">clauses/where-comparators.ts:319</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L319">clauses/where-comparators.ts:319</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1886,7 +1872,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L137">clauses/where-comparators.ts:137</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L137">clauses/where-comparators.ts:137</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1946,7 +1932,7 @@ query.<span class="hljs-keyword">where</span>({ age: lessEqualTo(<span class="hl
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L116">clauses/where-comparators.ts:116</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L116">clauses/where-comparators.ts:116</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2006,7 +1992,7 @@ query.<span class="hljs-keyword">where</span>({ age: lessThan(<span class="hljs-
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/index.ts#L100">clauses/index.ts:100</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/index.ts#L100">clauses/index.ts:100</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2085,7 +2071,7 @@ node(<span class="hljs-string">'parent'</span>, <span class="hljs-string">'Perso
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L127">clauses/where-operators.ts:127</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L127">clauses/where-operators.ts:127</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2119,7 +2105,7 @@ node(<span class="hljs-string">'parent'</span>, <span class="hljs-string">'Perso
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L69">clauses/where-operators.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L69">clauses/where-operators.ts:69</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2155,7 +2141,7 @@ node(<span class="hljs-string">'parent'</span>, <span class="hljs-string">'Perso
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L251">clauses/where-comparators.ts:251</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L251">clauses/where-comparators.ts:251</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2218,33 +2204,25 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 				<a name="relation" class="tsd-anchor"></a>
 				<h3>relation</h3>
 				<ul class="tsd-signatures tsd-kind-function">
-					<li class="tsd-signature tsd-kind-icon">relation<span class="tsd-signature-symbol">(</span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"in"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"out"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"either"</span>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, conditions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PathLength</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RelationPattern</span></li>
+					<li class="tsd-signature tsd-kind-icon">relation<span class="tsd-signature-symbol">(</span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RelationDirection</span>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span>, conditions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PathLength</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RelationPattern</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/index.ts#L186">clauses/index.ts:186</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/index.ts#L176">clauses/index.ts:176</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Creates a relation pattern like <code>-[rel:FriendsWith { active: true }]-&gt;</code>.</p>
 							</div>
-							<p>All of the arguments except the direction are optional and most of the time
-								you can supply only the ones you want, assuming you keep the order the same
-							of course.</p>
-							<p>Use the following signatures as a reference:</p>
-							<pre><code class="lang-typescript">relation(dir: <span class="hljs-string">'in'</span> | <span class="hljs-string">'out'</span> | <span class="hljs-string">'either'</span>, conditions: Dictionary&lt;<span class="hljs-built_in">any</span>&gt;)
-relation(dir: <span class="hljs-string">'in'</span> | <span class="hljs-string">'out'</span> | <span class="hljs-string">'either'</span>, labels: <span class="hljs-built_in">string</span>[], conditions?: Dictionary&lt;<span class="hljs-built_in">any</span>&gt;)
-relation(dir: <span class="hljs-string">'in'</span> | <span class="hljs-string">'out'</span> | <span class="hljs-string">'either'</span>, name: <span class="hljs-built_in">string</span>, conditions?: Dictionary&lt;<span class="hljs-built_in">any</span>&gt;)
-relation(dir: <span class="hljs-string">'in'</span> | <span class="hljs-string">'out'</span> | <span class="hljs-string">'either'</span>, name: <span class="hljs-built_in">string</span>, labels?: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">string</span>[],
-  conditions?: Dictionary&lt;<span class="hljs-built_in">any</span>&gt;, length?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">number</span>[] | <span class="hljs-string">'*'</span>)
-</code></pre>
-							<p><em>Note that labels must be an array when it is the first argument after dir.</em></p>
+							<p>The only required argument is direction. All other arguments are optional and all combinations of
+								them are valid. The only exception is that when labels is the first argument after direction, it
+							must be an array, otherwise it will be interpreted as the relation name.</p>
 							<p>Some examples</p>
 							<pre><code class="lang-typescript">relation(<span class="hljs-string">'either'</span>)
-<span class="hljs-comment">//  -[]-</span>
+<span class="hljs-comment">//  --</span>
 
 relation(<span class="hljs-string">'out'</span>, <span class="hljs-string">'rel'</span>)
 <span class="hljs-comment">//  -[rel]-&gt;</span>
@@ -2256,6 +2234,9 @@ relation(<span class="hljs-string">'in'</span>, [ <span class="hljs-string">'Fri
 <span class="hljs-comment">// &lt;-[:FriendsWith|RelatedTo]-</span>
 <span class="hljs-comment">// Note that this will match a relation with either the FriendsWith label or</span>
 <span class="hljs-comment">// the RelatedTo label. You cannot use this syntax when creating relations.</span>
+
+relation(<span class="hljs-string">'in'</span>, [<span class="hljs-number">4</span>, <span class="hljs-number">10</span>])
+<span class="hljs-comment">// &lt;-[*4..10]-</span>
 
 relation(<span class="hljs-string">'in'</span>, { active: <span class="hljs-literal">true</span> })
 <span class="hljs-comment">// &lt;-[{ active: true }]</span>
@@ -2284,20 +2265,20 @@ relation(<span class="hljs-string">'either'</span>, <span class="hljs-string">'r
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>dir: <span class="tsd-signature-type">"in"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"out"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"either"</span></h5>
+								<h5>dir: <span class="tsd-signature-type">RelationDirection</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>Direction of the relation. <code>in</code> means to the left, <code>out</code> means to
 									the right and <code>either</code> means no direction.</p>
 								</div>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> labels: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> labels: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PathLength</span></h5>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> length: <span class="tsd-signature-type">PathLength</span></h5>
@@ -2325,7 +2306,7 @@ relation(<span class="hljs-string">'either'</span>, <span class="hljs-string">'r
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L158">clauses/where-comparators.ts:158</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L158">clauses/where-comparators.ts:158</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2385,7 +2366,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L98">clauses/where-operators.ts:98</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L98">clauses/where-operators.ts:98</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2418,7 +2399,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 				<div class="tsd-signature tsd-kind-icon">comparisions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L4">clauses/where-comparators.ts:4</a></li>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L4">clauses/where-comparators.ts:4</a></li>
 					</ul>
 				</aside>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2427,7 +2408,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">between<span class="tsd-signature-symbol">:</span> <a href="globals.html#between" class="tsd-signature-type">between</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L16">clauses/where-comparators.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L16">clauses/where-comparators.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2437,7 +2418,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">contains<span class="tsd-signature-symbol">:</span> <a href="globals.html#contains" class="tsd-signature-type">contains</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L12">clauses/where-comparators.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L12">clauses/where-comparators.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2447,7 +2428,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">ends<wbr>With<span class="tsd-signature-symbol">:</span> <a href="globals.html#endswith" class="tsd-signature-type">endsWith</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L11">clauses/where-comparators.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L11">clauses/where-comparators.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2457,7 +2438,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">equals<span class="tsd-signature-symbol">:</span> <a href="globals.html#equals" class="tsd-signature-type">equals</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L5">clauses/where-comparators.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L5">clauses/where-comparators.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2467,7 +2448,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">exists<span class="tsd-signature-symbol">:</span> <a href="globals.html#exists" class="tsd-signature-type">exists</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L15">clauses/where-comparators.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L15">clauses/where-comparators.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2477,7 +2458,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">greater<wbr>Equal<wbr>To<span class="tsd-signature-symbol">:</span> <a href="globals.html#greaterequalto" class="tsd-signature-type">greaterEqualTo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L7">clauses/where-comparators.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L7">clauses/where-comparators.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2487,7 +2468,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">greater<wbr>Than<span class="tsd-signature-symbol">:</span> <a href="globals.html#greaterthan" class="tsd-signature-type">greaterThan</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L6">clauses/where-comparators.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L6">clauses/where-comparators.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2497,7 +2478,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">has<wbr>Label<span class="tsd-signature-symbol">:</span> <a href="globals.html#haslabel" class="tsd-signature-type">hasLabel</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L14">clauses/where-comparators.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L14">clauses/where-comparators.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2507,7 +2488,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">in<wbr>Array<span class="tsd-signature-symbol">:</span> <a href="globals.html#inarray" class="tsd-signature-type">inArray</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L13">clauses/where-comparators.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L13">clauses/where-comparators.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2517,7 +2498,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Null<span class="tsd-signature-symbol">:</span> <a href="globals.html#isnull" class="tsd-signature-type">isNull</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L17">clauses/where-comparators.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L17">clauses/where-comparators.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2527,7 +2508,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">less<wbr>Equal<wbr>To<span class="tsd-signature-symbol">:</span> <a href="globals.html#lessequalto" class="tsd-signature-type">lessEqualTo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L9">clauses/where-comparators.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L9">clauses/where-comparators.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2537,7 +2518,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">less<wbr>Than<span class="tsd-signature-symbol">:</span> <a href="globals.html#lessthan" class="tsd-signature-type">lessThan</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L8">clauses/where-comparators.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L8">clauses/where-comparators.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2547,7 +2528,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">regexp<span class="tsd-signature-symbol">:</span> <a href="globals.html#regexp" class="tsd-signature-type">regexp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L18">clauses/where-comparators.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L18">clauses/where-comparators.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2557,7 +2538,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">starts<wbr>With<span class="tsd-signature-symbol">:</span> <a href="globals.html#startswith" class="tsd-signature-type">startsWith</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-comparators.ts#L10">clauses/where-comparators.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-comparators.ts#L10">clauses/where-comparators.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2568,7 +2549,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 				<div class="tsd-signature tsd-kind-icon">operators<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
 					</ul>
 				</aside>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2577,7 +2558,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">and<span class="tsd-signature-symbol">:</span> <a href="globals.html#and" class="tsd-signature-type">and</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2587,7 +2568,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">not<span class="tsd-signature-symbol">:</span> <a href="globals.html#not" class="tsd-signature-type">not</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2597,7 +2578,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <a href="globals.html#or" class="tsd-signature-type">or</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -2607,7 +2588,7 @@ query.<span class="hljs-keyword">where</span>({ <span class="hljs-keyword">name<
 					<div class="tsd-signature tsd-kind-icon">xor<span class="tsd-signature-symbol">:</span> <a href="globals.html#xor" class="tsd-signature-type">xor</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/746e982/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/clauses/where-operators.ts#L8">clauses/where-operators.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
