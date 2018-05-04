@@ -23,9 +23,9 @@ export interface WrapperClause {
  * @internal
  */
 export class SetBlock<Q> {
-  constructor(protected chain?: (clause: Clause) => Q, protected wrapper?: WrapperClause) { }
+  constructor(protected chain: (clause: Clause) => Q, protected wrapper?: WrapperClause) { }
 
-  set(properties: SetProperties, options: SetOptions) {
+  set(properties: SetProperties, options?: SetOptions) {
     return this.chain(this.wrap(new Set(properties, options)));
   }
 
@@ -56,8 +56,8 @@ export abstract class Builder<Q> extends SetBlock<Q> {
     super(c => this.continueChainClause(c));
   }
 
-  onCreate = new SetBlock(this.continueChainClause.bind(this), OnCreate);
-  onMatch = new SetBlock(this.continueChainClause.bind(this), OnMatch);
+  onCreate = new SetBlock<Q>(this.continueChainClause.bind(this), OnCreate);
+  onMatch = new SetBlock<Q>(this.continueChainClause.bind(this), OnMatch);
 
   /**
    * Adds a clause to the current chain and returns something that can be
