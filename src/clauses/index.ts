@@ -14,6 +14,9 @@ export { Limit } from './limit';
 export { Where } from './where';
 export { Raw } from './raw';
 export { OrderBy } from './order-by';
+export { Merge } from './merge';
+export { OnMatch } from './on-match';
+export { OnCreate } from './on-create';
 export { and, or, xor, not, operators } from './where-operators';
 export {
   equals,

@@ -1,7 +1,7 @@
-import { PatternClause } from './pattern-clause';
+import { PatternClause, PatternCollection } from './pattern-clause';
 
 export class Create extends PatternClause {
-  constructor(patterns) {
+  constructor(patterns: PatternCollection) {
     super(patterns, { useExpandedConditions: false });
   }
 

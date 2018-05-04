@@ -1,7 +1,7 @@
 import { Dictionary, Many, assign } from 'lodash';
 import {
   Limit, Match, NodePattern, Skip, Where, Set, Create,
-  Return, With, Unwind, Delete, Raw, OrderBy,
+  Return, With, Unwind, Delete, Raw, OrderBy, Merge, OnCreate, OnMatch,
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
@@ -12,12 +12,53 @@ import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
 
+/**
+ * @internal
+ */
+export interface WrapperClause {
+  new (clause: Clause): Clause;
+}
+
+/**
+ * @internal
+ */
+export class SetBlock<Q> {
+  constructor(protected chain?: (clause: Clause) => Q, protected wrapper?: WrapperClause) { }
+
+  set(properties: SetProperties, options: SetOptions) {
+    return this.chain(this.wrap(new Set(properties, options)));
+  }
+
+  setLabels(labels: Dictionary<Many<string>>) {
+    return this.chain(this.wrap(new Set({ labels })));
+  }
+
+  setValues(values: Dictionary<any>, override?: boolean) {
+    return this.chain(this.wrap(new Set({ values }, { override })));
+  }
+
+  setVariables(variables: Dictionary<string | Dictionary<string>>, override?: boolean) {
+    return this.chain(this.wrap(new Set({ variables }, { override })));
+  }
+
+  private wrap(clause: Clause): Clause {
+    return this.wrapper ? new this.wrapper(clause) : clause;
+  }
+}
 
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
+ * @internal
  */
-export abstract class Builder<Q> {
+export abstract class Builder<Q> extends SetBlock<Q> {
+  protected constructor() {
+    super(c => this.continueChainClause(c));
+  }
+
+  onCreate = new SetBlock(this.continueChainClause.bind(this), OnCreate);
+  onMatch = new SetBlock(this.continueChainClause.bind(this), OnMatch);
+
   /**
    * Adds a clause to the current chain and returns something that can be
    * chained with more clauses.
@@ -189,6 +230,15 @@ export abstract class Builder<Q> {
     return this.continueChainClause(new Match(patterns, assign(options, {
       optional: true,
     })));
+  }
+
+  /**
+   * Adds a [merge]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/merge/}
+   * clause to the query. It accepts the same parameters as `match` and `create` so refer to them
+   * for more information.
+   */
+  merge(patterns: PatternCollection) {
+    return this.continueChainClause(new Merge(patterns));
   }
 
   /**
@@ -364,9 +414,9 @@ export abstract class Builder<Q> {
    * @param {SetOptions} options
    * @returns {Q}
    */
-  set(properties: SetProperties, options: SetOptions) {
-    return this.continueChainClause(new Set(properties, options));
-  }
+  // set(properties: SetProperties, options: SetOptions) {
+  //   return this.continueChainClause(new Set(properties, options));
+  // }
 
   /**
    * Adds labels to a node using a [set]{@link
@@ -386,9 +436,9 @@ export abstract class Builder<Q> {
    * @param {_.Dictionary<_.Many<string>>} labels
    * @returns {Q}
    */
-  setLabels(labels: Dictionary<Many<string>>) {
-    return this.continueChainClause(new Set({ labels }));
-  }
+  // setLabels(labels: Dictionary<Many<string>>) {
+  //   return this.continueChainClause(new Set({ labels }));
+  // }
 
   /**
    * Updates a node from parameters using a [set]{@link
@@ -412,9 +462,9 @@ export abstract class Builder<Q> {
    * @param {boolean} override
    * @returns {Q}
    */
-  setValues(values: Dictionary<any>, override?: boolean) {
-    return this.continueChainClause(new Set({ values }, { override }));
-  }
+  // setValues(values: Dictionary<any>, override?: boolean) {
+  //   return this.continueChainClause(new Set({ values }, { override }));
+  // }
 
   /**
    * Updates a node from a variable that was previously declared in the query
@@ -437,12 +487,12 @@ export abstract class Builder<Q> {
    * @param {boolean} override
    * @returns {Q}
    */
-  setVariables(
-    variables: Dictionary<string | Dictionary<string>>,
-    override?: boolean,
-  ) {
-    return this.continueChainClause(new Set({ variables }, { override }));
-  }
+  // setVariables(
+  //   variables: Dictionary<string | Dictionary<string>>,
+  //   override?: boolean,
+  // ) {
+  //   return this.continueChainClause(new Set({ variables }, { override }));
+  // }
 
   /**
    * Adds a [skip]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/skip}
