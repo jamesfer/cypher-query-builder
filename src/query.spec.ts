@@ -1,40 +1,50 @@
 import { Query } from './query';
 import { expect } from '../test-setup';
 import { Dictionary, each } from 'lodash';
-import { NodePattern } from './clauses';
+import { node, NodePattern } from './clauses';
 import { mockConnection } from './connection.mock';
 import { spy, stub } from 'sinon';
 import { ClauseCollection } from './clause-collection';
 
 describe('Query', () => {
   describe('query methods', () => {
-    const query = new Query();
-    const methods: Dictionary<Function> = {
-      matchNode: () => query.matchNode('Node'),
-      match: () => query.match(new NodePattern('Node')),
-      optionalMatch: () => query.optionalMatch(new NodePattern('Node')),
-      createNode: () => query.createNode('Node'),
-      create: () => query.create(new NodePattern('Node')),
-      return: () => query.return('node'),
-      with: () => query.with('node'),
-      unwind: () => query.unwind([1, 2, 3], 'number'),
-      delete: () => query.delete('node'),
-      detachDelete: () => query.detachDelete('node'),
-      set: () => query.set({}, { override: false }),
-      setLabels: () => query.setLabels({}),
-      setValues: () => query.setValues({}),
-      setVariables: () => query.setVariables({}, false),
-      skip: () => query.skip(1),
-      limit: () => query.limit(1),
-      where: () => query.where([]),
-      orderBy: () => query.orderBy('name'),
-      raw: () => query.raw('name'),
+    const methods: Dictionary<(q: Query) => Query> = {
+      matchNode: q => q.matchNode('Node'),
+      match: q => q.match(new NodePattern('Node')),
+      optionalMatch: q => q.optionalMatch(new NodePattern('Node')),
+      createNode: q => q.createNode('Node'),
+      create: q => q.create(new NodePattern('Node')),
+      return: q => q.return('node'),
+      with: q => q.with('node'),
+      unwind: q => q.unwind([1, 2, 3], 'number'),
+      delete: q => q.delete('node'),
+      detachDelete: q => q.detachDelete('node'),
+      set: q => q.set({}, { override: false }),
+      setLabels: q => q.setLabels({}),
+      setValues: q => q.setValues({}),
+      setVariables: q => q.setVariables({}, false),
+      skip: q => q.skip(1),
+      limit: q => q.limit(1),
+      where: q => q.where([]),
+      orderBy: q => q.orderBy('name'),
+      raw: q => q.raw('name'),
+      merge: q => q.merge(node('name')),
+      onCreateSet: q => q.onCreate.set({ labels: { a: 'Label' } }),
+      onCreateSetLabels: q => q.onCreate.setLabels({ a: 'Label' }),
+      onCreateSetValues: q => q.onCreate.setValues({ a: 'name' }),
+      onCreateSetVariables: q => q.onCreate.setVariables({ a: 'steve' }),
+      onMatchSet: q => q.onMatch.set({ labels: { a: 'Label' } }),
+      onMatchSetLabels: q => q.onMatch.setLabels({ a: 'Label' }),
+      onMatchSetValues: q => q.onMatch.setValues({ a: 'name' }),
+      onMatchSetVariables: q => q.onMatch.setVariables({ a: 'steve' }),
     };
 
     each(methods, (fn, name) => {
       it(name + ' should return a chainable query object', () => {
-        expect(fn()).to.equal(query);
+        const query = new Query();
+        expect(fn(query)).to.equal(query);
         expect(query.getClauses().length === 1);
+        expect(query.build()).to.equal(query.getClauses()[0].build() + ';');
       });
     });
   });
