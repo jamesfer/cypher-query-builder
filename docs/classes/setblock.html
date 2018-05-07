@@ -954,7 +954,7 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/credentials.html" class="tsd-kind-icon">Credentials</a>
 		</li>
-		<li class=" tsd-kind-interface tsd-is-private">
+		<li class=" tsd-kind-interface">
 			<a href="../interfaces/wrapperclause.html" class="tsd-kind-icon">Wrapper<wbr>Clause</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
@@ -1044,8 +1044,6 @@ img { max-width: 100%; }
 				<dl class="tsd-comment-tags">
 					<dt>internal</dt>
 					<dd></dd>
-					<dt>external</dt>
-					<dd></dd>
 				</dl>
 			</div>
 		</section>
@@ -1098,19 +1096,19 @@ img { max-width: 100%; }
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Set<wbr>Block<span class="tsd-signature-symbol">(</span>chain<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span>, wrapper<span class="tsd-signature-symbol">?: </span><a href="../interfaces/wrapperclause.html" class="tsd-signature-type">WrapperClause</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="setblock.html" class="tsd-signature-type">SetBlock</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Set<wbr>Block<span class="tsd-signature-symbol">(</span>chain<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, wrapper<span class="tsd-signature-symbol">?: </span><a href="../interfaces/wrapperclause.html" class="tsd-signature-type">WrapperClause</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="setblock.html" class="tsd-signature-type">SetBlock</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/4ef9c03/src/builder.ts#L27">builder.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L25">builder.ts:25</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> chain: <span class="tsd-signature-type">function</span></h5>
+								<h5>chain: <span class="tsd-signature-type">function</span></h5>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-siganture">
 										<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -1145,22 +1143,50 @@ img { max-width: 100%; }
 				<a name="set" class="tsd-anchor"></a>
 				<h3>set</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetProperties</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+					<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetProperties</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/4ef9c03/src/builder.ts#L30">builder.ts:30</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L62">builder.ts:62</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+								clause to the query.</p>
+							</div>
+							<p><code>set</code> lets you updates a nodes labels and properties in one clause. Most of
+								the time it will be easier to use one of the variants such as <code>setLabels</code>,
+							<code>setValues</code> or <code>setVariables</code>.</p>
+							<p>This function accepts three different kind of properties, each of which is
+							described in more detail in the variants.</p>
+							<pre><code><span class="hljs-selector-tag">query</span><span class="hljs-selector-class">.set</span>({
+  <span class="hljs-attribute">labels</span>: {
+    <span class="hljs-attribute">sale</span>: <span class="hljs-string">'Active'</span>,
+  },
+  <span class="hljs-attribute">variables</span>: {
+    <span class="hljs-attribute">sale</span>: {
+      <span class="hljs-attribute">activatedAt</span>: <span class="hljs-string">'timestamp()'</span>,
+    },
+  },
+  <span class="hljs-attribute">values</span>: {
+    <span class="hljs-attribute">sale</span>: {
+      <span class="hljs-attribute">activatedBy</span>: user.id,
+    },
+  },
+})
+<span class="hljs-comment">// SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId</span>
+</code></pre>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>properties: <span class="tsd-signature-type">SetProperties</span></h5>
 							</li>
 							<li>
-								<h5>options: <span class="tsd-signature-type">SetOptions</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">SetOptions</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
@@ -1177,9 +1203,21 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/4ef9c03/src/builder.ts#L34">builder.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L84">builder.ts:84</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds labels to a node using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+								clause.</p>
+							</div>
+							<pre><code><span class="hljs-selector-tag">query</span><span class="hljs-selector-class">.setLabels</span>({
+  <span class="hljs-attribute">sale</span>: <span class="hljs-string">'Active'</span>,
+})
+<span class="hljs-comment">// SET sale:Active</span>
+</code></pre><p><code>setLabels</code> accepts a dictionary where the keys are nodes to be updated
+							and the value is a single label or an array of labels to add to the node.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1200,9 +1238,23 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/4ef9c03/src/builder.ts#L38">builder.ts:38</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L110">builder.ts:110</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates a node from parameters using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+									clause. This function treats all values as parameters which is different to
+								<code>setVariables</code> which assumes values are cypher variables.</p>
+							</div>
+							<pre><code>query.setValues({
+  <span class="hljs-string">'sale.activatedBy'</span>: user<span class="hljs-selector-class">.id</span>,
+})
+<span class="hljs-comment">// SET sale.activatedBy = $userId</span>
+</code></pre><p><code>setValues</code> accepts a dictionary where the keys are nodes or property names
+							to be updated.</p>
+							<p>If you set override to true, it will use the <code>+=</code> operator to modify nodes.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1226,9 +1278,24 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/4ef9c03/src/builder.ts#L42">builder.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L135">builder.ts:135</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates a node from a variable that was previously declared in the query
+									using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+									clause. This function only accepts strings as its values which are not
+									escaped in any way so beware. If you want to store some user supplied
+								information in the database, <code>setValues</code> is the function you want.</p>
+							</div>
+							<pre><code>query.setVariables({
+  'sale.activatedAt': 'timestamp()',
+})
+<span class="hljs-comment">// SET sale.activatedAt = timestamp()</span>
+</code></pre><p>Note that values are inserted into the query, as is.</p>
+							<p>If you set override to true, it will use the <code>+=</code> operator to modify nodes.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
