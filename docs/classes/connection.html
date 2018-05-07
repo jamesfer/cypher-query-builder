@@ -913,8 +913,14 @@ img { max-width: 100%; }
 		<li class="current tsd-kind-class">
 			<a href="connection.html" class="tsd-kind-icon">Connection</a>
 			<ul>
-				<li class=" tsd-kind-constructor tsd-parent-kind-class">
+				<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<a href="connection.html#constructor" class="tsd-kind-icon">constructor</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a href="connection.html#oncreate" class="tsd-kind-icon">on<wbr>Create</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a href="connection.html#onmatch" class="tsd-kind-icon">on<wbr>Match</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="connection.html#close" class="tsd-kind-icon">close</a>
@@ -939,6 +945,9 @@ img { max-width: 100%; }
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a href="connection.html#matchnode" class="tsd-kind-icon">match<wbr>Node</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a href="connection.html#merge" class="tsd-kind-icon">merge</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a href="connection.html#optionalmatch" class="tsd-kind-icon">optional<wbr>Match</a>
@@ -993,6 +1002,9 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class">
 			<a href="query.html" class="tsd-kind-icon">Query</a>
 		</li>
+		<li class=" tsd-kind-class tsd-has-type-parameter">
+			<a href="setblock.html" class="tsd-kind-icon">Set<wbr>Block</a>
+		</li>
 		<li class=" tsd-kind-class">
 			<a href="whereand.html" class="tsd-kind-icon">Where<wbr>And</a>
 		</li>
@@ -1010,6 +1022,9 @@ img { max-width: 100%; }
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/credentials.html" class="tsd-kind-icon">Credentials</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/wrapperclause.html" class="tsd-kind-icon">Wrapper<wbr>Clause</a>
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#comparator" class="tsd-kind-icon">Comparator</a>
@@ -1136,7 +1151,14 @@ img { max-width: 100%; }
 					<section class="tsd-index-section ">
 						<h3>Constructors</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="connection.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="connection.html#constructor" class="tsd-kind-icon">constructor</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section tsd-is-inherited">
+						<h3>Properties</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#oncreate" class="tsd-kind-icon">on<wbr>Create</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#onmatch" class="tsd-kind-icon">on<wbr>Match</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -1150,6 +1172,7 @@ img { max-width: 100%; }
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#limit" class="tsd-kind-icon">limit</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#match" class="tsd-kind-icon">match</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#matchnode" class="tsd-kind-icon">match<wbr>Node</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#merge" class="tsd-kind-icon">merge</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#optionalmatch" class="tsd-kind-icon">optional<wbr>Match</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#orderby" class="tsd-kind-icon">order<wbr>By</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="connection.html#query" class="tsd-kind-icon">query</a></li>
@@ -1173,17 +1196,18 @@ img { max-width: 100%; }
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Constructors</h2>
-			<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+			<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
-				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, credentials<span class="tsd-signature-symbol">: </span><a href="../interfaces/credentials.html" class="tsd-signature-type">Credentials</a>, driver<span class="tsd-signature-symbol">?: </span><a href="../globals.html#driverconstructor" class="tsd-signature-type">DriverConstructor</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connection.html" class="tsd-signature-type">Connection</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
+							<p>Overrides <a href="setblock.html">SetBlock</a>.<a href="setblock.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L56">connection.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L56">connection.ts:56</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1227,6 +1251,61 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 		</section>
+		<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<h2>Properties</h2>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<a name="oncreate" class="tsd-anchor"></a>
+				<h3>on<wbr>Create</h3>
+				<div class="tsd-signature tsd-kind-icon">on<wbr>Create<span class="tsd-signature-symbol">:</span> <a href="setblock.html" class="tsd-signature-type">SetBlock</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Q</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new SetBlock&lt;Q&gt;(this.continueChainClause.bind(this), OnCreate)</span></div>
+				<aside class="tsd-sources">
+					<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#oncreate">onCreate</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L169">builder.ts:169</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Used to add an <code>ON CREATE</code> clause to the query. Any following query will be prefixed with
+						<code>ON CREATE</code>.</p>
+					</div>
+					<p>Example:</p>
+					<pre><code class="lang-javascript">query.onCreate.setLabels({ <span class="hljs-attr">node</span>: <span class="hljs-string">'Active'</span> });
+<span class="hljs-comment">// ON CREATE SET node:Active</span>
+
+query.onCreate.setVariables({ <span class="hljs-string">'node.createdAt'</span>: <span class="hljs-string">'timestamp()'</span> });
+<span class="hljs-comment">// ON CREATE SET node.createdAt = timestamp()</span>
+<span class="hljs-string">`</span>
+</code></pre>
+					<p>The only methods that are available after <code>onCreate</code> are the set family of clauses.</p>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+				<a name="onmatch" class="tsd-anchor"></a>
+				<h3>on<wbr>Match</h3>
+				<div class="tsd-signature tsd-kind-icon">on<wbr>Match<span class="tsd-signature-symbol">:</span> <a href="setblock.html" class="tsd-signature-type">SetBlock</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Q</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new SetBlock&lt;Q&gt;(this.continueChainClause.bind(this), OnMatch)</span></div>
+				<aside class="tsd-sources">
+					<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#onmatch">onMatch</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L186">builder.ts:186</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Used to add an <code>ON MATCH</code> clause to the query. Any following query will be prefixed with
+						<code>ON MATCH</code>.</p>
+					</div>
+					<p>Example:</p>
+					<pre><code class="lang-javascript">query.onMatch.setLabels({ <span class="hljs-attr">node</span>: <span class="hljs-string">'Active'</span> });
+<span class="hljs-comment">// ON MATCH SET node:Active</span>
+
+query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: <span class="hljs-string">'timestamp()'</span> });
+<span class="hljs-comment">// ON MATCH SET node.createdAt = timestamp()</span>
+<span class="hljs-string">`</span>
+</code></pre>
+					<p>The only methods that are available after <code>onMatch</code> are the set family of clauses.</p>
+				</div>
+			</section>
+		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
@@ -1239,7 +1318,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L86">connection.ts:86</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L86">connection.ts:86</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1263,7 +1342,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#create">create</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L56">builder.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L223">builder.ts:223</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1308,7 +1387,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#createnode">createNode</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L69">builder.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L236">builder.ts:236</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1344,7 +1423,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#delete">delete</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L92">builder.ts:92</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L259">builder.ts:259</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1381,7 +1460,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#detachdelete">detachDelete</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L103">builder.ts:103</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L270">builder.ts:270</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1413,7 +1492,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#limit">limit</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L116">builder.ts:116</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L283">builder.ts:283</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1443,7 +1522,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#match">match</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L158">builder.ts:158</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L325">builder.ts:325</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1500,7 +1579,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#matchnode">matchNode</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L172">builder.ts:172</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L339">builder.ts:339</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1526,6 +1605,46 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<a name="merge" class="tsd-anchor"></a>
+				<h3>merge</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<li class="tsd-signature tsd-kind-icon">merge<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#merge">merge</a></p>
+							<ul>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L377">builder.ts:377</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/merge/" class="external">merge</a>
+									clause to the query. It accepts the same parameters as <code>match</code> and <code>create</code> so refer to them
+								for more information.</p>
+							</div>
+							<pre><code class="lang-javascript">query.merge([
+  node(<span class="hljs-string">'user'</span>, <span class="hljs-string">'User'</span>, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }),
+  relation(<span class="hljs-string">'out'</span>, <span class="hljs-string">'rel'</span>, <span class="hljs-string">'OwnsProject'</span>),
+  node(<span class="hljs-string">'project'</span>, <span class="hljs-string">'Project'</span>, { <span class="hljs-attr">id</span>: <span class="hljs-number">20</span> }),
+])
+.onMatch.setVariables({ <span class="hljs-string">'rel.updatedAt'</span>: <span class="hljs-string">`timestamp`</span> });
+<span class="hljs-comment">// MERGE (user:User { id: 1 })-[rel:OwnsProject]-&gt;(project:Project { id: 20 })</span>
+<span class="hljs-comment">// ON MATCH SET rel.updatedAt = timestamp()</span>
+</code></pre>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 				<a name="optionalmatch" class="tsd-anchor"></a>
 				<h3>optional<wbr>Match</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -1536,7 +1655,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#optionalmatch">optionalMatch</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L188">builder.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L355">builder.ts:355</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1568,7 +1687,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#orderby">orderBy</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L235">builder.ts:235</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L422">builder.ts:422</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1620,7 +1739,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L110">connection.ts:110</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L110">connection.ts:110</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1645,7 +1764,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#raw">raw</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L267">builder.ts:267</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L454">builder.ts:454</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1690,7 +1809,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#return">return</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L329">builder.ts:329</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L516">builder.ts:516</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1758,7 +1877,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L168">connection.ts:168</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L168">connection.ts:168</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1828,7 +1947,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L97">connection.ts:97</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L97">connection.ts:97</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1848,14 +1967,14 @@ img { max-width: 100%; }
 				<a name="set" class="tsd-anchor"></a>
 				<h3>set</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetProperties</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+					<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetProperties</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
-							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#set">set</a></p>
+							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#set">set</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L367">builder.ts:367</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L62">builder.ts:62</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1892,7 +2011,7 @@ img { max-width: 100%; }
 								<h5>properties: <span class="tsd-signature-type">SetProperties</span></h5>
 							</li>
 							<li>
-								<h5>options: <span class="tsd-signature-type">SetOptions</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">SetOptions</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
@@ -1908,9 +2027,9 @@ img { max-width: 100%; }
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
-							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#setlabels">setLabels</a></p>
+							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setlabels">setLabels</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L389">builder.ts:389</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L84">builder.ts:84</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1944,9 +2063,9 @@ img { max-width: 100%; }
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
-							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#setvalues">setValues</a></p>
+							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setvalues">setValues</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L415">builder.ts:415</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L110">builder.ts:110</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1985,9 +2104,9 @@ img { max-width: 100%; }
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
-							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#setvariables">setVariables</a></p>
+							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setvariables">setVariables</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L440">builder.ts:440</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L135">builder.ts:135</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2029,7 +2148,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#skip">skip</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L454">builder.ts:454</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L527">builder.ts:527</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2058,7 +2177,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/connection.ts#L235">connection.ts:235</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/connection.ts#L235">connection.ts:235</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2127,7 +2246,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#unwind">unwind</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L466">builder.ts:466</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L539">builder.ts:539</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2166,7 +2285,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#where">where</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L547">builder.ts:547</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L620">builder.ts:620</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2253,7 +2372,7 @@ query.where([
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#with">with</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/fccc845/src/builder.ts#L609">builder.ts:609</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L682">builder.ts:682</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

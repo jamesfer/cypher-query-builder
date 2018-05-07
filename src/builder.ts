@@ -1,7 +1,7 @@
 import { Dictionary, Many, assign } from 'lodash';
 import {
   Limit, Match, NodePattern, Skip, Where, Set, Create,
-  Return, With, Unwind, Delete, Raw, OrderBy,
+  Return, With, Unwind, Delete, Raw, OrderBy, Merge, OnCreate, OnMatch,
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
@@ -12,12 +12,179 @@ import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
 
+/**
+ * @internal
+ */
+export interface WrapperClause {
+  new (clause: Clause): Clause;
+}
+
+/**
+ * @internal
+ */
+export class SetBlock<Q> {
+  constructor(protected chain: (clause: Clause) => Q, protected wrapper?: WrapperClause) { }
+
+  /**
+   * Adds a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause to the query.
+   *
+   * `set` lets you updates a nodes labels and properties in one clause. Most of
+   * the time it will be easier to use one of the variants such as `setLabels`,
+   * `setValues` or `setVariables`.
+   *
+   * This function accepts three different kind of properties, each of which is
+   * described in more detail in the variants.
+   *
+   * ```
+   * query.set({
+   *   labels: {
+   *     sale: 'Active',
+   *   },
+   *   variables: {
+   *     sale: {
+   *       activatedAt: 'timestamp()',
+   *     },
+   *   },
+   *   values: {
+   *     sale: {
+   *       activatedBy: user.id,
+   *     },
+   *   },
+   * })
+   * // SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId
+   * ```
+   *
+   * @param {SetProperties} properties
+   * @param {SetOptions} options
+   * @returns {Q}
+   */
+  set(properties: SetProperties, options?: SetOptions) {
+    return this.chain(this.wrap(new Set(properties, options)));
+  }
+
+  /**
+   * Adds labels to a node using a [set]{@link
+    * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause.
+   *
+   * ```
+   * query.setLabels({
+   *   sale: 'Active',
+   * })
+   * // SET sale:Active
+   * ```
+   *
+   * `setLabels` accepts a dictionary where the keys are nodes to be updated
+   * and the value is a single label or an array of labels to add to the node.
+   *
+   * @param {_.Dictionary<_.Many<string>>} labels
+   * @returns {Q}
+   */
+  setLabels(labels: Dictionary<Many<string>>) {
+    return this.chain(this.wrap(new Set({ labels })));
+  }
+
+  /**
+   * Updates a node from parameters using a [set]{@link
+    * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause. This function treats all values as parameters which is different to
+   * `setVariables` which assumes values are cypher variables.
+   *
+   * ```
+   * query.setValues({
+   *   'sale.activatedBy': user.id,
+   * })
+   * // SET sale.activatedBy = $userId
+   * ```
+   *
+   * `setValues` accepts a dictionary where the keys are nodes or property names
+   * to be updated.
+   *
+   * If you set override to true, it will use the `+=` operator to modify nodes.
+   *
+   * @param {_.Dictionary<any>} values
+   * @param {boolean} override
+   * @returns {Q}
+   */
+  setValues(values: Dictionary<any>, override?: boolean) {
+    return this.chain(this.wrap(new Set({ values }, { override })));
+  }
+
+  /**
+   * Updates a node from a variable that was previously declared in the query
+   * using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
+   * clause. This function only accepts strings as its values which are not
+   * escaped in any way so beware. If you want to store some user supplied
+   * information in the database, `setValues` is the function you want.
+   *
+   * ```
+   * query.setVariables({
+   *   'sale.activatedAt': 'timestamp()',
+   * })
+   * // SET sale.activatedAt = timestamp()
+   * ```
+   * Note that values are inserted into the query, as is.
+   *
+   * If you set override to true, it will use the `+=` operator to modify nodes.
+   *
+   * @param {_.Dictionary<string | _.Dictionary<string>>} variables
+   * @param {boolean} override
+   * @returns {Q}
+   */
+  setVariables(variables: Dictionary<string | Dictionary<string>>, override?: boolean) {
+    return this.chain(this.wrap(new Set({ variables }, { override })));
+  }
+
+  private wrap(clause: Clause): Clause {
+    return this.wrapper ? new this.wrapper(clause) : clause;
+  }
+}
 
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
+ * @internal
  */
-export abstract class Builder<Q> {
+export abstract class Builder<Q> extends SetBlock<Q> {
+  protected constructor() {
+    super(c => this.continueChainClause(c));
+  }
+
+  /**
+   * Used to add an `ON CREATE` clause to the query. Any following query will be prefixed with
+   * `ON CREATE`.
+   *
+   * Example:
+   * ```javascript
+   * query.onCreate.setLabels({ node: 'Active' });
+   * // ON CREATE SET node:Active
+
+   * query.onCreate.setVariables({ 'node.createdAt': 'timestamp()' });
+   * // ON CREATE SET node.createdAt = timestamp()
+   * ````
+   *
+   * The only methods that are available after `onCreate` are the set family of clauses.
+   */
+  onCreate = new SetBlock<Q>(this.continueChainClause.bind(this), OnCreate);
+
+  /**
+   * Used to add an `ON MATCH` clause to the query. Any following query will be prefixed with
+   * `ON MATCH`.
+   *
+   * Example:
+   * ```javascript
+   * query.onMatch.setLabels({ node: 'Active' });
+   * // ON MATCH SET node:Active
+
+   * query.onMatch.setVariables({ 'node.updatedAt': 'timestamp()' });
+   * // ON MATCH SET node.createdAt = timestamp()
+   * ````
+   *
+   * The only methods that are available after `onMatch` are the set family of clauses.
+   */
+  onMatch = new SetBlock<Q>(this.continueChainClause.bind(this), OnMatch);
+
   /**
    * Adds a clause to the current chain and returns something that can be
    * chained with more clauses.
@@ -192,6 +359,26 @@ export abstract class Builder<Q> {
   }
 
   /**
+   * Adds a [merge]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/merge/}
+   * clause to the query. It accepts the same parameters as `match` and `create` so refer to them
+   * for more information.
+   *
+   * ```javascript
+   * query.merge([
+   *   node('user', 'User', { id: 1 }),
+   *   relation('out', 'rel', 'OwnsProject'),
+   *   node('project', 'Project', { id: 20 }),
+   * ])
+   * .onMatch.setVariables({ 'rel.updatedAt': `timestamp` });
+   * // MERGE (user:User { id: 1 })-[rel:OwnsProject]->(project:Project { id: 20 })
+   * // ON MATCH SET rel.updatedAt = timestamp()
+   * ```
+   */
+  merge(patterns: PatternCollection) {
+    return this.continueChainClause(new Merge(patterns));
+  }
+
+  /**
    * Adds an [order by]{@link
    * https://neo4j.com/docs/developer-manual/current/cypher/clauses/order-by}
    * to the query.
@@ -328,120 +515,6 @@ export abstract class Builder<Q> {
    */
   return(terms: Many<Term>) {
     return this.continueChainClause(new Return(terms));
-  }
-
-  /**
-   * Adds a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
-   * clause to the query.
-   *
-   * `set` lets you updates a nodes labels and properties in one clause. Most of
-   * the time it will be easier to use one of the variants such as `setLabels`,
-   * `setValues` or `setVariables`.
-   *
-   * This function accepts three different kind of properties, each of which is
-   * described in more detail in the variants.
-   *
-   * ```
-   * query.set({
-   *   labels: {
-   *     sale: 'Active',
-   *   },
-   *   variables: {
-   *     sale: {
-   *       activatedAt: 'timestamp()',
-   *     },
-   *   },
-   *   values: {
-   *     sale: {
-   *       activatedBy: user.id,
-   *     },
-   *   },
-   * })
-   * // SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId
-   * ```
-   *
-   * @param {SetProperties} properties
-   * @param {SetOptions} options
-   * @returns {Q}
-   */
-  set(properties: SetProperties, options: SetOptions) {
-    return this.continueChainClause(new Set(properties, options));
-  }
-
-  /**
-   * Adds labels to a node using a [set]{@link
-   * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
-   * clause.
-   *
-   * ```
-   * query.setLabels({
-   *   sale: 'Active',
-   * })
-   * // SET sale:Active
-   * ```
-   *
-   * `setLabels` accepts a dictionary where the keys are nodes to be updated
-   * and the value is a single label or an array of labels to add to the node.
-   *
-   * @param {_.Dictionary<_.Many<string>>} labels
-   * @returns {Q}
-   */
-  setLabels(labels: Dictionary<Many<string>>) {
-    return this.continueChainClause(new Set({ labels }));
-  }
-
-  /**
-   * Updates a node from parameters using a [set]{@link
-   * https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
-   * clause. This function treats all values as parameters which is different to
-   * `setVariables` which assumes values are cypher variables.
-   *
-   * ```
-   * query.setValues({
-   *   'sale.activatedBy': user.id,
-   * })
-   * // SET sale.activatedBy = $userId
-   * ```
-   *
-   * `setValues` accepts a dictionary where the keys are nodes or property names
-   * to be updated.
-   *
-   * If you set override to true, it will use the `+=` operator to modify nodes.
-   *
-   * @param {_.Dictionary<any>} values
-   * @param {boolean} override
-   * @returns {Q}
-   */
-  setValues(values: Dictionary<any>, override?: boolean) {
-    return this.continueChainClause(new Set({ values }, { override }));
-  }
-
-  /**
-   * Updates a node from a variable that was previously declared in the query
-   * using a [set]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/set}
-   * clause. This function only accepts strings as its values which are not
-   * escaped in any way so beware. If you want to store some user supplied
-   * information in the database, `setValues` is the function you want.
-   *
-   * ```
-   * query.setVariables({
-   *   'sale.activatedAt': 'timestamp()',
-   * })
-   * // SET sale.activatedAt = timestamp()
-   * ```
-   * Note that values are inserted into the query, as is.
-   *
-   * If you set override to true, it will use the `+=` operator to modify nodes.
-   *
-   * @param {_.Dictionary<string | _.Dictionary<string>>} variables
-   * @param {boolean} override
-   * @returns {Q}
-   */
-  setVariables(
-    variables: Dictionary<string | Dictionary<string>>,
-    override?: boolean,
-  ) {
-    return this.continueChainClause(new Set({ variables }, { override }));
   }
 
   /**

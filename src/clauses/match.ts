@@ -1,4 +1,4 @@
-import { PatternClause } from './pattern-clause';
+import { PatternClause, PatternCollection } from './pattern-clause';
 
 export interface MatchOptions {
   optional?: boolean;
@@ -6,7 +6,7 @@ export interface MatchOptions {
 
 export class Match extends PatternClause {
   constructor(
-    patterns,
+    patterns: PatternCollection,
     protected options: MatchOptions = { optional: false },
   ) {
     super(patterns, { useExpandedConditions: true });

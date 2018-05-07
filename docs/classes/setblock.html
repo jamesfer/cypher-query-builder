@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>WhereNot | cypher-query-builder</title>
+	<title>SetBlock | cypher-query-builder</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -916,22 +916,31 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class">
 			<a href="query.html" class="tsd-kind-icon">Query</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class="current tsd-kind-class tsd-has-type-parameter">
 			<a href="setblock.html" class="tsd-kind-icon">Set<wbr>Block</a>
+			<ul>
+				<li class=" tsd-kind-constructor tsd-parent-kind-class">
+					<a href="setblock.html#constructor" class="tsd-kind-icon">constructor</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="setblock.html#set" class="tsd-kind-icon">set</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="setblock.html#setlabels" class="tsd-kind-icon">set<wbr>Labels</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="setblock.html#setvalues" class="tsd-kind-icon">set<wbr>Values</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="setblock.html#setvariables" class="tsd-kind-icon">set<wbr>Variables</a>
+				</li>
+			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="whereand.html" class="tsd-kind-icon">Where<wbr>And</a>
 		</li>
-		<li class="current tsd-kind-class">
+		<li class=" tsd-kind-class">
 			<a href="wherenot.html" class="tsd-kind-icon">Where<wbr>Not</a>
-			<ul>
-				<li class=" tsd-kind-constructor tsd-parent-kind-class">
-					<a href="wherenot.html#constructor" class="tsd-kind-icon">constructor</a>
-				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a href="wherenot.html#evaluate" class="tsd-kind-icon">evaluate</a>
-				</li>
-			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="whereop.html" class="tsd-kind-icon">Where<wbr>Op</a>
@@ -1030,14 +1039,30 @@ img { max-width: 100%; }
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
+		<section class="tsd-panel tsd-comment">
+			<div class="tsd-comment tsd-typography">
+				<dl class="tsd-comment-tags">
+					<dt>internal</dt>
+					<dd></dd>
+				</dl>
+			</div>
+		</section>
+		<section class="tsd-panel tsd-type-parameters">
+			<h3>Type parameters</h3>
+			<ul class="tsd-type-parameters">
+				<li>
+					<h4>Q</h4>
+				</li>
+			</ul>
+		</section>
 		<section class="tsd-panel tsd-hierarchy">
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<a href="whereop.html" class="tsd-signature-type">WhereOp</a>
+					<span class="target">SetBlock</span>
 					<ul class="tsd-hierarchy">
 						<li>
-							<span class="target">WhereNot</span>
+							<a href="builder.html" class="tsd-signature-type">Builder</a>
 						</li>
 					</ul>
 				</li>
@@ -1050,13 +1075,16 @@ img { max-width: 100%; }
 					<section class="tsd-index-section ">
 						<h3>Constructors</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="wherenot.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="setblock.html#constructor" class="tsd-kind-icon">constructor</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="wherenot.html#evaluate" class="tsd-kind-icon">evaluate</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="setblock.html#set" class="tsd-kind-icon">set</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="setblock.html#setlabels" class="tsd-kind-icon">set<wbr>Labels</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="setblock.html#setvalues" class="tsd-kind-icon">set<wbr>Values</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="setblock.html#setvariables" class="tsd-kind-icon">set<wbr>Variables</a></li>
 						</ul>
 					</section>
 				</div>
@@ -1068,55 +1096,216 @@ img { max-width: 100%; }
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Where<wbr>Not<span class="tsd-signature-symbol">(</span>conditions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AnyConditions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="wherenot.html" class="tsd-signature-type">WhereNot</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Set<wbr>Block<span class="tsd-signature-symbol">(</span>chain<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, wrapper<span class="tsd-signature-symbol">?: </span><a href="../interfaces/wrapperclause.html" class="tsd-signature-type">WrapperClause</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="setblock.html" class="tsd-signature-type">SetBlock</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/clauses/where-operators.ts#L131">clauses/where-operators.ts:131</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L25">builder.ts:25</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>conditions: <span class="tsd-signature-type">AnyConditions</span></h5>
+								<h5>chain: <span class="tsd-signature-type">function</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-siganture">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>clause<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Clause</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>clause: <span class="tsd-signature-type">Clause</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> wrapper: <a href="../interfaces/wrapperclause.html" class="tsd-signature-type">WrapperClause</a></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="wherenot.html" class="tsd-signature-type">WhereNot</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="setblock.html" class="tsd-signature-type">SetBlock</a></h4>
 					</li>
 				</ul>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-				<a name="evaluate" class="tsd-anchor"></a>
-				<h3>evaluate</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<li class="tsd-signature tsd-kind-icon">evaluate<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, precedence<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Precedence</span>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="set" class="tsd-anchor"></a>
+				<h3>set</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>properties<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SetProperties</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
-							<p>Overrides <a href="whereop.html">WhereOp</a>.<a href="whereop.html#evaluate">evaluate</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/clauses/where-operators.ts#L136">clauses/where-operators.ts:136</a></li>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L62">builder.ts:62</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+								clause to the query.</p>
+							</div>
+							<p><code>set</code> lets you updates a nodes labels and properties in one clause. Most of
+								the time it will be easier to use one of the variants such as <code>setLabels</code>,
+							<code>setValues</code> or <code>setVariables</code>.</p>
+							<p>This function accepts three different kind of properties, each of which is
+							described in more detail in the variants.</p>
+							<pre><code><span class="hljs-selector-tag">query</span><span class="hljs-selector-class">.set</span>({
+  <span class="hljs-attribute">labels</span>: {
+    <span class="hljs-attribute">sale</span>: <span class="hljs-string">'Active'</span>,
+  },
+  <span class="hljs-attribute">variables</span>: {
+    <span class="hljs-attribute">sale</span>: {
+      <span class="hljs-attribute">activatedAt</span>: <span class="hljs-string">'timestamp()'</span>,
+    },
+  },
+  <span class="hljs-attribute">values</span>: {
+    <span class="hljs-attribute">sale</span>: {
+      <span class="hljs-attribute">activatedBy</span>: user.id,
+    },
+  },
+})
+<span class="hljs-comment">// SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId</span>
+</code></pre>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>params: <span class="tsd-signature-type">any</span></h5>
+								<h5>properties: <span class="tsd-signature-type">SetProperties</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> precedence: <span class="tsd-signature-type">Precedence</span><span class="tsd-signature-symbol"> =&nbsp;Precedence.None</span></h5>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">SetOptions</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="setlabels" class="tsd-anchor"></a>
+				<h3>set<wbr>Labels</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">set<wbr>Labels<span class="tsd-signature-symbol">(</span>labels<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L84">builder.ts:84</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds labels to a node using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+								clause.</p>
+							</div>
+							<pre><code><span class="hljs-selector-tag">query</span><span class="hljs-selector-class">.setLabels</span>({
+  <span class="hljs-attribute">sale</span>: <span class="hljs-string">'Active'</span>,
+})
+<span class="hljs-comment">// SET sale:Active</span>
+</code></pre><p><code>setLabels</code> accepts a dictionary where the keys are nodes to be updated
+							and the value is a single label or an array of labels to add to the node.</p>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>labels: <span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="setvalues" class="tsd-anchor"></a>
+				<h3>set<wbr>Values</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">set<wbr>Values<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, override<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L110">builder.ts:110</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates a node from parameters using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+									clause. This function treats all values as parameters which is different to
+								<code>setVariables</code> which assumes values are cypher variables.</p>
+							</div>
+							<pre><code>query.setValues({
+  <span class="hljs-string">'sale.activatedBy'</span>: user<span class="hljs-selector-class">.id</span>,
+})
+<span class="hljs-comment">// SET sale.activatedBy = $userId</span>
+</code></pre><p><code>setValues</code> accepts a dictionary where the keys are nodes or property names
+							to be updated.</p>
+							<p>If you set override to true, it will use the <code>+=</code> operator to modify nodes.</p>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>values: <span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> override: <span class="tsd-signature-type">boolean</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="setvariables" class="tsd-anchor"></a>
+				<h3>set<wbr>Variables</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">set<wbr>Variables<span class="tsd-signature-symbol">(</span>variables<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, override<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/jamesfer/cypher-query-builder/blob/22721ee/src/builder.ts#L135">builder.ts:135</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Updates a node from a variable that was previously declared in the query
+									using a <a href="https://neo4j.com/docs/developer-manual/current/cypher/clauses/set" class="external">set</a>
+									clause. This function only accepts strings as its values which are not
+									escaped in any way so beware. If you want to store some user supplied
+								information in the database, <code>setValues</code> is the function you want.</p>
+							</div>
+							<pre><code>query.setVariables({
+  'sale.activatedAt': 'timestamp()',
+})
+<span class="hljs-comment">// SET sale.activatedAt = timestamp()</span>
+</code></pre><p>Note that values are inserted into the query, as is.</p>
+							<p>If you set override to true, it will use the <code>+=</code> operator to modify nodes.</p>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>variables: <span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> override: <span class="tsd-signature-type">boolean</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
 					</li>
 				</ul>
 			</section>
