@@ -54,6 +54,7 @@ export class Connection extends Builder<Query> {
   protected driver: Driver;
   protected open: boolean;
   protected transformer = new Transformer();
+  protected _session: Session;
 
   /**
    * Creates a new connection to the database.
@@ -96,8 +97,12 @@ export class Connection extends Builder<Query> {
    */
   session(): Session | null {
     if (this.open) {
-      return this.driver.session();
+      if (!this._session) {
+        this._session = this.driver.session();
+      }
+      return this._session;
     }
+
     return null;
   }
 
