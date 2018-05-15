@@ -1,5 +1,6 @@
 import { join, Many, last, split, capitalize } from 'lodash';
 import { ParameterBag } from '../parameter-bag';
+import { combineAnd } from './where-utils';
 
 export const comparisions = {
   equals,
@@ -18,7 +19,7 @@ export const comparisions = {
   regexp,
 };
 
-export type Comparator = (params: ParameterBag, name: string) => Many<string>;
+export type Comparator = (params: ParameterBag, name: string) => string;
 
 function compare(operator: string, value: any, variable?: boolean, paramName?: string): Comparator {
   return (params: ParameterBag, name: string): string => {
@@ -267,16 +268,16 @@ export function regexp(exp: string, insensitive?: boolean, variable?: boolean) {
  *
  * ```
  * query.where({ age: between(18, 65) })
- * // WHERE 18 <= age <= 65
+ * // WHERE age >= 18 AND age <= 65
  *
  * query.where({ age: between(18, 65, false) })
- * // WHERE 18 < age < 65
+ * // WHERE age > 18 < AND age < 65
  *
  * query.where({ age: between(18, 65, true, false) })
- * // WHERE 18 <= age < 65
+ * // WHERE age >= 18 AND age < 65
  *
  * query.where({ age: between('lowerBound', 'upperBound', true, false, true) })
- * // WHERE lowerBound <= age < upperBound
+ * // WHERE age >= lowerBound AND age < upperBound
  * ```
  *
  * @param lower
@@ -297,12 +298,12 @@ export function between(
   const upperOp = upperInclusive ? '<=' : '<';
   return (params: ParameterBag, name) => {
     const paramName = capitalize(name);
-    const upperComp = compare(lowerOp, lower, variables, 'lower' + paramName);
-    const lowerComp = compare(upperOp, upper, variables, 'upper' + paramName);
+    const lowerComparator = compare(lowerOp, lower, variables, 'lower' + paramName);
+    const upperComparator = compare(upperOp, upper, variables, 'upper' + paramName);
 
-    return []
-      .concat(lowerComp(params, name))
-      .concat(upperComp(params, name));
+    const lowerConstraint = lowerComparator(params, name);
+    const upperConstraint = upperComparator(params, name);
+    return `${lowerConstraint} AND ${upperConstraint}`;
   };
 }
 
