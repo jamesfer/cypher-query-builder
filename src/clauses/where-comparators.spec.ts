@@ -100,46 +100,26 @@ describe('Where Comparators', () => {
   describe('between', () => {
     it('should perform multiple comparisons', () => {
       const clauses = between(1, 2)(bag, 'name');
-      expect(clauses).to.be.an('array')
-        .with.members([
-          'name >= $lowerName',
-          'name <= $upperName',
-        ]);
+      expect(clauses).to.equal('name >= $lowerName AND name <= $upperName');
     });
 
     it('should support exclusive comparisons', () => {
       const clauses = between(1, 2, false)(bag, 'name');
-      expect(clauses).to.be.an('array')
-        .with.members([
-          'name > $lowerName',
-          'name < $upperName',
-        ]);
+      expect(clauses).to.equal('name > $lowerName AND name < $upperName');
     });
 
     it('should support mixed comparisons', () => {
       let clauses = between(1, 2, true, false)(bag, 'name');
-      expect(clauses).to.be.an('array')
-        .with.members([
-          'name >= $lowerName',
-          'name < $upperName',
-        ]);
+      expect(clauses).to.equal('name >= $lowerName AND name < $upperName');
 
       bag = new ParameterBag();
       clauses = between(1, 2, false, true)(bag, 'name');
-      expect(clauses).to.be.an('array')
-        .with.members([
-          'name > $lowerName',
-          'name <= $upperName',
-        ]);
+      expect(clauses).to.equal('name > $lowerName AND name <= $upperName');
     });
 
     it('should support cypher variables', () => {
       const clauses = between('v1', 'v2', false, false, true)(bag, 'name');
-      expect(clauses).to.be.an('array')
-        .with.members([
-          'name > v1',
-          'name < v2',
-        ]);
+      expect(clauses).to.equal('name > v1 AND name < v2');
     });
   });
 });

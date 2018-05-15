@@ -22,7 +22,7 @@
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
     "lint": "tslint --project ./tsconfig.lint.json",
-    "test": "docker-compose -f docker/docker-compose.test.yml up --exit-code-from tests",
+    "test": "docker-compose -f docker/docker-compose.test.yml -p cypher-query-builder up --exit-code-from tests",
     "test:unit": "nyc --reporter=html --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts",
     "validate": "yarn --silent lint && yarn --silent build:prod && yarn --silent test",
     "release": "./scripts/release.sh",
