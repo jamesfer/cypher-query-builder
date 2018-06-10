@@ -43,4 +43,13 @@ describe('OrderBy', () => {
     });
     expect(query.build()).to.equal('ORDER BY node.prop1 DESC, node.prop2, node.prop3 DESC');
   });
+
+  it('should support multiple order columns with directions using the array syntax', () => {
+    const query = new OrderBy([
+      ['node.prop1', 'DESC'],
+      'node.prop2',
+      ['node.prop3', true],
+    ]);
+    expect(query.build()).to.equal('ORDER BY node.prop1 DESC, node.prop2, node.prop3 DESC');
+  });
 });
