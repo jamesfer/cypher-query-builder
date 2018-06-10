@@ -1,7 +1,7 @@
 import { Clause } from '../clause';
 import { join, map, isString, isArray, Dictionary, trim } from 'lodash';
 
-export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING';
+export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING' | null | undefined;
 export type InternalDirection = 'DESC' | '';
 export type OrderConstraint = [string, Direction] | [string];
 export type InternalOrderConstraint = { field: string, direction: InternalDirection };
