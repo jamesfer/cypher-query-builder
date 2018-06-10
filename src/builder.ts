@@ -412,13 +412,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // ORDER BY name DESC, occupation
    * ```
    *
-   * Valid values for directions are `DESC`, `DESCENDING`, `ASC`, `ASCENDING`.
-   * `true` and `false` are also accepted (`true` being the same as `DESC` and
-   * `false` the same as `ASC`), however they should be avoided as they are
-   * quite ambiguous. Directions always default to `ASC` as it does in cypher.
-   *
-   * *Depreciation note:*
-   * It was previously acceptable to pass an object where each key is the
+   * It is also acceptable to pass an object where each key is the
    * property and the value is a direction. Eg:
    * ```javascript
    * query.orderBy({
@@ -426,8 +420,14 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *   occupation: 'ASC',
    * })
    * ```
-   * This has been deprecated as the iteration order of objects is not
-   * always consistent.
+   * However, the underlying iteration order is not always guaranteed and
+   * it may cause subtle bugs in your code. It is still accepted but it
+   * is recommended that you use the array syntax above.
+   *
+   * Valid values for directions are `DESC`, `DESCENDING`, `ASC`, `ASCENDING`.
+   * `true` and `false` are also accepted (`true` being the same as `DESC` and
+   * `false` the same as `ASC`), however they should be avoided as they are
+   * quite ambiguous. Directions always default to `ASC` as it does in cypher.
    *
    * @param {_.Many<string> | OrderConstraints} fields
    * @param {Direction} dir

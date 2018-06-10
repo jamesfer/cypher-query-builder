@@ -25,8 +25,6 @@ export class OrderBy extends Clause {
         return { field: field[0], direction: fieldDirection };
       });
     } else {
-      // tslint:disable-next-line:max-line-length
-      console.warn('Warning: Passing constraints to OrderBy using an object is deprecated as the iteration order is not guaranteed. Use an array instead.');
       this.constraints = map(fields, (fieldDirection, field) => {
         return { field, direction: OrderBy.normalizeDirection(fieldDirection) };
       });
