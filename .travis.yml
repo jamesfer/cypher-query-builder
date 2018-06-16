@@ -8,6 +8,14 @@ node_js:
 services: docker
 cache: yarn
 
+env:
+  global:
+    # NPM_TOKEN
+    - secure: "P67bhIs5a4zGQzhm+IKdCvby+nNtuIUEkHW6eJKLr39hv3pdCRJbQzpc0Bac4VVA3vnOkoMmVVUbQr1F603jVpW22EDY/HjeXIZs97jWvmkUF1LyQMfz6eDN7RgCx7XqvZNZ6ZlTSxVHun4qvrL+5Yz4W4FgCqF2lc2Em1vL1gp3CZvUXavDkwDXh8rthtJTfCuSzBN4BQc/ohX8xVXsRZ0xcYNVdH3rWxPBksIRncw8QEcu7jXim0gUaagXXoh8HHOXrmpTAIRpq6Op1RJ07p+kyMWz6UcRYq/Yim2GxypkF37P/jQ4d5HLo68XowS7QrrGe9wmMYnuoW4WX5TqpYjFtlnb4EOBuGXXGSNaT+EIyCiRPN/IXlOnQxDI1m/6xHi4pLMka6FkeW+AH4Gz1pLqa+vcCaO4W2P+qXqrChUcl0qPXuOEUaFguj40Zf1WwyNMZXiynIWXmVmYhWUg6+WBt9c3pnfWHdRsXBEptWqNrskNNjbCgWU4HCxesUCpSh4jS2JTfZJMMW3xQIEiIio6SUZ3SGa/JHgaDnjgfy55im6f9CnFU4x7Q+D3fwPdxo1S9IijPOpAUT3TcBPRV+BORYmI7fEyiCiSY7gdCIpSqH2e3cggtN0b/osFERg5MevYKZDo8CUBZY23F/cCOshgN30FHzFtqB+/bMIi0+o="
+    # GH_TOKEN
+    - secure: "Nycvk6E3t+tHz6akzqZrGUTcboX7UXcPoAxDK7971c3XbWA9B9mI02t4R9AbuQLKwM4Z6ioCcRkWb6u1KPwUPlGPm3F8Ovoa7lmwUnDpoFsmBUSkwxgQ3Xb/O6EEL4xUFMqwvshm18K9pOC2UWZNr/a4XZVjmzRqPJwieKGbh0J72K0VEf7Dgie2NchDN/MSVf2pGHX8tHcZOLMn+lVcPYHreK4zb9Bipm/XZg7Hcb3bcqSCdiztSC7+V4uc1LisTVbiAigFK7IIMjODp0PAHBkr6/Sv3o+LxgM9pvH5Ety1jlimXq0WW5elX0B7B1IsZT4+wUUGtFH7v8fRi/1j8/1gynfqai/hetW41ta0ZdSroJZbPr7K39+FpodWnq6xai9xfAEhFITDT29hmvFVvlmZeH03OzhfKkhmN04JrobdV8ToIUa8KrE1Vq18IbS23ciLoPan0NbXiIZP3PW9e90e7OF1k6ssqBbgRQFF4d5k7GNaJDsyadGPHw7yIz4krCsknIO8W3HAnuWQkwRR2Pe71LtiBkIb1p42D6g6Ppba8iGK4DPcXSGYRg8RfVC5znAg6Zdhsjbx3t4fVK+UloWOkIalsDEbocfEpPZXP6m1iCxNIikXmUUM4iqFkgh8WHNL1n91LKFV2jCQ8yUjZAjPPc2seZy9Lw0dE3pKUbE="
+
+
 before_script:
   - yarn install-peers
 script:
@@ -16,11 +24,8 @@ after_success:
   - yarn --silent nyc report --reporter=text-lcov | sed "s|/app|$(pwd)|" | ./node_modules/.bin/coveralls
 
 deploy:
-  provider: npm
-  email: jamesferguson497@gmail.com
+  provider: script
   skip_cleanup: true
+  script: yarn semantic-release
   on:
-    tags: true
     branch: master
-  api_key:
-    secure: Tm6TfM1dE1kUsWk2oo9nahdWHOv214Vvujs6kSW5cbv4YuEiSP8UgkCtsmR1DvTIjtnrx60YRnM4sU3M8owLjv85tJAAas2mRv0XCiq1Ha79s7Z9zsex8aQhJkptc+y9oAnMiVvVEWS/2927XhqIofDM/FV7F0CXT92FDOfA4YQEbv5BVxT6scJ4DcTMMh6MOVY0lLiH2SoesTRGK2bVXSK8qSliHiMrV1l4p3PqZ5r2WKHI2+fwGx76U1z6QALtPGfJFzy9/BXH6LM+DtS5ccMVFgTtdHFmQ3y45HyoXKPAZi4gEwi+8W/XcJPfjOEj7/cFxpTnK3oGUVRQJ3dxkxznLZmYc9+iCPwHtftL+UlgGD/Pn1/JjizZ6GPxrHNANG9tEhyCJnWaPKBE5C/KPcQwAHeL2ShZARBcNJCy3yEGuvpRFhHXf6zXe+CcBuUw0wgK8K8D+BlduMtStaOjbdI4/R8/NYICXg16xvMYBcFoHDQK1vE9d1a9w9gieNiIKGvYSzNKvoXEDHCDnIv5LcI6fYnFkX/5y+jsJb7bOZSKfrza8auhPgeOUZkxtzv3CHEcy0uwP7FqQPf3t2dDn0QZvPumkK/bT4vhdhe5DX53ulyKzmMkk9lEPy3vDQyE35BKupkqHsG3zB0k/qZtYipDwxlAANlY9dR2Yx/S2k0=
