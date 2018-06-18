@@ -55,6 +55,19 @@ export class SetBlock<Q> {
    * // SET sale:Active, sale.activatedAt = timestamp(), sale.activatedBy = $userId
    * ```
    *
+   * `set` also accepts an options object which currently only contains a
+   * single setting: `override`. Override controls whether the `=` or `+=`
+   * operator is used in the set clause. `true` causes the existing object to be
+   * cleared and replaced by the new object. `false` on the other hand will
+   * merge the existing and new objects together, with new properties replacing
+   * the ones on the existing object.
+   * The default value of override is a little inconsistent and it will be
+   * improved in the next major version. If you don't pass any settings object,
+   * override will default to `true`. If you pass an options object without an
+   * `override` key, override will be `false`. In future versions, override will
+   * always default to `false` to be more consistent with `setVariables` and
+   * `setValues`.
+   *
    * @param {SetProperties} properties
    * @param {SetOptions} options
    * @returns {Q}
@@ -95,13 +108,15 @@ export class SetBlock<Q> {
    * query.setValues({
    *   'sale.activatedBy': user.id,
    * })
-   * // SET sale.activatedBy = $userId
+   * // SET sale.activatedBy += $userId
    * ```
    *
    * `setValues` accepts a dictionary where the keys are nodes or property names
    * to be updated.
    *
-   * If you set override to true, it will use the `+=` operator to modify nodes.
+   * `setValues` and `setVariables` by default set override to false meaning
+   * that the `+=` operator will be used to merge values. You can set override
+   * to `true` to use the `=` operator instead.
    *
    * @param {_.Dictionary<any>} values
    * @param {boolean} override
@@ -122,11 +137,13 @@ export class SetBlock<Q> {
    * query.setVariables({
    *   'sale.activatedAt': 'timestamp()',
    * })
-   * // SET sale.activatedAt = timestamp()
+   * // SET sale.activatedAt += timestamp()
    * ```
-   * Note that values are inserted into the query, as is.
+   * Note how values are inserted into the query, as is.
    *
-   * If you set override to true, it will use the `+=` operator to modify nodes.
+   * `setValues` and `setVariables` by default set override to false meaning
+   * that the `+=` operator will be used to merge values. You can set override
+   * to `true` to use the `=` operator instead.
    *
    * @param {_.Dictionary<string | _.Dictionary<string>>} variables
    * @param {boolean} override
