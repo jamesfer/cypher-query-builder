@@ -1,6 +1,6 @@
 {
   "name": "cypher-query-builder",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "dist/index.js",
   "author": "James Ferguson",
@@ -51,7 +51,10 @@
       "@semantic-release/npm",
       {
         "path": "@semantic-release/git",
-        "assets": ["package.json", "CHANGELOG.md"],
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
         "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}\n[skip ci]\n"
       }
     ]
