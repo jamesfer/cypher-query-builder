@@ -25,6 +25,13 @@ describe('OrderBy', () => {
     expect(query.build()).to.equal('ORDER BY node.prop DESC');
   });
 
+  it('should support null and undefined as directions', () => {
+    let query = new OrderBy('node.prop', null);
+    expect(query.build()).to.equal('ORDER BY node.prop');
+    query = new OrderBy('node.prop', undefined);
+    expect(query.build()).to.equal('ORDER BY node.prop');
+  });
+
   it('should support multiple order columns', () => {
     const query = new OrderBy(['node.prop1', 'node.prop2']);
     expect(query.build()).to.equal('ORDER BY node.prop1, node.prop2');
@@ -41,6 +48,15 @@ describe('OrderBy', () => {
       'node.prop2': 'ASC',
       'node.prop3': true,
     });
+    expect(query.build()).to.equal('ORDER BY node.prop1 DESC, node.prop2, node.prop3 DESC');
+  });
+
+  it('should support multiple order columns with directions using the array syntax', () => {
+    const query = new OrderBy([
+      ['node.prop1', 'DESC'],
+      'node.prop2',
+      ['node.prop3', true],
+    ]);
     expect(query.build()).to.equal('ORDER BY node.prop1 DESC, node.prop2, node.prop3 DESC');
   });
 });

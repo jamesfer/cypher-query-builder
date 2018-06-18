@@ -1,33 +1,44 @@
 import { Clause } from '../clause';
-import { join, map, Many, isString, isArray, Dictionary, reduce, mapValues, assign } from 'lodash';
+import { join, map, isString, isArray, Dictionary, trim } from 'lodash';
 
-export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING';
+export type Direction = boolean | 'DESC' | 'DESCENDING' | 'ASC' | 'ASCENDING' | null | undefined;
+export type InternalDirection = 'DESC' | '';
+export type OrderConstraint = [string, Direction] | [string];
+export type InternalOrderConstraint = { field: string, direction: InternalDirection };
 export type OrderConstraints = Dictionary<Direction>;
 
 export class OrderBy extends Clause {
-  constraints: Dictionary<'DESC' | ''>;
+  constraints: InternalOrderConstraint[];
 
-  constructor(fields: Many<string> | OrderConstraints, dir?: Direction) {
+  constructor(fields: string | (string | OrderConstraint)[] | OrderConstraints, dir?: Direction) {
     super();
-    const reverse = OrderBy.normalizeDirection(dir);
+    const direction = OrderBy.normalizeDirection(dir);
 
     if (isString(fields)) {
-      this.constraints = { [fields]: reverse };
+      this.constraints = [{ direction, field: fields }];
     } else if (isArray(fields)) {
-      this.constraints = reduce(fields, (obj, field) => assign(obj, { [field]: reverse }), {});
+      this.constraints = map(fields, (field): InternalOrderConstraint => {
+        if (!isArray(field)) {
+          return { field, direction };
+        }
+        const fieldDirection = field[1] ? OrderBy.normalizeDirection(field[1]) : direction;
+        return { field: field[0], direction: fieldDirection };
+      });
     } else {
-      this.constraints = mapValues(fields, OrderBy.normalizeDirection);
+      this.constraints = map(fields, (fieldDirection, field) => {
+        return { field, direction: OrderBy.normalizeDirection(fieldDirection) };
+      });
     }
   }
 
   build() {
-    const contraints = map(this.constraints, (dir, prop) => {
-      return prop + (dir.length > 0 ? ` ${dir}` : '');
+    const constraints = map(this.constraints, ({ field, direction }) => {
+      return trim(`${field} ${direction}`);
     });
-    return 'ORDER BY ' + join(contraints, ', ');
+    return 'ORDER BY ' + join(constraints, ', ');
   }
 
-  private static normalizeDirection(dir?: Direction): 'DESC' | '' {
+  private static normalizeDirection(dir?: Direction | string): InternalDirection {
     const isDescending = dir === 'DESC' || dir === 'DESCENDING' || dir === true;
     return isDescending ? 'DESC' : '';
   }

@@ -5,7 +5,7 @@ import {
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
-import { Direction, OrderConstraints } from './clauses/order-by';
+import { Direction, OrderConstraint, OrderConstraints } from './clauses/order-by';
 import { PatternCollection } from './clauses/pattern-clause';
 import { SetOptions, SetProperties } from './clauses/set';
 import { Term } from './clauses/term-list-clause';
@@ -400,43 +400,57 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * https://neo4j.com/docs/developer-manual/current/cypher/clauses/order-by}
    * to the query.
    *
-   * You can supply a single string or an array of strings to order by and the
-   * direction parameter can control which way all fields are sorted by.
+   * Pass a single string or an array of strings to order by.
    * ```javascript
    * query.orderBy([
    *   'name',
    *   'occupation',
+   * ])
+   * // ORDER BY name, occupation
+   * ```
+   *
+   * You can control the sort direction by adding a direction to each property.
+   * ```javascript
+   * query.orderBy([
+   *   ['name', 'DESC'],
+   *   'occupation', // Same as ['occupation', 'ASC']
+   * ])
+   * // ORDER BY name DESC, occupation
+   * ```
+   *
+   * The second parameter is the default search direction for all properties that
+   * don't have a direction specified. So the above query could instead be
+   * written as:
+   * ```javascript
+   * query.orderBy([
+   *   'name',
+   *   ['occupation', 'ASC']
    * ], 'DESC')
+   * // ORDER BY name DESC, occupation
    * ```
    *
-   * Results in a query of
-   * ```
-   * ORDER BY name DESC, occupation DESC
-   * ```
-   *
-   * If you would like to control the direction on each property individually,
-   * you can provide an object where each key is the property and the value is a
-   * direction. Eg:
+   * It is also acceptable to pass an object where each key is the
+   * property and the value is a direction. Eg:
    * ```javascript
    * query.orderBy({
    *   name: 'DESC',
    *   occupation: 'ASC',
    * })
    * ```
+   * However, the underlying iteration order is not always guaranteed and
+   * it may cause subtle bugs in your code. It is still accepted but it
+   * is recommended that you use the array syntax above.
    *
-   * Results in a query of
-   * ```
-   * ORDER BY name DESC, occupation
-   * ```
-   *
-   * Direction defaults to `ASC` as it does in cypher.
-   *
+   * Valid values for directions are `DESC`, `DESCENDING`, `ASC`, `ASCENDING`.
+   * `true` and `false` are also accepted (`true` being the same as `DESC` and
+   * `false` the same as `ASC`), however they should be avoided as they are
+   * quite ambiguous. Directions always default to `ASC` as it does in cypher.
    *
    * @param {_.Many<string> | OrderConstraints} fields
    * @param {Direction} dir
    * @returns {Q}
    */
-  orderBy(fields: Many<string> | OrderConstraints, dir?: Direction) {
+  orderBy(fields: string | (string | OrderConstraint)[] | OrderConstraints, dir?: Direction) {
     return this.continueChainClause(new OrderBy(fields, dir));
   }
 
