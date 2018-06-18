@@ -19,6 +19,7 @@
     "graph"
   ],
   "scripts": {
+    "commit": "git-cz",
     "build": "webpack --progress",
     "build:prod": "webpack --progress --env.production",
     "lint": "tslint --project ./tsconfig.lint.json",
@@ -29,6 +30,31 @@
     "merge": "./scripts/merge.sh",
     "docs": "typedoc src/builder.ts src/query.ts src/connection.ts src/clauses/index.ts src/clauses/where-comparators.ts src/clauses/where-operators.ts --mode file --theme minimal --out ./docs --excludeExternals --excludeProtected --excludePrivate --ignoreCompilerErrors",
     "install-peers": "yarn add --peer rxjs@^5.5.6"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "release": {
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ],
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog",
+        "changelogFile": "CHANGELOG.md"
+      },
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": ["package.json", "CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}\n[skip ci]\n"
+      }
+    ]
   },
   "nyc": {
     "all": true,
@@ -57,6 +83,8 @@
     "node-cleanup": "^2.1.2"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^2.0.2",
+    "@semantic-release/git": "^5.0.0",
     "@types/chai": "^4.0.4",
     "@types/chai-as-promised": "^7.1.0",
     "@types/lodash": "^4.14.77",
@@ -65,10 +93,13 @@
     "@types/sinon": "^4.1.2",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
+    "commitizen": "^2.10.1",
     "coveralls": "^3.0.0",
+    "cz-conventional-changelog": "^2.1.0",
     "mocha": "^4.0.1",
     "nyc": "^11.4.1",
     "rimraf": "^2.6.2",
+    "semantic-release": "^15.5.1",
     "sinon": "^4.1.3",
     "source-map-support": "^0.5.0",
     "ts-loader": "^3.1.1",
