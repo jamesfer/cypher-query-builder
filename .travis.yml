@@ -23,7 +23,7 @@ script:
 after_success:
   - yarn --silent nyc report --reporter=text-lcov | sed "s|/app|$(pwd)|" | ./node_modules/.bin/coveralls
   # Rebuild docs, only on master branch and not on pull requests
-  - [[ $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH = "master" ]] && yarn docs
+  - '[[ $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH = "master" ]] && yarn docs'
 
 deploy:
   provider: script
