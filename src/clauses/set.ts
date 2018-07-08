@@ -22,6 +22,25 @@ export class Set extends Clause {
   protected variables: Dictionary<string | Dictionary<string>>;
   protected override: boolean;
 
+  protected makeLabelStatement = (labels: Many<string>, key: string) => {
+    return key + stringifyLabels(labels);
+  }
+
+  protected makeValueStatement = (value: any, key: string): string => {
+    const valueIsObject = value instanceof Parameter ? isObject(value.value) : isObject(value);
+    const op = this.override || !valueIsObject ? ' = ' : ' += ';
+    return key + op + value;
+  }
+
+  protected makeVariableStatement = (value: string | Dictionary<string>, key: string): string => {
+    const op = this.override ? ' = ' : ' += ';
+    if (isObject(value)) {
+      const operationStrings = map(value, (value, prop) => `${key}.${prop}${op}${value}`);
+      return join(operationStrings, ', ');
+    }
+    return key + op + value;
+  }
+
   constructor(
     { labels, values, variables }: SetProperties,
     inOptions?: SetOptions,
@@ -44,28 +63,9 @@ export class Set extends Clause {
   }
 
   build() {
-    const labels = map(this.labels, (labels, key) => {
-      return key + stringifyLabels(labels);
-    });
-    const values = this.makeSetStatements(this.values);
-    const variables = this.makeSetStatements(this.variables, true);
-
+    const labels = map(this.labels, this.makeLabelStatement);
+    const values = map(this.values, this.makeValueStatement);
+    const variables = map(this.variables, this.makeVariableStatement);
     return 'SET ' + join(concat(labels, values, variables), ', ');
-  }
-
-  protected makeSetStatements(
-    obj: Dictionary<string | Parameter | Dictionary<string>>,
-    recursive: boolean = false,
-  ) {
-    return map(obj, (value, key) => this.setStatement(value, key, recursive));
-  }
-
-  protected setStatement(value, key, recursive: boolean = false) {
-    const op = this.override ? ' = ' : ' += ';
-    if (isObject(value) && recursive) {
-      const operationStrings = map(value, (value, prop) => key + '.' + prop + op + value);
-      return join(operationStrings, ', ');
-    }
-    return key + op + value;
   }
 }
