@@ -720,6 +720,21 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // WHERE (name = 'Alan' OR name = 'Steve' OR name = 'Barry') AND age = 54
    * ```
    *
+   * For convenience you can also pass a Javascript RegExp object as a value,
+   * which will then be converted into a string before it is passed to cypher.
+   * *However*, beware that, the cypher regexp syntax is inherited from
+   * [java]{@link
+    * https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html},
+   * and may have slight differences to the Javascript syntax. If you would
+   * prefer, you can use the `regexp` comparator and use strings instead of
+   * RegExp objects. For example, Javascript RegExp flags will not be
+   * preserved when sent to cypher.
+   * ```javascript
+   * query.where({
+   *   name: /[A-Z].*son/,
+   * })
+   * // WHERE age =~ '[A-Z].*son'
+   *
    * For more complex comparisons, you can use the comparator functions such as:
    * ```javascript
    * query.where({
