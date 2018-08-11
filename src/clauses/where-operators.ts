@@ -7,15 +7,8 @@ import { ParameterBag } from '../parameter-bag';
 
 export const operators = { and, or, xor, not };
 
-/* istanbul ignore next */
-export class WhereOp {
-  evaluate(
-    params: ParameterBag,
-    precedence: Precedence = Precedence.None,
-    name: string = '',
-  ): string {
-    throw Error('Cannot evaluate base where operator class.');
-  }
+export abstract class WhereOp {
+  abstract evaluate(params: ParameterBag, precedence?: Precedence, name?: string): string;
 }
 
 /**
