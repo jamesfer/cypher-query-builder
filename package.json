@@ -28,8 +28,7 @@
     "validate": "yarn --silent lint && yarn --silent build:prod && yarn --silent test",
     "release": "./scripts/release.sh",
     "merge": "./scripts/merge.sh",
-    "docs": "typedoc src/builder.ts src/query.ts src/connection.ts src/clauses/index.ts src/clauses/where-comparators.ts src/clauses/where-operators.ts --mode file --theme minimal --out ./docs --excludeExternals --excludeProtected --excludePrivate --ignoreCompilerErrors",
-    "install-peers": "yarn add --peer rxjs@^5.5.6"
+    "docs": "typedoc src/builder.ts src/query.ts src/connection.ts src/clauses/index.ts src/clauses/where-comparators.ts src/clauses/where-operators.ts --mode file --theme minimal --out ./docs --excludeExternals --excludeProtected --excludePrivate --ignoreCompilerErrors"
   },
   "config": {
     "commitizen": {
@@ -102,6 +101,7 @@
     "mocha": "^4.0.1",
     "nyc": "^11.4.1",
     "rimraf": "^2.6.2",
+    "rxjs": "^5.5.6",
     "semantic-release": "^15.5.1",
     "sinon": "^4.1.3",
     "source-map-support": "^0.5.0",
