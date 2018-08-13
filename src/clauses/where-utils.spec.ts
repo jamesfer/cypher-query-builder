@@ -1,4 +1,4 @@
-import { AnyConditions, stringCons } from './where-utils';
+import { AnyConditions, stringifyConditions } from './where-utils';
 import { expect } from 'chai';
 import { ParameterBag } from '../parameter-bag';
 import { not, xor } from './where-operators';
@@ -6,7 +6,7 @@ import { equals, greaterThan } from './where-comparators';
 
 describe('stringifyConditions', () => {
   function stringify(conditions: AnyConditions) {
-    return stringCons(new ParameterBag(), conditions);
+    return stringifyConditions(new ParameterBag(), conditions);
   }
 
   it('should convert a simple object', () => {

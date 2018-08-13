@@ -1,5 +1,5 @@
 import { Clause } from '../clause';
-import { AnyConditions, stringCons } from './where-utils';
+import { AnyConditions, stringifyConditions } from './where-utils';
 
 /**
  * where({
@@ -18,11 +18,11 @@ import { AnyConditions, stringCons } from './where-utils';
  * ]);
  */
 export class Where extends Clause {
-  constructor(public conditions: AnyConditions) {
+  constructor(protected conditions: AnyConditions) {
     super();
   }
 
   build() {
-    return 'WHERE ' + stringCons(this.parameterBag, this.conditions);
+    return 'WHERE ' + stringifyConditions(this.parameterBag, this.conditions);
   }
 }
