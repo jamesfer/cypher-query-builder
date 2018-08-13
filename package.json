@@ -1,6 +1,6 @@
 {
   "name": "cypher-query-builder",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "main": "dist/index.js",
   "author": "James Ferguson",
