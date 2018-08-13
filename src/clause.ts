@@ -33,10 +33,11 @@ export abstract class Clause extends ParameterContainer {
    * @return {string}
    */
   interpolate() {
-    const params = this.getParams();
     let query = this.build();
+    const params = this.getParams();
     for (const name in params) {
-      query = query.replace('$' + name, stringifyValue(params[name]));
+      const pattern = new RegExp(`\\$${name}(?![a-zA-Z0-9_])`, 'g');
+      query = query.replace(pattern, stringifyValue(params[name]));
     }
     return query;
   }
