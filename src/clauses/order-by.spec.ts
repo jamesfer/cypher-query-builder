@@ -18,6 +18,17 @@ describe('OrderBy', () => {
     expect(query.build()).to.equal('ORDER BY node.prop');
   });
 
+  it('should support a case-insensitive direction arg', () => {
+    let query = new OrderBy('node.prop', 'desc');
+    expect(query.build()).to.equal('ORDER BY node.prop DESC');
+    query = new OrderBy('node.prop', 'descending');
+    expect(query.build()).to.equal('ORDER BY node.prop DESC');
+    query = new OrderBy('node.prop', 'asc');
+    expect(query.build()).to.equal('ORDER BY node.prop');
+    query = new OrderBy('node.prop', 'ascending');
+    expect(query.build()).to.equal('ORDER BY node.prop');
+  });
+
   it('should support a boolean direction arg', () => {
     let query = new OrderBy('node.prop', false);
     expect(query.build()).to.equal('ORDER BY node.prop');
