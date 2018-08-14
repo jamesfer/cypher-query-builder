@@ -17,5 +17,12 @@ describe('Where', () => {
         upperAge: 65,
       });
     });
+
+    it('should not have side effects on the parameters', () => {
+      const query = new Where({ age: between(18, 65) });
+      const params = query.getParams();
+      query.build();
+      expect(query.getParams()).to.deep.equal(params);
+    });
   });
 });
