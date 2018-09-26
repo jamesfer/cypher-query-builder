@@ -4,6 +4,7 @@ import { ClauseCollection } from './clause-collection';
 import { Clause } from './clause';
 import { Observable } from 'rxjs';
 import { Dictionary } from 'lodash';
+import * as Promise from 'any-promise';
 
 export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
@@ -71,9 +72,9 @@ export class Query extends Builder<Query> {
    *
    * @returns {Promise<Dictionary<R>[]>}
    */
-  async run<R = any>(): Promise<Dictionary<R>[]> {
+  run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
-      throw Error('Cannot run query; no connection object available.');
+      return Promise.reject(Error('Cannot run query; no connection object available.'));
     }
 
     return this.connection.run<R>(this);
@@ -148,7 +149,7 @@ export class Query extends Builder<Query> {
    * the return value which is `Dictionary<R>`. Note that this function returns
    * `undefined` if the result set was empty.
    */
-  async first<R = any>(): Promise<Dictionary<R>> {
+  first<R = any>(): Promise<Dictionary<R>> {
     return this.run<R>().then(results => results && results.length > 0 ? results[0] : undefined);
   }
 

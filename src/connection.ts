@@ -8,6 +8,7 @@ import { Observable, Observer } from 'rxjs';
 import { TeardownLogic } from 'rxjs/Subscription';
 import nodeCleanup = require('node-cleanup');
 import { Dictionary, isFunction } from 'lodash';
+import * as Promise from 'any-promise';
 
 let connections: Connection[] = [];
 
@@ -205,7 +206,9 @@ export class Connection extends Builder<Query> {
 
     const queryObj = query.buildQueryObject();
     const session = this.session();
-    return session.run(queryObj.query, queryObj.params)
+
+    // Need to wrap promise in an any-promise
+    return Promise.resolve(session.run(queryObj.query, queryObj.params))
       .then((result) => {
         session.close();
         return this.transformer.transformRecords<R>(result.records);
