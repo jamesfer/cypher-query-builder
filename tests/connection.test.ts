@@ -1,9 +1,9 @@
-import { Connection, Credentials, Node, Query } from '../src';
+import { Connection, Node, Query } from '../src';
 import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
 import { v1 as neo4j } from 'neo4j-driver';
 import { SinonSpy, spy } from 'sinon';
-import { each, Dictionary } from 'lodash';
+import { Dictionary, each } from 'lodash';
 import { Observable } from 'rxjs';
 import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
 import { Driver } from 'neo4j-driver/types/v1';
@@ -54,6 +54,27 @@ describe('Connection', () => {
 
       connection.close();
       driverSpy.restore();
+    });
+
+    it('should accept a custom driver constructor function', () => {
+      const constructorSpy = spy(driverConstructor);
+      const connection = new Connection(neo4jUrl, neo4jCredentials, constructorSpy);
+      expect(constructorSpy.calledOnce).to.equal(true);
+      expect(constructorSpy.firstCall.args[0]).to.equal(neo4jUrl);
+      connection.close();
+    });
+
+    it('should pass driver options to the driver constructor', () => {
+      const constructorSpy = spy(driverConstructor);
+      const driverConfig = { connectionPoolSize: 5 };
+      const connection = new Connection(neo4jUrl, neo4jCredentials, {
+        driverConfig,
+        driverConstructor: constructorSpy,
+      });
+      expect(constructorSpy.calledOnce).to.equal(true);
+      expect(constructorSpy.firstCall.args[0]).to.equal(neo4jUrl);
+      expect(constructorSpy.firstCall.args[2]).to.deep.equal(driverConfig);
+      connection.close();
     });
   });
 

@@ -2,12 +2,12 @@ import { Transformer } from './transformer';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
-import { AuthToken, Driver, Session } from 'neo4j-driver/types/v1';
+import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
 import { Observable, Observer } from 'rxjs';
 import { TeardownLogic } from 'rxjs/Subscription';
 import nodeCleanup = require('node-cleanup');
-import { Dictionary } from 'lodash';
+import { Dictionary, isFunction } from 'lodash';
 
 let connections: Connection[] = [];
 
@@ -19,6 +19,16 @@ nodeCleanup(() => {
 
 export interface Credentials { username: string; password: string; }
 export type DriverConstructor = typeof neo4j.driver;
+
+export interface FullConnectionOptions {
+  driverConstructor: DriverConstructor;
+  driverConfig: Config;
+}
+export type ConnectionOptions = Partial<FullConnectionOptions>;
+
+function isCredentials(credentials: any): credentials is Credentials {
+  return 'username' in credentials && 'password' in credentials;
+}
 
 /**
  * A connection lets you access the Neo4j server and run queries against it.
@@ -52,30 +62,49 @@ export type DriverConstructor = typeof neo4j.driver;
 export class Connection extends Builder<Query> {
   protected auth: AuthToken;
   protected driver: Driver;
+  protected options: FullConnectionOptions;
   protected open: boolean;
   protected transformer = new Transformer();
 
   /**
    * Creates a new connection to the database.
    *
-   * @param {string} url Url of the database such as `bolt://localhost`
-   * @param {Credentials} credentials Username and password of the user to login
-   * to the database in the form `{ username: ..., password: ... }`
-   * @param {DriverConstructor} driver An optional driver constructor to use for
+   * @param url Url of the database such as `'bolt://localhost'`
+   * @param auth Auth can either be an object in the form `{ username: ..., password: ... }`, or a
+   * Neo4j AuthToken object which contains the `scheme`, `principal` and `credentials` properties
+   * for more advanced authentication scenarios. The AuthToken object is what is passed directly to
+   * the neo4j javascript driver so checkout their docs for more information on it.
+   * @param options Additional configuration options. If you provide a function instead of an
+   * object, it will be used as the driver constructor. While passing a driver constructor function
+   * here is not deprecated, it is the legacy way of setting it and you should prefer to pass an
+   * options object with the `driverConstructor` parameter.
+   * @param options.driverConstructor An optional driver constructor to use for
    * this connection. Defaults to the official Neo4j driver. The constructor is
    * given the url you pass to this constructor and an auth token that is
    * generated from calling [`neo4j.auth.basic`]{@link
    * https://neo4j.com/docs/api/javascript-driver/current#usage-examples}.
+   * @param options.driverConfig Neo4j options that are passed directly to the underlying driver.
    */
   constructor(
     protected url: string,
-    credentials: Credentials,
-    driver: DriverConstructor = neo4j.driver,
+    auth: Credentials | AuthToken,
+    options: DriverConstructor | ConnectionOptions = neo4j.driver,
   ) {
     super();
-    this.auth = neo4j.auth.basic(credentials.username, credentials.password);
-    this.driver = driver(this.url, this.auth);
+
+    this.auth = isCredentials(auth)
+      ? neo4j.auth.basic(auth.username, auth.password)
+      : auth;
+
+    this.options = {
+      driverConstructor: isFunction(options) ? options
+        : options.driverConstructor ? options.driverConstructor : neo4j.driver,
+      driverConfig: isFunction(options) || !options.driverConfig ? {} : options.driverConfig,
+    };
+
+    this.driver = this.options.driverConstructor(this.url, this.auth, this.options.driverConfig);
     this.open = true;
+
     connections.push(this);
   }
 
