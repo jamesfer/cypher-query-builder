@@ -13,9 +13,9 @@ export async function waitForNeo() {
 
   let attempts = 0;
   const connection = new Connection(neo4jUrl, neo4jCredentials);
-  while (attempts < 20) {
+  while (attempts < 30) {
     // Wait a short time before trying again
-    if (attempts > 0) await new Promise(res => setTimeout(res, 100));
+    if (attempts > 0) await new Promise(res => setTimeout(res, 1000));
 
     try {
       // Attempt a query and exit the loop if it succeeds
