@@ -83,6 +83,7 @@ describe('Query', () => {
     it('should run the query on its connection', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
+      runStub.returns(Promise.resolve());
       const query = (new Query(connection)).raw('Query');
       return expect(query.run()).to.be.fulfilled.then(() => {
         expect(runStub.calledOnce);
@@ -115,7 +116,7 @@ describe('Query', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
       const firstRecord = { number: 1 };
-      runStub.returns([firstRecord, { number: 2 }, { number: 3 }]);
+      runStub.returns(Promise.resolve([firstRecord, { number: 2 }, { number: 3 }]));
 
       const query = (new Query(connection)).raw('Query');
       return expect(query.first()).to.be.fulfilled.then((result) => {
@@ -127,7 +128,7 @@ describe('Query', () => {
     it('should return undefined if the query returns no results', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
-      runStub.returns([]);
+      runStub.returns(Promise.resolve([]));
 
       const query = (new Query(connection)).raw('Query');
       return expect(query.first()).to.be.fulfilled.then((result) => {
