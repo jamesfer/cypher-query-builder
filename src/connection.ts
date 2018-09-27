@@ -9,6 +9,7 @@ import { TeardownLogic } from 'rxjs/Subscription';
 import nodeCleanup = require('node-cleanup');
 import { Dictionary, isFunction } from 'lodash';
 import * as Promise from 'any-promise';
+// import * as Observable from 'any-observable';
 
 let connections: Connection[] = [];
 
@@ -252,17 +253,39 @@ export class Connection extends Builder<Query> {
    * ```
    *
    * Notice how the steve record is returned for each row, this is how cypher
-   * works. You can extract all of steve's friends from the query by using RxJS
+   * works. You can extract all of steve's friends from the query by using
    * operators:
    * ```
    * const friends$ = results$.map(row => row.friends);
    * ```
+   *
+   * The observable class that is used is imported from
+   * [any-observable](https://github.com/sindresorhus/any-observable) by default
+   * it uses rxjs for the observables, but you can pick a different implementation
+   * by registering it with any-observable before importing this module.
    *
    * If you use typescript you can use the type parameter to hint at the type of
    * the return value which is `Dictionary<R>`.
    *
    * Throws an exception if this connection is not open or there are no clauses
    * in the query.
+   *
+   * The query is run when you call stream so you should subscribe to the results
+   * immediately to prevent missing any data.
+   *
+   * Due to the way the Neo4j javascript driver works, once you call stream there
+   * is no way to stop the query until it is complete. Even if you unsubscribe from
+   * the observable, all the remaining rows will still be parsed by the driver but
+   * then immediately discarded.
+   * ```typescript
+   * const results$ = connection.matchNode('records')
+   *   .return('records')
+   *   .limit(1000) // 1000 records will be loaded and parsed from the database
+   *   .stream()
+   *   .take(10) // even though you only take the first 10
+   *   .subscribe(record => {});
+   * ```
+   * In practice this should never happen unless you're doing some strange things.
    */
   stream<R = any>(query: Query): Observable<Dictionary<R>> {
     if (!this.open) {
@@ -280,19 +303,25 @@ export class Connection extends Builder<Query> {
     const result = session.run(queryObj.query, queryObj.params);
 
     // Subscribe to the result and clean up the session
-    return Observable.create((subscriber: Observer<Dictionary<R>>): TeardownLogic => {
-      // Note: Neo4j observable uses a different syntax to RxJS observables
+    return new Observable((subscriber: Observer<Dictionary<R>>): void => {
+      // Note: Neo4j observables use a different subscribe syntax to RxJS observables
       result.subscribe({
         onNext: (record) => {
-          subscriber.next(this.transformer.transformRecord<R>(record));
+          if (!subscriber.closed) {
+            subscriber.next(this.transformer.transformRecord<R>(record));
+          }
         },
         onError: (error) => {
           session.close();
-          subscriber.error(error);
+          if (!subscriber.closed) {
+            subscriber.error(error);
+          }
         },
         onCompleted: () => {
           session.close();
-          subscriber.complete();
+          if (!subscriber.closed) {
+            subscriber.complete();
+          }
         },
       });
     });

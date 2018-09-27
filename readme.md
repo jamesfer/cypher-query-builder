@@ -7,7 +7,7 @@ A flexible and intuitive query builder for Neo4j and Cypher.
 Write queries in Javascript just as you would write them in Cypher.
 
 - Easy to use fluent interface
-- Support for streaming records using RxJS
+- Support for streaming records using observables
 - Full Typescript declarations included in package
 
 ```javascript
@@ -89,7 +89,7 @@ ES5
 
 ```javascript
 db.matchNode('projects', 'Project')
-  .ret('projects')
+  .return('projects')
   .run()
   .then(function (results) {
     // Do something with results
@@ -100,7 +100,7 @@ ES6
 
 ```javascript
 const results = await db.matchNode('projects', 'Project')
-  .ret('projects')
+  .return('projects')
   .run();
 ```
 
@@ -130,8 +130,7 @@ results = [
 ]
 ```
 
-You can also use the `stream` method to download the results as an RxJS 
-observable.
+You can also use the `stream` method to download the results as an observable.
 
 ```javascript
 const results = db.matchNode('project', 'Project')
@@ -140,6 +139,12 @@ const results = db.matchNode('project', 'Project')
 
 results.subscribe(row => console.log(row.project.properties.name));
 ```
+
+Under the hood, the promises and observables used by this library are constructed
+by [any-promise](https://github.com/kevinbeaty/any-promise) and 
+[any-observable](https://github.com/sindresorhus/any-observable) respectively. They
+default to using the global Promise class and the RxJS observable library, but you 
+can change that by registering another implementation before importing this module.
 
 ### Processing
 
