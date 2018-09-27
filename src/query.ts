@@ -77,7 +77,13 @@ export class Query extends Builder<Query> {
       return Promise.reject(Error('Cannot run query; no connection object available.'));
     }
 
-    return this.connection.run<R>(this);
+    // connection.run can throw errors synchronously. This is highly inconsistent and will be
+    // fixed in the future, but for now we need to catch synchronous errors and reject them.
+    try {
+      return this.connection.run<R>(this);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
