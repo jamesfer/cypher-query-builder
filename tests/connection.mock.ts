@@ -1,4 +1,4 @@
-import { Connection } from './connection';
+import { Connection } from '../src/connection';
 import { stub, spy } from 'sinon';
 
 export const defaultUrl = 'bolt://localhost';
