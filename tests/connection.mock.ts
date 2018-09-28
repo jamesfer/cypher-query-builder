@@ -1,5 +1,6 @@
-import { Connection } from '../src/connection';
+import * as Promise from 'any-promise';
 import { stub, spy } from 'sinon';
+import { Connection } from '../src/connection';
 
 export const defaultUrl = 'bolt://localhost';
 export const defaultCredentials = { username: 'neo4j', password: 'admin' };
