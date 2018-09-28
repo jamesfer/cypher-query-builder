@@ -1,5 +1,5 @@
-import { Clause } from './clause';
 import { map } from 'lodash';
+import { Clause } from './clause';
 
 export class ClauseCollection extends Clause {
   protected clauses: Clause[] = [];

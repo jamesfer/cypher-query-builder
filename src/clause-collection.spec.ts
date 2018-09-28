@@ -1,7 +1,7 @@
+import { values } from 'lodash';
 import { Return, Unwind } from './clauses';
 import { ClauseCollection } from './clause-collection';
 import { expect } from '../test-setup';
-import { values } from 'lodash';
 
 describe('ClauseCollection', () => {
   describe('#addClause', () => {

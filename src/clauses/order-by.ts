@@ -1,5 +1,5 @@
-import { Clause } from '../clause';
 import { map, isString, isArray, Dictionary, trim } from 'lodash';
+import { Clause } from '../clause';
 
 export type Direction = boolean
   | 'DESC'

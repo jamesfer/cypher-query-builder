@@ -1,4 +1,3 @@
-import { Clause } from '../clause';
 import {
   flattenDeep,
   map,
@@ -10,6 +9,7 @@ import {
   Dictionary,
   Many,
 } from 'lodash';
+import { Clause } from '../clause';
 
 export type Properties = (string | Dictionary<string>)[];
 export type Term

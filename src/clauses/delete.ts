@@ -1,5 +1,5 @@
+import { Many, castArray } from 'lodash';
 import { Clause } from '../clause';
-import { castArray, Many } from 'lodash';
 
 export interface DeleteOptions {
   detach?: boolean;

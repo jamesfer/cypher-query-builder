@@ -9,7 +9,6 @@ import {
   isFunction,
 } from 'lodash';
 import { ParameterBag } from '../parameter-bag';
-import { WhereOp } from './where-operators';
 import { Comparator } from './where-comparators';
 
 export type Condition = any | Comparator;
@@ -25,6 +24,10 @@ export const enum Precedence {
   Xor,
   And,
   Not,
+}
+
+export abstract class WhereOp {
+  abstract evaluate(params: ParameterBag, precedence?: Precedence, name?: string): string;
 }
 
 export function stringifyCondition(

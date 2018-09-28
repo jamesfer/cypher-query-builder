@@ -1,5 +1,5 @@
-import { uniqueString } from './utils';
 import { Dictionary, keys, mapValues } from 'lodash';
+import { uniqueString } from './utils';
 
 export class Parameter {
   constructor(

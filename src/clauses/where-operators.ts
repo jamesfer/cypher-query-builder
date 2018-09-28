@@ -1,15 +1,16 @@
 import {
+  AndConditions,
+  AnyConditions,
+  combineAnd,
+  combineNot,
+  combineOr,
+  combineXor,
+  OrConditions,
   Precedence,
-  combineAnd, combineNot, combineXor, combineOr, AndConditions,
-  OrConditions, AnyConditions,
+  WhereOp,
 } from './where-utils';
-import { ParameterBag } from '../parameter-bag';
 
 export const operators = { and, or, xor, not };
-
-export abstract class WhereOp {
-  abstract evaluate(params: ParameterBag, precedence?: Precedence, name?: string): string;
-}
 
 /**
  * `AND` operator to use in where clauses. This is the default operator when

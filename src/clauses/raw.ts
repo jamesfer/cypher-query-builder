@@ -1,4 +1,3 @@
-import { Clause } from '../clause';
 import {
   isString,
   isArray,
@@ -8,6 +7,7 @@ import {
   zip,
   isNil,
 } from 'lodash';
+import { Clause } from '../clause';
 
 export class Raw extends Clause {
   clause: string;

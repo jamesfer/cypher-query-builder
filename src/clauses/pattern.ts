@@ -1,8 +1,8 @@
-import { Clause } from '../clause';
 import {
   mapValues, map, isEmpty, Dictionary, isArray, isString,
   castArray, isObjectLike, isNil, Many,
 } from 'lodash';
+import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
