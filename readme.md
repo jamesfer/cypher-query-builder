@@ -85,7 +85,7 @@ are accepted by that driver.
 
 ### Querying
 
-ES5
+ES6
 
 ```javascript
 db.matchNode('projects', 'Project')
@@ -96,7 +96,7 @@ db.matchNode('projects', 'Project')
   });
 ```
 
-ES6
+ES2017
 
 ```javascript
 const results = await db.matchNode('projects', 'Project')
