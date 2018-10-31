@@ -1,4 +1,4 @@
-import { Connection, Credentials, Node, Query } from '../src';
+import { Connection, Node, Query } from '../src';
 import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
 import { v1 as neo4j } from 'neo4j-driver';
@@ -211,6 +211,9 @@ describe('Connection', () => {
       createNode: () => connection.createNode('Node'),
       create: () => connection.create(new NodePattern('Node')),
       return: () => connection.return('node'),
+      remove: () => connection.remove({ properties: { node: ['prop1', 'prop2'] } }),
+      removeProperties: () => connection.removeProperties({ node: ['prop1', 'prop2'] }),
+      removeLabels: () => connection.removeLabels({ node: 'label' }),
       with: () => connection.with('node'),
       unwind: () => connection.unwind([1, 2, 3], 'number'),
       delete: () => connection.delete('node'),
