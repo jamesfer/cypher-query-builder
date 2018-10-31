@@ -1,8 +1,5 @@
 import { Clause } from '../clause';
-import {
-  join, concat, map, mapValues, castArray, Dictionary,
-  Many, isObject,
-} from 'lodash';
+import { concat, map, mapValues, castArray, Dictionary, Many, isObject } from 'lodash';
 import { stringifyLabels } from '../utils';
 import { Parameter } from '../parameter-bag';
 
@@ -36,7 +33,7 @@ export class Set extends Clause {
     const op = this.override ? ' = ' : ' += ';
     if (isObject(value)) {
       const operationStrings = map(value, (value, prop) => `${key}.${prop}${op}${value}`);
-      return join(operationStrings, ', ');
+      return operationStrings.join(', ');
     }
     return key + op + value;
   }
@@ -66,6 +63,6 @@ export class Set extends Clause {
     const labels = map(this.labels, this.makeLabelStatement);
     const values = map(this.values, this.makeValueStatement);
     const variables = map(this.variables, this.makeVariableStatement);
-    return 'SET ' + join(concat(labels, values, variables), ', ');
+    return `SET ${concat(labels, values, variables).join(', ')}`;
   }
 }

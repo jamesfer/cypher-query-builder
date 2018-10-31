@@ -8,7 +8,7 @@ export class Parameter {
   ) { }
 
   toString() {
-    return '$' + this.name;
+    return `$${this.name}`;
   }
 }
 

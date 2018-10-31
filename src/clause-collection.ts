@@ -1,5 +1,5 @@
 import { Clause } from './clause';
-import { join, map } from 'lodash';
+import { map } from 'lodash';
 
 export class ClauseCollection extends Clause {
   protected clauses: Clause[] = [];
@@ -25,6 +25,6 @@ export class ClauseCollection extends Clause {
    * @inheritDoc
    */
   build() {
-    return join(map(this.clauses, s => s.build()), '\n') + ';';
+    return `${map(this.clauses, s => s.build()).join('\n')};`;
   }
 }

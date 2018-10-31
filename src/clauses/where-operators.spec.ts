@@ -5,7 +5,6 @@ import {
 import { expect } from 'chai';
 import { ParameterBag } from '../parameter-bag';
 
-
 describe('WhereAnd', () => {
   it('should combine conditions with AND', () => {
     const op = new WhereAnd({ name: 1, name2: 2, node: { prop: 3 } });

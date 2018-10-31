@@ -10,6 +10,6 @@ export class Return extends TermListClause {
   }
 
   build() {
-    return 'RETURN ' + super.build();
+    return `RETURN ${super.build()}`;
   }
 }

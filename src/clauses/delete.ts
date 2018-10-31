@@ -1,5 +1,5 @@
 import { Clause } from '../clause';
-import { join, Many, castArray } from 'lodash';
+import { castArray, Many } from 'lodash';
 
 export interface DeleteOptions {
   detach?: boolean;
@@ -17,8 +17,7 @@ export class Delete extends Clause {
   }
 
   build() {
-    let str = this.options.detach ? 'DETACH ' : '';
-    str += 'DELETE ';
-    return str + join(this.variables, ', ');
+    const detach = this.options.detach ? 'DETACH ' : '';
+    return `${detach}DELETE ${this.variables.join(', ')}`;
   }
 }

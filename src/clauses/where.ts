@@ -10,6 +10,6 @@ export class Where extends Clause {
   }
 
   build() {
-    return 'WHERE ' + this.query;
+    return `WHERE ${this.query}`;
   }
 }

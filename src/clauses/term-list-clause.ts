@@ -1,7 +1,14 @@
 import { Clause } from '../clause';
 import {
-  join, flattenDeep, map, isPlainObject, isString, isArray, castArray, reduce,
-  Dictionary, Many,
+  flattenDeep,
+  map,
+  isPlainObject,
+  isString,
+  isArray,
+  castArray,
+  reduce,
+  Dictionary,
+  Many,
 } from 'lodash';
 
 export type Properties = (string | Dictionary<string>)[];
@@ -28,7 +35,7 @@ export class TermListClause extends Clause {
   }
 
   toString() {
-    return join(flattenDeep(map(this.terms, term => this.stringifyTerm(term))), ', ');
+    return flattenDeep(map(this.terms, term => this.stringifyTerm(term))).join(', ');
   }
 
   private stringifyTerm(term: Term): Many<string> {
@@ -49,9 +56,9 @@ export class TermListClause extends Clause {
   }
 
   private stringifyProperty(prop: string, alias?: string, node?: string): string {
-    let prefix = node ? node + '.' : '';
+    let prefix = node ? `${node}.` : '';
     if (alias) {
-      prefix += alias + ' AS ';
+      prefix += `${alias} AS `;
     }
     return prefix + prop;
   }

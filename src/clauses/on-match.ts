@@ -8,6 +8,6 @@ export class OnMatch extends Clause {
   }
 
   build() {
-    return 'ON MATCH ' + this.clause.build();
+    return `ON MATCH ${this.clause.build()}`;
   }
 }

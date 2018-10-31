@@ -345,7 +345,6 @@ export abstract class Builder<Q> extends SetBlock<Q> {
     return this.continueChainClause(new Match(patterns, options));
   }
 
-
   /**
    * Shorthand for `match(node(name, labels, conditions))`. For more details on
    * the arguments see {@link node}.

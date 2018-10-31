@@ -40,11 +40,11 @@ describe('Query', () => {
     };
 
     each(methods, (fn, name) => {
-      it(name + ' should return a chainable query object', () => {
+      it(`${name} should return a chainable query object`, () => {
         const query = new Query();
         expect(fn(query)).to.equal(query);
         expect(query.getClauses().length === 1);
-        expect(query.build()).to.equal(query.getClauses()[0].build() + ';');
+        expect(query.build()).to.equal(`${query.getClauses()[0].build()};`);
       });
     });
   });

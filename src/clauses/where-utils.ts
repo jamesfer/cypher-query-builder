@@ -3,9 +3,7 @@ import {
   isPlainObject,
   Many,
   isArray,
-  join,
   map,
-  split,
   last,
   keys,
   isFunction,
@@ -37,10 +35,9 @@ export function stringifyCondition(
   if (isFunction(condition)) {
     return condition(params, name);
   }
-  const conditionName = last(split(name, '.'));
-  return name + ' = ' + params.addParam(condition, conditionName);
+  const conditionName = last(name.split('.'));
+  return `${name} = ${params.addParam(condition, conditionName)}`;
 }
-
 
 export function stringCons(
   params: ParameterBag,
@@ -66,9 +63,9 @@ export function combineNot(
   precedence: Precedence = Precedence.None,
   name: string = '',
 ): string {
-  const string = 'NOT ' + stringCons(params, conditions, Precedence.Not, name);
+  const string = `NOT ${stringCons(params, conditions, Precedence.Not, name)}`;
   const braces = precedence !== Precedence.None && precedence > Precedence.Not;
-  return braces ? '(' + string + ')' : string;
+  return braces ? `(${string})` : string;
 }
 
 export function combineOr(
@@ -81,9 +78,9 @@ export function combineOr(
   const newPrecedence = conditions.length < 2 ? precedence : Precedence.Or;
   const strings = map(conditions, condition => stringCons(params, condition, newPrecedence, name));
 
-  const string = join(strings, ' OR ');
+  const string = strings.join(' OR ');
   const braces = precedence !== Precedence.None && precedence > newPrecedence;
-  return braces ? '(' + string + ')' : string;
+  return braces ? `(${string})` : string;
 }
 
 export function combineXor(
@@ -96,9 +93,9 @@ export function combineXor(
   const newPrecedence = conditions.length < 2 ? precedence : Precedence.Xor;
   const strings = map(conditions, condition => stringCons(params, condition, newPrecedence, name));
 
-  const string = join(strings, ' XOR ');
+  const string = strings.join(' XOR ');
   const braces = precedence !== Precedence.None && precedence > newPrecedence;
-  return braces ? '(' + string + ')' : string;
+  return braces ? `(${string})` : string;
 }
 
 export function combineAnd(
@@ -108,7 +105,7 @@ export function combineAnd(
   name: string = '',
 ): string {
   // Prepare name to be joined with the key of the object
-  const namePrefix = name.length > 0 ? name + '.' : '';
+  const namePrefix = name.length > 0 ? `${name}.` : '';
 
   // If this operator will not be used, precedence should not be altered
   const newPrecedence = keys(conditions).length < 2 ? precedence : Precedence.And;
@@ -116,7 +113,7 @@ export function combineAnd(
     return stringCons(params, condition, newPrecedence, namePrefix + key);
   });
 
-  const string = join(strings, ' AND ');
+  const string = strings.join(' AND ');
   const braces = precedence !== Precedence.None && precedence > newPrecedence;
-  return braces ? '(' + string + ')' : string;
+  return braces ? `(${string})` : string;
 }
