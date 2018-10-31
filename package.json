@@ -2,7 +2,6 @@
   "name": "cypher-query-builder",
   "version": "4.0.0",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
-  "main": "dist/index.js",
   "author": "James Ferguson",
   "license": "MIT",
   "repository": "github:jamesfer/cypher-query-builder",
@@ -126,8 +125,8 @@
     "source-map-support": "^0.5.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
-    "tslint-config-airbnb": "^5.7.0",
+    "tslint-config-airbnb": "^5.11.1",
     "typedoc": "^0.12.0",
-    "typescript": "^2.8.0"
+    "typescript": "^3.5.1"
   }
 }
