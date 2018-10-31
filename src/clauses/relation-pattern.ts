@@ -1,5 +1,5 @@
-import { Pattern } from './pattern';
 import { Dictionary, trim, Many, isNil, isNumber, isArray, every } from 'lodash';
+import { Pattern } from './pattern';
 import { PathLength, stringifyPathLength } from '../utils';
 
 const isPathLengthArray = value => (

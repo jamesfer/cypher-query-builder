@@ -1,5 +1,5 @@
-import { RelationPattern } from './relation-pattern';
 import { keys, values } from 'lodash';
+import { RelationPattern } from './relation-pattern';
 import { expect } from '../../test-setup';
 
 describe('Relation', () => {

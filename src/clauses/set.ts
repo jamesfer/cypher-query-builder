@@ -1,5 +1,8 @@
+import {
+  concat, map, mapValues, castArray, Dictionary,
+  Many, isObject,
+} from 'lodash';
 import { Clause } from '../clause';
-import { concat, map, mapValues, castArray, Dictionary, Many, isObject } from 'lodash';
 import { stringifyLabels } from '../utils';
 import { Parameter } from '../parameter-bag';
 

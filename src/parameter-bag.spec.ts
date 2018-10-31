@@ -1,6 +1,6 @@
-import { expect } from '../test-setup';
-import { ParameterBag } from './parameter-bag';
 import { keys, values } from 'lodash';
+import { ParameterBag } from './parameter-bag';
+import { expect } from '../test-setup';
 
 describe('ParameterBag', () => {
   let parameterBag;

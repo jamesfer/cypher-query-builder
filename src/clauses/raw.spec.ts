@@ -1,6 +1,6 @@
-import { Raw } from './raw';
 import { expect } from 'chai';
 import { values } from 'lodash';
+import { Raw } from './raw';
 
 describe('Raw', () => {
   it('should return the same string it is given', () => {

@@ -1,5 +1,5 @@
-import { Pattern } from './pattern';
 import { Dictionary, Many, trim } from 'lodash';
+import { Pattern } from './pattern';
 
 export class NodePattern extends Pattern {
   constructor(
