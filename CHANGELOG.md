@@ -1,3 +1,10 @@
+# [3.8.0](https://github.com/jamesfer/cypher-query-builder/compare/v3.7.0...v3.8.0) (2018-10-31)
+
+
+### Features
+
+* **Remove:** create remove clause ([9d600b6](https://github.com/jamesfer/cypher-query-builder/commit/9d600b6))
+
 # [3.7.0](https://github.com/jamesfer/cypher-query-builder/compare/v3.6.0...v3.7.0) (2018-09-28)
 
 
