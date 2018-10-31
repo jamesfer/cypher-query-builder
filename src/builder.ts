@@ -2,6 +2,7 @@ import { Dictionary, Many, assign } from 'lodash';
 import {
   Limit, Match, NodePattern, Skip, Where, Set, Create,
   Return, With, Unwind, Delete, Raw, OrderBy, Merge, OnCreate, OnMatch,
+  Remove,
 } from './clauses';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
@@ -11,6 +12,7 @@ import { SetOptions, SetProperties } from './clauses/set';
 import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
+import { RemoveProperties } from './clauses/remove';
 
 /**
  * @internal
@@ -484,6 +486,80 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    */
   raw(clause: string | TemplateStringsArray, ...args: any[]) {
     return this.continueChainClause(new Raw(clause, ...args));
+  }
+
+  /**
+   * Adds a [remove]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/remove/}
+   * clause to the query.
+   *
+   * Pass objects containing the list of properties and labels to remove from a node. Each key in an
+   * object is the name of a node and the values are the names of the labels and properties to
+   * remove. The values of each object can be either a single string, or an array of strings.
+   * ```javascript
+   * query.remove({
+   *   labels: {
+   *     coupon: 'Active',
+   *   },
+   *   properties: {
+   *     customer: ['inactive', 'new'],
+   *   },
+   * });
+   * // REMOVE coupon:Active, customer.inactive, customer.new
+   * ```
+   *
+   * Both labels and properties objects are optional, but you must provide at least one of them for
+   * the query to be syntatically valid.
+   * ```
+   * query.remove({
+   *
+   * });
+   * // Invalid query:
+   * // REMOVE
+   * ```
+   *
+   * If you only need to remove labels *or* properties, you may find `removeProperties` or
+   * `removeLabels` more convenient.
+   */
+  remove(properties: RemoveProperties) {
+    return this.continueChainClause(new Remove(properties));
+  }
+
+  /**
+   * Adds a [remove]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/remove/}
+   * clause to the query.
+   *
+   * Pass an object containing the list of properties to remove from a node. Each key in the
+   * object is the name of a node and the values are the names of the properties to remove. The
+   * values can be either a single string, or an array of strings.
+   * ```javascript
+   * query.remove({
+   *   customer: ['inactive', 'new'],
+   *   coupon: 'available',
+   * });
+   * // REMOVE customer.inactive, customer.new, coupon.available
+   * ```
+   */
+  removeProperties(properties: Dictionary<Many<string>>) {
+    return this.continueChainClause(new Remove({ properties }));
+  }
+
+  /**
+   * Adds a [remove]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/remove/}
+   * clause to the query.
+   *
+   * Pass an object containing the list of labels to remove from a node. Each key in the
+   * object is the name of a node and the values are the names of the labels to remove. The
+   * values can be either a single string, or an array of strings.
+   * ```javascript
+   * query.remove({
+   *   customer: ['Inactive', 'New'],
+   *   coupon: 'Available',
+   * });
+   * // REMOVE customer:Inactive, customer:New, coupon:Available
+   * ```
+   */
+  removeLabels(labels: Dictionary<Many<string>>) {
+    return this.continueChainClause(new Remove({ labels }));
   }
 
   /**
