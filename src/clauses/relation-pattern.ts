@@ -1,5 +1,5 @@
 import { Pattern } from './pattern';
-import { Dictionary, trim, Many, join, isNil, isNumber, isArray, every } from 'lodash';
+import { Dictionary, trim, Many, isNil, isNumber, isArray, every } from 'lodash';
 import { PathLength, stringifyPathLength } from '../utils';
 
 const isPathLengthArray = value => (
@@ -61,6 +61,6 @@ export class RelationPattern extends Pattern {
       out: ['-', '->'],
       either: ['-', '-'],
     };
-    return join(arrows[this.dir], query.length > 0 ? `[${query}]` : '');
+    return arrows[this.dir].join(query.length > 0 ? `[${query}]` : '');
   }
 }

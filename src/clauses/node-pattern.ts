@@ -13,7 +13,7 @@ export class NodePattern extends Pattern {
   build() {
     let query = this.getNameString();
     query += this.getLabelsString();
-    query += ' ' + this.getConditionsParamString();
-    return '(' + trim(query) + ')';
+    query += ` ${this.getConditionsParamString()}`;
+    return `(${trim(query)})`;
   }
 }

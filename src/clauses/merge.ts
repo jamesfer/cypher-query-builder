@@ -8,6 +8,6 @@ export class Merge extends PatternClause {
   }
 
   build() {
-    return 'MERGE ' + super.build();
+    return `MERGE ${super.build()}`;
   }
 }

@@ -8,6 +8,6 @@ export class OnCreate extends Clause {
   }
 
   build() {
-    return 'ON CREATE ' + this.clause.build();
+    return `ON CREATE ${this.clause.build()}`;
   }
 }

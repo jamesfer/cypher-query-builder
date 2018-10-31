@@ -1,6 +1,6 @@
 import { Clause } from '../clause';
 import {
-  mapValues, join, map, isEmpty, Dictionary, isArray, isString,
+  mapValues, map, isEmpty, Dictionary, isArray, isString,
   castArray, isObjectLike, isNil, Many,
 } from 'lodash';
 import { Parameter } from '../parameter-bag';
@@ -114,9 +114,8 @@ export abstract class Pattern extends Clause {
       const strings = map(this.conditionParams, (param, name) => {
         return `${name}: ${param}`;
       });
-      return '{ ' + join(strings, ', ') + ' }';
+      return `{ ${strings.join(', ')} }`;
     }
     return this.conditionParams.toString();
   }
 }
-

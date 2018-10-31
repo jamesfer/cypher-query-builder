@@ -44,7 +44,6 @@ describe('Connection', () => {
 
   afterEach(() => connection.close());
 
-
   describe('#constructor', () => {
     it('should default to neo4j driver', () => {
       const driverSpy = spy(neo4j, 'driver');
@@ -251,7 +250,7 @@ describe('Connection', () => {
     };
 
     each(methods, (fn, name) => {
-      it(name + ' should return a query object', () => {
+      it(`${name} should return a query object`, () => {
         expect(fn()).to.be.an.instanceof(Query);
       });
     });

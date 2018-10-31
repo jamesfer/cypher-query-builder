@@ -1,5 +1,5 @@
 import { Clause } from '../clause';
-import { join, map, isString, isArray, Dictionary, trim } from 'lodash';
+import { map, isString, isArray, Dictionary, trim } from 'lodash';
 
 export type Direction = boolean
   | 'DESC'
@@ -45,7 +45,7 @@ export class OrderBy extends Clause {
     const constraints = map(this.constraints, ({ field, direction }) => {
       return trim(`${field} ${direction}`);
     });
-    return 'ORDER BY ' + join(constraints, ', ');
+    return `ORDER BY ${constraints.join(', ')}`;
   }
 
   private static normalizeDirection(dir?: Direction | string): InternalDirection {

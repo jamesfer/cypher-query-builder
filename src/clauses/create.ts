@@ -6,6 +6,6 @@ export class Create extends PatternClause {
   }
 
   build() {
-    return 'CREATE ' + super.build();
+    return `CREATE ${super.build()}`;
   }
 }

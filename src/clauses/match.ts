@@ -15,7 +15,7 @@ export class Match extends PatternClause {
   build() {
     let str = 'MATCH ';
     if (this.options.optional) {
-      str = 'OPTIONAL ' + str;
+      str = `OPTIONAL ${str}`;
     }
     return str + super.build();
   }

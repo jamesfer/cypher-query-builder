@@ -1,11 +1,9 @@
 import { Clause } from '../clause';
 import {
-  Dictionary,
   isString,
   isArray,
   isObjectLike,
   map,
-  join,
   flatten,
   zip,
   isNil,
@@ -31,7 +29,7 @@ export class Raw extends Clause {
       }
     } else if (isArray(clause)) {
       const queryParams = map(args, param => this.addParam(param));
-      this.clause = join(flatten(zip(clause, queryParams)), '');
+      this.clause = flatten(zip(clause, queryParams)).join('');
     } else {
       throw new TypeError('Clause should be a string or an array');
     }

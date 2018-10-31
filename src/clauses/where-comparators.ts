@@ -1,6 +1,5 @@
-import { join, Many, last, split, capitalize } from 'lodash';
+import { last, capitalize } from 'lodash';
 import { ParameterBag } from '../parameter-bag';
-import { combineAnd } from './where-utils';
 
 export const comparisions = {
   equals,
@@ -23,13 +22,13 @@ export type Comparator = (params: ParameterBag, name: string) => string;
 
 function compare(operator: string, value: any, variable?: boolean, paramName?: string): Comparator {
   return (params: ParameterBag, name: string): string => {
-    const baseParamName = paramName || last(split(name, '.'));
+    const baseParamName = paramName || last(name.split('.'));
     const parts = [
       name,
       operator,
       variable ? value : params.addParam(value, baseParamName),
     ];
-    return join(parts, ' ');
+    return parts.join(' ');
   };
 }
 
@@ -250,7 +249,7 @@ export function inArray(value: any[], variable?: boolean) {
  * @returns {Comparator}
  */
 export function regexp(exp: string, insensitive?: boolean, variable?: boolean) {
-  return compare('=~', insensitive ? '(?i)' + exp : exp, variable);
+  return compare('=~', insensitive ? `(?i)${exp}` : exp, variable);
 }
 
 /**
@@ -298,8 +297,8 @@ export function between(
   const upperOp = upperInclusive ? '<=' : '<';
   return (params: ParameterBag, name) => {
     const paramName = capitalize(name);
-    const lowerComparator = compare(lowerOp, lower, variables, 'lower' + paramName);
-    const upperComparator = compare(upperOp, upper, variables, 'upper' + paramName);
+    const lowerComparator = compare(lowerOp, lower, variables, `lower${paramName}`);
+    const upperComparator = compare(upperOp, upper, variables, `upper${paramName}`);
 
     const lowerConstraint = lowerComparator(params, name);
     const upperConstraint = upperComparator(params, name);
@@ -318,7 +317,7 @@ export function between(
  * @returns {Comparator}
  */
 export function isNull(): Comparator {
-  return (params, name) => name + ' IS NULL';
+  return (params, name) => `${name} IS NULL`;
 }
 
 /**
@@ -332,7 +331,7 @@ export function isNull(): Comparator {
  * @returns {Comparator}
  */
 export function hasLabel(label: string): Comparator {
-  return (params, name) => name + ':' + label;
+  return (params, name) => `${name}:${label}`;
 }
 
 /**

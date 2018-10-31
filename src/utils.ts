@@ -3,15 +3,13 @@ import {
   castArray,
   isArray,
   isBoolean,
+  isNil,
   isNumber,
   isObject,
   isString,
-  join,
   map,
   reduce,
-  isNil,
 } from 'lodash';
-
 
 /**
  * Converts a string to camel case and ensures it is unique in the provided
@@ -32,7 +30,7 @@ export function uniqueString(str, existing: string[]) {
   }
 
   // Compute all taken suffixes that are similar to the given string
-  const regex = new RegExp('^' + camelString + '([0-9]*)$');
+  const regex = new RegExp(`^${camelString}([0-9]*)$`);
   const collectSuffixes = (suffixes, existingString) => {
     const matches = existingString.match(regex);
     if (matches) {
@@ -52,7 +50,6 @@ export function uniqueString(str, existing: string[]) {
   return camelString + (number === 1 ? '' : number);
 }
 
-
 /**
  * Converts a Javascript value into a string suitable for a cypher query.
  * @param {object|Array|string|boolean|number} value
@@ -60,23 +57,22 @@ export function uniqueString(str, existing: string[]) {
  */
 export function stringifyValue(value) {
   if (isNumber(value) || isBoolean(value)) {
-    return '' + value;
+    return `${value}`;
   }
   if (isString(value)) {
-    return `'` + value + `'`;
+    return `'${value}'`;
   }
   if (isArray(value)) {
-    const str = join(map(value, stringifyValue), ', ');
+    const str = map(value, stringifyValue).join(', ');
     return `[ ${str} ]`;
   }
   if (isObject(value)) {
-    const pairs = map(value, (el, key) => key + ': ' + stringifyValue(el));
-    const str = join(pairs, ', ');
+    const pairs = map(value, (el, key) => `${key}: ${stringifyValue(el)}`);
+    const str = pairs.join(', ');
     return `{ ${str} }`;
   }
   return '';
 }
-
 
 /**
  * Converts labels into a string that can be put into a pattern.
@@ -90,10 +86,8 @@ export function stringifyLabels(labels, relation = false) {
     return '';
   }
 
-  const separator = relation ? '|' : ':';
-  return ':' + join(castArray(labels), separator);
+  return `:${castArray(labels).join(relation ? '|' : ':')}`;
 }
-
 
 export type PathLength = '*'
   | number

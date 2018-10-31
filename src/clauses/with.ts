@@ -10,6 +10,6 @@ export class With extends TermListClause {
   }
 
   build() {
-    return 'WITH ' + super.build();
+    return `WITH ${super.build()}`;
   }
 }
