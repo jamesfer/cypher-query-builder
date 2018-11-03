@@ -1,3 +1,10 @@
+## [3.8.2](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.1...v3.8.2) (2018-11-03)
+
+
+### Bug Fixes
+
+* fix how rollup was emitting imports ([110a022](https://github.com/jamesfer/cypher-query-builder/commit/110a022))
+
 ## [3.8.1](https://github.com/jamesfer/cypher-query-builder.git/compare/v3.8.0...v3.8.1) (2018-11-03)
 
 
