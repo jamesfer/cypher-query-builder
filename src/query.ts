@@ -1,10 +1,11 @@
+// tslint:disable-next-line import-name
+import Promise from 'any-promise';
+import { Observable } from 'rxjs';
+import { Dictionary } from 'lodash';
 import { Connection } from './connection';
 import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause } from './clause';
-import { Observable } from 'rxjs';
-import { Dictionary } from 'lodash';
-import * as Promise from 'any-promise';
 
 export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
