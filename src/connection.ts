@@ -1,15 +1,14 @@
+// tslint:disable-next-line import-name
+import Promise from 'any-promise';
+import nodeCleanup from 'node-cleanup';
+import { Observable, Observer } from 'rxjs';
+import { Dictionary, isFunction } from 'lodash';
+import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Transformer } from './transformer';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
-import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Clause } from './clause';
-import { Observable, Observer } from 'rxjs';
-import { TeardownLogic } from 'rxjs/Subscription';
-import nodeCleanup = require('node-cleanup');
-import { Dictionary, isFunction } from 'lodash';
-import * as Promise from 'any-promise';
-// import * as Observable from 'any-observable';
 
 let connections: Connection[] = [];
 

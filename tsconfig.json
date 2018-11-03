@@ -7,6 +7,8 @@
     "outDir": "dist",
     "target": "es5",
     "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
