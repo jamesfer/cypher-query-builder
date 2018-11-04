@@ -1,3 +1,10 @@
+## [3.8.3](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.2...v3.8.3) (2018-11-04)
+
+
+### Bug Fixes
+
+* fix generated references to lodash types ([9b27bab](https://github.com/jamesfer/cypher-query-builder/commit/9b27bab))
+
 ## [3.8.2](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.1...v3.8.2) (2018-11-03)
 
 
