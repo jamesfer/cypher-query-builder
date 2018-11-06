@@ -1,3 +1,10 @@
+## [3.8.4](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.3...v3.8.4) (2018-11-06)
+
+
+### Bug Fixes
+
+* fix conflicting any promise types ([13a9eff](https://github.com/jamesfer/cypher-query-builder/commit/13a9eff))
+
 ## [3.8.3](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.2...v3.8.3) (2018-11-04)
 
 
