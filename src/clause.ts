@@ -18,7 +18,7 @@ export abstract class Clause extends ParameterContainer {
    * Turns the clause into a query string.
    * @return {string} Partial query string.
    */
-  toString() {
+  toString(): string {
     return this.build();
   }
 
@@ -38,7 +38,7 @@ export abstract class Clause extends ParameterContainer {
    * interpolated into the string. For debugging purposes only.
    * @return {string}
    */
-  interpolate() {
+  interpolate(): string {
     let query = this.build();
     const params = this.getParams();
     for (const name in params) {

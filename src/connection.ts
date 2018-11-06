@@ -1,7 +1,9 @@
 // tslint:disable-next-line import-name
-import Promise from 'any-promise';
+import AnyPromise from 'any-promise';
+// tslint:disable-next-line import-name
+import Observable from 'any-observable';
 import nodeCleanup from 'node-cleanup';
-import { Observable, Observer } from 'rxjs';
+import { Observable as RxObservable } from 'rxjs';
 import { Dictionary, isFunction } from 'lodash';
 import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Transformer } from './transformer';
@@ -18,14 +20,23 @@ nodeCleanup(() => {
   connections = [];
 });
 
-export interface Credentials { username: string; password: string; }
+export interface Observer<T> {
+  closed?: boolean;
+  next: (value: T) => void;
+  error: (error: any) => void;
+  complete: () => void;
+}
+
 export type DriverConstructor = typeof neo4j.driver;
 
 export interface FullConnectionOptions {
   driverConstructor: DriverConstructor;
   driverConfig: Config;
 }
+
 export type ConnectionOptions = Partial<FullConnectionOptions>;
+
+export interface Credentials { username: string; password: string; }
 
 function isCredentials(credentials: any): credentials is Credentials {
   return 'username' in credentials && 'password' in credentials;
@@ -137,7 +148,7 @@ export class Connection extends Builder<Query> {
    * new chainable query for you.
    * @return {Query}
    */
-  query() {
+  query(): Query {
     return new Query(this);
   }
 
@@ -208,7 +219,7 @@ export class Connection extends Builder<Query> {
     const session = this.session();
 
     // Need to wrap promise in an any-promise
-    return Promise.resolve(session.run(queryObj.query, queryObj.params))
+    return AnyPromise.resolve(session.run(queryObj.query, queryObj.params))
       .then((result) => {
         session.close();
         return this.transformer.transformRecords<R>(result.records);
@@ -216,7 +227,7 @@ export class Connection extends Builder<Query> {
       .catch((error) => {
         session.close();
         return Promise.reject(error);
-      });
+      }) as any;
   }
 
   /**
@@ -286,7 +297,7 @@ export class Connection extends Builder<Query> {
    * ```
    * In practice this should never happen unless you're doing some strange things.
    */
-  stream<R = any>(query: Query): Observable<Dictionary<R>> {
+  stream<R = any>(query: Query): RxObservable<Dictionary<R>> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }

@@ -1,11 +1,11 @@
 // tslint:disable-next-line import-name
-import Promise from 'any-promise';
-import { Observable } from 'rxjs';
+import AnyPromise from 'any-promise';
+import { Observable as RxObservable } from 'rxjs';
 import { Dictionary } from 'lodash';
 import { Connection } from './connection';
 import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
-import { Clause } from './clause';
+import { Clause, QueryObject } from './clause';
 
 export class Query extends Builder<Query> {
   protected clauses = new ClauseCollection();
@@ -75,7 +75,7 @@ export class Query extends Builder<Query> {
    */
   run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
-      return Promise.reject(Error('Cannot run query; no connection object available.'));
+      return AnyPromise.reject(Error('Cannot run query; no connection object available.')) as any;
     }
 
     // connection.run can throw errors synchronously. This is highly inconsistent and will be
@@ -83,7 +83,7 @@ export class Query extends Builder<Query> {
     try {
       return this.connection.run<R>(this);
     } catch (error) {
-      return Promise.reject(error);
+      return AnyPromise.reject(error) as any;
     }
   }
 
@@ -133,7 +133,7 @@ export class Query extends Builder<Query> {
    * Throws an exception if this query does not have a connection or has no
    * clauses.
    */
-  stream<R = any>(): Observable<Dictionary<R>> {
+  stream<R = any>(): RxObservable<Dictionary<R>> {
     if (!this.connection) {
       throw Error('Cannot run query; no connection object available.');
     }
@@ -181,7 +181,7 @@ export class Query extends Builder<Query> {
    *
    * @returns {string}
    */
-  build() {
+  build(): string {
     return this.clauses.build();
   }
 
@@ -189,7 +189,7 @@ export class Query extends Builder<Query> {
    * Synonym for `build()`.
    * @returns {string}
    */
-  toString() {
+  toString(): string {
     return this.clauses.toString();
   }
 
@@ -197,7 +197,7 @@ export class Query extends Builder<Query> {
    * Returns an object that includes both the query and the params ready to be
    * passed to the neo4j driver.
    */
-  buildQueryObject() {
+  buildQueryObject(): QueryObject {
     return this.clauses.buildQueryObject();
   }
 
@@ -221,7 +221,7 @@ export class Query extends Builder<Query> {
    *
    * @returns {string}
    */
-  interpolate() {
+  interpolate(): string {
     return this.clauses.interpolate();
   }
 
@@ -229,7 +229,7 @@ export class Query extends Builder<Query> {
    * Returns an array of all the clauses in this query.
    * @returns {Clause[]}
    */
-  getClauses() {
+  getClauses(): Clause[] {
     return this.clauses.getClauses();
   }
 
@@ -240,7 +240,7 @@ export class Query extends Builder<Query> {
    * @param {Clause} clause
    * @returns {this}
    */
-  addClause(clause: Clause) {
+  addClause(clause: Clause): this {
     this.clauses.addClause(clause);
     return this;
   }

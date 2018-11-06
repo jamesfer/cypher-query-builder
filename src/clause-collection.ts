@@ -8,7 +8,7 @@ export class ClauseCollection extends Clause {
    * Returns all clauses in this collection.
    * @returns {Clause[]}
    */
-  getClauses() {
+  getClauses(): Clause[] {
     return this.clauses;
   }
 
