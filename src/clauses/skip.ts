@@ -1,7 +1,8 @@
 import { Clause } from '../clause';
+import { Parameter } from '../parameter-bag';
 
 export class Skip extends Clause {
-  protected amountParam;
+  protected amountParam: Parameter;
 
   constructor(public amount: number | string) {
     super();

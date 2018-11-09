@@ -2,28 +2,21 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowJs": false,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "target": "es5",
-    "module": "commonjs",
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
+    "esModuleInterop": true,
     "lib": [
       "es2016",
       "dom"
-    ]
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
   "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts"
+    "node_modules",
+    "dist"
   ]
 }

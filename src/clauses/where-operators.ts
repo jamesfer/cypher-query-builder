@@ -9,6 +9,7 @@ import {
   Precedence,
   WhereOp,
 } from './where-utils';
+import { ParameterBag } from '../parameter-bag';
 
 export const operators = { and, or, xor, not };
 
@@ -38,7 +39,7 @@ export class WhereAnd extends WhereOp {
     super();
   }
 
-  evaluate(params, precedence = Precedence.None, name = '') {
+  evaluate(params: ParameterBag, precedence = Precedence.None, name = '') {
     return combineAnd(params, this.conditions, precedence, name);
   }
 }
@@ -69,7 +70,7 @@ export class WhereOr extends WhereOp {
     super();
   }
 
-  evaluate(params, precedence = Precedence.None, name = '') {
+  evaluate(params: ParameterBag, precedence = Precedence.None, name = '') {
     return combineOr(params, this.conditions, precedence, name);
   }
 }
@@ -98,7 +99,7 @@ export class WhereXor extends WhereOp {
     super();
   }
 
-  evaluate(params, precedence = Precedence.None, name = '') {
+  evaluate(params: ParameterBag, precedence = Precedence.None, name = '') {
     return combineXor(params, this.conditions, precedence, name);
   }
 }
@@ -127,7 +128,7 @@ export class WhereNot extends WhereOp {
     super();
   }
 
-  evaluate(params, precedence = Precedence.None, name = '') {
+  evaluate(params: ParameterBag, precedence = Precedence.None, name = '') {
     return combineNot(params, this.conditions, precedence, name);
   }
 }

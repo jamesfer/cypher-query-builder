@@ -114,7 +114,7 @@ describe('Connection', () => {
 
     it('should throw if the connection has been closed', () => {
       connection.close();
-      const run = () => connection.run(connection.query());
+      const run = () => connection.run(connection.query().matchNode('node'));
       expect(run).to.throw(Error, 'connection is not open');
     });
 

@@ -15,7 +15,7 @@ export class Query extends Builder<Query> {
    *
    * @param {Connection} connection
    */
-  constructor(protected connection: Connection = null) {
+  constructor(protected connection: Connection | null = null) {
     super();
   }
 
@@ -156,7 +156,7 @@ export class Query extends Builder<Query> {
    * the return value which is `Dictionary<R>`. Note that this function returns
    * `undefined` if the result set was empty.
    */
-  first<R = any>(): Promise<Dictionary<R>> {
+  first<R = any>(): Promise<Dictionary<R> | undefined> {
     return this.run<R>().then(results => results && results.length > 0 ? results[0] : undefined);
   }
 

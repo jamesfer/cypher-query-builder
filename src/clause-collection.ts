@@ -16,7 +16,7 @@ export class ClauseCollection extends Clause {
    * Adds a clause to the child list.
    * @param {Clause} clause
    */
-  addClause(clause) {
+  addClause(clause: Clause) {
     clause.useParameterBag(this.parameterBag);
     this.clauses.push(clause);
   }

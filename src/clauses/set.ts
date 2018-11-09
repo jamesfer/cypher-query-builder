@@ -1,6 +1,6 @@
 import {
   concat, map, mapValues, castArray, Dictionary,
-  Many, isObject,
+  Many, isObject, isString,
 } from 'lodash';
 import { Clause } from '../clause';
 import { stringifyLabels } from '../utils';
@@ -13,7 +13,7 @@ export type SetProperties = {
 };
 
 export interface SetOptions {
-  override: boolean;
+  override?: boolean;
 }
 
 export class Set extends Clause {
@@ -34,11 +34,11 @@ export class Set extends Clause {
 
   protected makeVariableStatement = (value: string | Dictionary<string>, key: string): string => {
     const op = this.override ? ' = ' : ' += ';
-    if (isObject(value)) {
-      const operationStrings = map(value, (value, prop) => `${key}.${prop}${op}${value}`);
-      return operationStrings.join(', ');
+    if (isString(value)) {
+      return key + op + value;
     }
-    return key + op + value;
+    const operationStrings = map(value, (value, prop) => `${key}.${prop}${op}${value}`);
+    return operationStrings.join(', ');
   }
 
   constructor(
@@ -48,7 +48,7 @@ export class Set extends Clause {
     super();
 
     let options: SetOptions | undefined = inOptions;
-    if (inOptions === undefined) {
+    if (options === undefined) {
       // tslint:disable-next-line:max-line-length
       console.warn('Warning: In the future, override will default to false in a Set clause when no options are provided. To retain the old behaviour, pass { override: false } as options to the Set constructor.');
       options = { override: true };
@@ -58,8 +58,8 @@ export class Set extends Clause {
     this.values = mapValues(values, (value, name) => {
       return this.parameterBag.addParam(value, name);
     });
-    this.variables = variables;
-    this.override = options.override;
+    this.variables = variables || {};
+    this.override = options.override === undefined ? false : options.override;
   }
 
   build() {

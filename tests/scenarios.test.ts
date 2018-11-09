@@ -5,7 +5,7 @@ import { Dictionary, isNil } from 'lodash';
 import { node, relation } from '../src/clauses';
 
 function expectResults(
-  results: any,
+  results: any[],
   length?: number | null,
   properties?: string[] | null,
   cb?: null | ((row: any) => any),
@@ -37,7 +37,7 @@ function expectNode(record: any, labels?: string[], properties?: Dictionary<any>
     .and.to.match(/[0-9]+/);
 
   expect(record.labels).to.be.an.instanceOf(Array);
-  record.labels.forEach(label => expect(label).to.be.a('string'));
+  record.labels.forEach((label: string) => expect(label).to.be.a('string'));
   if (labels) {
     expect(record.labels).to.have.members(labels);
   }
@@ -166,14 +166,14 @@ describe('scenarios', () => {
       expectResults(results, 1, ['rels', 'nodes'], (row) => {
         expect(row.rels).to.be.an.instanceOf(Array)
           .and.to.have.a.lengthOf(3);
-        row.rels.forEach((rel) => {
+        row.rels.forEach((rel: any) => {
           expectRelation(rel, 'Road');
           expect(rel.properties).to.have.own.keys(['length']);
         });
 
         expect(row.nodes).to.be.an.instanceOf(Array)
           .and.to.have.a.lengthOf(4);
-        row.nodes.forEach((node) => {
+        row.nodes.forEach((node: any) => {
           expectNode(node, ['City']);
           expect(node.properties).to.have.own.keys(['name']);
         });

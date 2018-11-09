@@ -66,11 +66,13 @@ describe('Query', () => {
       'getClauses',
     ];
 
-    each(methods, (method) => {
-      const methodSpy = spy(query.getClauseCollection(), method);
-      query[method]();
-      expect(methodSpy.calledOnce).to.be.true;
-      methodSpy.restore();
+    methods.forEach((method) => {
+      it(`should proxy the ${method} method to the clause collection`, () => {
+        const methodSpy = spy(query.getClauseCollection(), method);
+        (query as any)[method]();
+        expect(methodSpy.calledOnce).to.be.true;
+        methodSpy.restore();
+      });
     });
   });
 
@@ -119,7 +121,7 @@ describe('Query', () => {
       runStub.returns(Promise.resolve([firstRecord, { number: 2 }, { number: 3 }]));
 
       const query = (new Query(connection)).raw('Query');
-      return expect(query.first()).to.be.fulfilled.then((result) => {
+      return expect(query.first()).to.be.fulfilled.then((result: any) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(firstRecord);
       });
@@ -131,7 +133,7 @@ describe('Query', () => {
       runStub.returns(Promise.resolve([]));
 
       const query = (new Query(connection)).raw('Query');
-      return expect(query.first()).to.be.fulfilled.then((result) => {
+      return expect(query.first()).to.be.fulfilled.then((result: any) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(undefined);
       });
