@@ -32,7 +32,7 @@ export default configurations.map(({ target, format }) => {
       babel({ extensions: ['.ts'] }),
     ],
     external: id => dependencies.includes(id)
-      || /\/lodash\//.test(id)
-      || /\/neo4j-driver\//.test(id),
+      || /^lodash/.test(id)
+      || /^neo4j-driver/.test(id),
   };
 });
