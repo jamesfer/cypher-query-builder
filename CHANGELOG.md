@@ -1,3 +1,10 @@
+## [3.8.5](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.4...v3.8.5) (2018-11-15)
+
+
+### Bug Fixes
+
+* tell rollup to output external modules with node style paths ([248f039](https://github.com/jamesfer/cypher-query-builder/commit/248f039)), closes [#68](https://github.com/jamesfer/cypher-query-builder/issues/68)
+
 ## [3.8.4](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.3...v3.8.4) (2018-11-06)
 
 
