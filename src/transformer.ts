@@ -33,7 +33,7 @@ export interface Relation<P = Dictionary<PlainValue | PlainArray>> {
 
 export class Transformer {
   transformRecords<T= any>(records: Record[]): Dictionary<T>[] {
-    return map(records, rec => this.transformRecord(rec));
+    return map(records, rec => this.transformRecord<T>(rec));
   }
 
   transformRecord<T = any>(record: Record): Dictionary<T> {
