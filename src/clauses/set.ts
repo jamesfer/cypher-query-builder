@@ -13,7 +13,7 @@ export type SetProperties = {
 };
 
 export interface SetOptions {
-  override: boolean;
+  override?: boolean;
 }
 
 export class Set extends Clause {
@@ -43,16 +43,9 @@ export class Set extends Clause {
 
   constructor(
     { labels, values, variables }: SetProperties,
-    inOptions?: SetOptions,
+    options: SetOptions = {},
   ) {
     super();
-
-    let options: SetOptions | undefined = inOptions;
-    if (inOptions === undefined) {
-      // tslint:disable-next-line:max-line-length
-      console.warn('Warning: In the future, override will default to false in a Set clause when no options are provided. To retain the old behaviour, pass { override: false } as options to the Set constructor.');
-      options = { override: true };
-    }
 
     this.labels = mapValues(labels, castArray);
     this.values = mapValues(values, (value, name) => {
