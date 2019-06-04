@@ -3,7 +3,6 @@ import AnyPromise from 'any-promise';
 // tslint:disable-next-line import-name
 import Observable from 'any-observable';
 import nodeCleanup from 'node-cleanup';
-import { Observable as RxObservable } from 'rxjs';
 import { Dictionary, isFunction } from 'lodash';
 import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Transformer } from './transformer';
@@ -297,7 +296,7 @@ export class Connection extends Builder<Query> {
    * ```
    * In practice this should never happen unless you're doing some strange things.
    */
-  stream<R = any>(query: Query): RxObservable<Dictionary<R>> {
+  stream<R = any>(query: Query): Observable<Dictionary<R>> {
     if (!this.open) {
       throw Error('Cannot run query; connection is not open.');
     }
