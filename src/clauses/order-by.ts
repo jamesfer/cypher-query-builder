@@ -1,7 +1,7 @@
 import { map, isString, isArray, Dictionary, trim } from 'lodash';
 import { Clause } from '../clause';
 
-export type Direction = boolean
+export type Direction =
   | 'DESC'
   | 'desc'
   | 'DESCENDING'
