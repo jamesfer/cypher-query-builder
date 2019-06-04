@@ -13,14 +13,14 @@ export type SetProperties = {
 };
 
 export interface SetOptions {
-  override?: boolean;
+  merge?: boolean;
 }
 
 export class Set extends Clause {
   protected labels: Dictionary<string[]>;
   protected values: Dictionary<Parameter>;
   protected variables: Dictionary<string | Dictionary<string>>;
-  protected override: boolean;
+  protected merge: boolean;
 
   protected makeLabelStatement = (labels: Many<string>, key: string) => {
     return key + stringifyLabels(labels);
@@ -28,12 +28,12 @@ export class Set extends Clause {
 
   protected makeValueStatement = (value: any, key: string): string => {
     const valueIsObject = value instanceof Parameter ? isObject(value.value) : isObject(value);
-    const op = this.override || !valueIsObject ? ' = ' : ' += ';
+    const op = this.merge && valueIsObject ? ' += ' : ' = ';
     return key + op + value;
   }
 
   protected makeVariableStatement = (value: string | Dictionary<string>, key: string): string => {
-    const op = this.override ? ' = ' : ' += ';
+    const op = this.merge ? ' += ' : ' = ';
     if (isString(value)) {
       return key + op + value;
     }
@@ -43,23 +43,16 @@ export class Set extends Clause {
 
   constructor(
     { labels, values, variables }: SetProperties,
-    inOptions?: SetOptions,
+    options: SetOptions = {},
   ) {
     super();
-
-    let options: SetOptions | undefined = inOptions;
-    if (options === undefined) {
-      // tslint:disable-next-line:max-line-length
-      console.warn('Warning: In the future, override will default to false in a Set clause when no options are provided. To retain the old behaviour, pass { override: false } as options to the Set constructor.');
-      options = { override: true };
-    }
 
     this.labels = mapValues(labels, castArray);
     this.values = mapValues(values, (value, name) => {
       return this.parameterBag.addParam(value, name);
     });
     this.variables = variables || {};
-    this.override = options.override === undefined ? false : options.override;
+    this.merge = !!options.merge;
   }
 
   build() {
