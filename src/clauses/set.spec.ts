@@ -57,20 +57,20 @@ describe('Set', () => {
     expect(queryParams).to.have.property('node2', param2);
   });
 
-  it('should merge properties when override is false', () => {
+  it('should merge properties when merge is true', () => {
     const data = {
       values: { node: { name: 'complex value' } },
       variables: { node2: 'variable' },
     };
-    const query = new Set(data, { override: false });
+    const query = new Set(data, { merge: true });
     expect(query.build()).to.equal('SET node += $node, node2 += variable');
   });
 
-  it('should not merge plain values even when override is false', () => {
+  it('should not merge plain values even when merge is true', () => {
     const data = {
-      values: { node: 'value' },
+      values: { 'node.property': 'value', otherNode: { dictionary: 'value' } },
     };
-    const query = new Set(data, { override: false });
-    expect(query.build()).to.equal('SET node = $node');
+    const query = new Set(data, { merge: true });
+    expect(query.build()).to.equal('SET node.property = $nodeProperty, otherNode += $otherNode');
   });
 });
