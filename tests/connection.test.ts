@@ -2,10 +2,10 @@
 import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
 import { tap } from 'rxjs/operators';
-import { SinonSpy, spy } from 'sinon';
 import { v1 as neo4j } from 'neo4j-driver';
-import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
 import { Driver } from 'neo4j-driver/types/v1';
+import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
+import { SinonSpy, spy } from 'sinon';
 import { Connection, Node, Query } from '../src';
 import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
@@ -108,15 +108,15 @@ describe('Connection', () => {
   });
 
   describe('#run', () => {
-    it('should throw if there are no clauses in the query', () => {
-      const run = () => connection.run(connection.query());
-      expect(run).to.throw(Error, 'no clauses');
+    it('should reject if there are no clauses in the query', () => {
+      const promise = connection.run(connection.query());
+      expect(promise).to.be.rejectedWith(Error, 'no clauses');
     });
 
-    it('should throw if the connection has been closed', () => {
+    it('should reject if the connection has been closed', () => {
       connection.close();
-      const run = () => connection.run(connection.query().matchNode('node'));
-      expect(run).to.throw(Error, 'connection is not open');
+      const promise = connection.run(connection.query().matchNode('node'));
+      expect(promise).to.be.rejectedWith(Error, 'connection is not open');
     });
 
     it('should run the query through a session', () => {
@@ -171,15 +171,33 @@ describe('Connection', () => {
       connection.close();
     });
 
-    it('should throw if there are no clauses in the query', () => {
-      const stream = () => connection.stream(connection.query());
-      expect(stream).to.throw(Error, 'no clauses');
+    it('should return errored observable if there are no clauses in the query', () => {
+      const observable = connection.stream(connection.query());
+      expect(observable).to.be.an.instanceOf(Observable);
+
+      observable.subscribe({
+        next: () => expect.fail(null, null, 'Observable should not emit anything'),
+        error(error) {
+          expect(error).to.be.instanceOf(Error);
+          expect(error.message).to.include('no clauses');
+        },
+        complete: () => expect.fail(null, null, 'Observable should not complete successfully'),
+      });
     });
 
-    it('should throw if the connection has been closed', () => {
+    it('should return errored observable if the connection has been closed', () => {
       connection.close();
-      const stream = () => connection.stream(query);
-      expect(stream).to.throw(Error, 'connection is not open');
+      const observable = connection.stream(query);
+      expect(observable).to.be.an.instanceOf(Observable);
+
+      observable.subscribe({
+        next: () => expect.fail(null, null, 'Observable should not emit anything'),
+        error(error) {
+          expect(error).to.be.instanceOf(Error);
+          expect(error.message).to.include('connection is not open');
+        },
+        complete: () => expect.fail(null, null, 'Observable should not complete successfully'),
+      });
     });
 
     it('should run the query through a session', () => {
@@ -216,7 +234,7 @@ describe('Connection', () => {
       expect(observable).to.be.an.instanceOf(Observable);
       observable.subscribe({
         next: () => expect.fail(null, null, 'Observable should not emit any items'),
-        error: () => {
+        error() {
           expect(sessionCloseSpy.calledOnce);
           done();
         },
@@ -227,32 +245,41 @@ describe('Connection', () => {
 
   describe('query methods', () => {
     const methods: Dictionary<Function> = {
-      query: () => connection.query(),
-      matchNode: () => connection.matchNode('Node'),
-      match: () => connection.match(new NodePattern('Node')),
-      optionalMatch: () => connection.optionalMatch(new NodePattern('Node')),
       create: () => connection.create(new NodePattern('Node')),
-      createUnique: () => connection.createUnique(new NodePattern('Node')),
       createNode: () => connection.createNode('Node'),
+      createUnique: () => connection.createUnique(new NodePattern('Node')),
       createUniqueNode: () => connection.createUniqueNode('Node'),
-      return: () => connection.return('node'),
-      returnDistinct: () => connection.returnDistinct('node'),
+      delete: () => connection.delete('node'),
+      detachDelete: () => connection.detachDelete('node'),
+      limit: () => connection.limit(1),
+      match: () => connection.match(new NodePattern('Node')),
+      matchNode: () => connection.matchNode('Node'),
+      merge: () => connection.merge(new NodePattern('Node')),
+      onCreateSet: () => connection.onCreate.set({}, { merge: false }),
+      onCreateSetLabels: () => connection.onCreate.setLabels({}),
+      onCreateSetValues: () => connection.onCreate.setValues({}),
+      onCreateSetVariables: () => connection.onCreate.setVariables({}, false),
+      onMatchSet: () => connection.onMatch.set({}, { merge: false }),
+      onMatchSetLabels: () => connection.onMatch.setLabels({}),
+      onMatchSetValues: () => connection.onMatch.setValues({}),
+      onMatchSetVariables: () => connection.onMatch.setVariables({}, false),
+      optionalMatch: () => connection.optionalMatch(new NodePattern('Node')),
+      orderBy: () => connection.orderBy('name'),
+      query: () => connection.query(),
+      raw: () => connection.raw('name'),
       remove: () => connection.remove({ properties: { node: ['prop1', 'prop2'] } }),
       removeProperties: () => connection.removeProperties({ node: ['prop1', 'prop2'] }),
       removeLabels: () => connection.removeLabels({ node: 'label' }),
-      with: () => connection.with('node'),
-      unwind: () => connection.unwind([1, 2, 3], 'number'),
-      delete: () => connection.delete('node'),
-      detachDelete: () => connection.detachDelete('node'),
+      return: () => connection.return('node'),
+      returnDistinct: () => connection.returnDistinct('node'),
       set: () => connection.set({}, { merge: false }),
       setLabels: () => connection.setLabels({}),
       setValues: () => connection.setValues({}),
       setVariables: () => connection.setVariables({}, false),
       skip: () => connection.skip(1),
-      limit: () => connection.limit(1),
+      unwind: () => connection.unwind([1, 2, 3], 'number'),
       where: () => connection.where([]),
-      orderBy: () => connection.orderBy('name'),
-      raw: () => connection.raw('name'),
+      with: () => connection.with('node'),
     };
 
     each(methods, (fn, name) => {
