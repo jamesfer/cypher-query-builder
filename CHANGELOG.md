@@ -1,3 +1,27 @@
+# [4.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.5...v4.0.0) (2019-06-25)
+
+
+### Bug Fixes
+
+* remove unused rxjs peer dependency ([ae0c95d](https://github.com/jamesfer/cypher-query-builder/commit/ae0c95d))
+* **Delete:** change the default behaviour of delete clause not to use detach ([9f367c7](https://github.com/jamesfer/cypher-query-builder/commit/9f367c7))
+* **Limit:** use a parameter for limit number ([025c873](https://github.com/jamesfer/cypher-query-builder/commit/025c873))
+* **Skip:** use a parameter in skip number ([7f6360c](https://github.com/jamesfer/cypher-query-builder/commit/7f6360c))
+* **Skip, Limit:** make skip and limit only accept number amounts ([cfb62c3](https://github.com/jamesfer/cypher-query-builder/commit/cfb62c3))
+
+
+### BREAKING CHANGES
+
+* **Skip, Limit:** The type of skip and limit clauses no longer accept a string. This will only effect
+typescript users, there is no breaking change for javascript users.
+* **Delete:** The `.delete` method now uses `detach: false` by default meaning that it will
+become a plain old `DELETE` clause in cypher. To retain the previous behaviour of becoming a `DETACH
+DELETE` clause by default, use the `.detachDelete` method instead.
+* **Skip:** A string expression as the skip number is no longer accepted. The argument must be
+a number.
+* **Limit:** A string expression as the limit number is no longer accepted. The argument must be
+a number.
+
 ## [3.8.5](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.4...v3.8.5) (2018-11-15)
 
 
