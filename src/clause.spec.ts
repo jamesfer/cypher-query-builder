@@ -22,7 +22,7 @@ describe('Clause', () => {
 
       const clause = new SpecialClause('param = $paramLong');
       clause.useParameterBag(bag);
-      expect(clause.interpolate()).to.equal('param = \'def\'');
+      expect(clause.interpolate()).to.equal("param = 'def'");
     });
   });
 });

@@ -18,3 +18,5 @@ services:
     command: yarn nyc --reporter=html --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts tests/**/*.test.ts
     volumes:
       - ..:/app
+      - /app/node_modules
+

@@ -85,7 +85,7 @@ describe('Query', () => {
     it('should run the query on its connection', () => {
       const { connection } = mockConnection();
       const runStub = stub(connection, 'run');
-      runStub.returns(Promise.resolve());
+      runStub.returns(Promise.resolve([{}]));
       const query = (new Query(connection)).raw('Query');
       return expect(query.run()).to.be.fulfilled.then(() => {
         expect(runStub.calledOnce);
