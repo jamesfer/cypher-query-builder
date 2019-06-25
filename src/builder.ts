@@ -301,7 +301,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {string | number} amount
    * @returns {Q}
    */
-  limit(amount: string | number) {
+  limit(amount: number) {
     return this.continueChainClause(new Limit(amount));
   }
 
@@ -632,7 +632,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {string | number} amount
    * @returns {Q}
    */
-  skip(amount: string | number) {
+  skip(amount: number) {
     return this.continueChainClause(new Skip(amount));
   }
 
