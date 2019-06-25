@@ -128,8 +128,5 @@
     "tslint-config-airbnb": "^5.7.0",
     "typedoc": "^0.10.0",
     "typescript": "^2.8.0"
-  },
-  "peerDependencies": {
-    "rxjs": "^5.5.6"
   }
 }

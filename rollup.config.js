@@ -1,14 +1,10 @@
-import typescript from 'rollup-plugin-typescript';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel'
 import path from 'path';
+import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'rollup-plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript';
+import { dependencies } from './package.json';
 
-const packageJson = require('./package.json');
-const dependencies = [
-  ...Object.keys(packageJson.dependencies),
-  ...Object.keys(packageJson.peerDependencies),
-];
 const configurations = [
   { format: 'esm', target: 'es5' },
   { format: 'esm', target: 'es2015' },
@@ -31,7 +27,7 @@ export default configurations.map(({ target, format }) => {
       typescript({ target }),
       babel({ extensions: ['.ts'] }),
     ],
-    external: id => dependencies.includes(id)
+    external: id => id in dependencies
       || /^lodash/.test(id)
       || /^neo4j-driver/.test(id),
   };
