@@ -75,8 +75,8 @@ describe('scenarios', () => {
 
   before(waitForNeo);
   before(() => db = new Connection(neo4jUrl, neo4jCredentials));
-  before(() => db.matchNode('node').delete('node').run());
-  after(() => db.matchNode('node').delete('node').run());
+  before(() => db.matchNode('node').detachDelete('node').run());
+  after(() => db.matchNode('node').detachDelete('node').run());
   after(() => db.close());
 
   describe('node', () => {

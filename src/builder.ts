@@ -266,7 +266,9 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * clause to the query.
    *
    * Delete accepts a single string or an array of them and all of them are
-   * joined together with commas.
+   * joined together with commas. *Note that these strings are not escaped or
+   * passed to Neo4j using parameters, therefore you should not pass user
+   * input into this clause without escaping it first*.
    *
    * You can set `detach: true` in the options to make it a `DETACH DELETE`
    * clause.
