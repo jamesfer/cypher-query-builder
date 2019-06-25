@@ -7,8 +7,8 @@ import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
 export abstract class Pattern extends Clause {
-  protected useExpandedConditions: boolean;
-  protected conditionParams = {};
+  protected useExpandedConditions: boolean | undefined;
+  protected conditionParams: Dictionary<Parameter> | Parameter = {};
   protected name: string;
   protected labels: string[];
   protected conditions: Dictionary<any>;

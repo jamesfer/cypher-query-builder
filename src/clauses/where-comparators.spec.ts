@@ -1,6 +1,7 @@
+import { Dictionary } from 'lodash';
 import { expect } from 'chai';
 import {
-  between,
+  between, Comparator,
   contains, endsWith, equals, exists, greaterEqualTo, greaterThan, hasLabel,
   inArray,
   isNull, lessEqualTo, lessThan, regexp, startsWith,
@@ -9,11 +10,12 @@ import { ParameterBag } from '../parameter-bag';
 
 describe('Where Comparators', () => {
   let bag: ParameterBag;
+
   beforeEach(() => {
     bag = new ParameterBag();
   });
 
-  const simpleOperators = {
+  const simpleOperators: Dictionary<(value: any, variable?: boolean) => Comparator> = {
     equals,
     greaterThan,
     greaterEqualTo,
@@ -24,7 +26,8 @@ describe('Where Comparators', () => {
     contains,
     inArray,
   };
-  const opSymbols = {
+
+  const opSymbols: Dictionary<string> = {
     equals: '=',
     greaterThan: '>',
     greaterEqualTo: '>=',

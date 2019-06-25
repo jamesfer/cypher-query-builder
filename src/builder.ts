@@ -18,7 +18,7 @@ import { RemoveProperties } from './clauses/remove';
  * @internal
  */
 export interface WrapperClause {
-  new (clause: Clause): Clause;
+  new (clause: Set): Clause;
 }
 
 /**
@@ -155,7 +155,7 @@ export class SetBlock<Q> {
     return this.chain(this.wrap(new Set({ variables }, { override })));
   }
 
-  private wrap(clause: Clause): Clause {
+  private wrap(clause: Set): Clause {
     return this.wrapper ? new this.wrapper(clause) : clause;
   }
 }
@@ -253,7 +253,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @returns {Q}
    */
   createNode(
-    name?: Many<string> | Dictionary<any>,
+    name: Many<string> | Dictionary<any>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Dictionary<any>,
   ) {

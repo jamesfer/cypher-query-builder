@@ -41,6 +41,10 @@ function isCredentials(credentials: any): credentials is Credentials {
   return 'username' in credentials && 'password' in credentials;
 }
 
+// We have to correct the type of lodash's isFunction method because it doesn't correctly narrow
+// union types such as the options parameter passed to the connection constructor.
+const isTrueFunction: (value: any) => value is Function = isFunction;
+
 /**
  * A connection lets you access the Neo4j server and run queries against it.
  *
@@ -107,15 +111,13 @@ export class Connection extends Builder<Query> {
       ? neo4j.auth.basic(auth.username, auth.password)
       : auth;
 
-    this.options = {
-      driverConstructor: isFunction(options) ? options
-        : options.driverConstructor ? options.driverConstructor : neo4j.driver,
-      driverConfig: isFunction(options) || !options.driverConfig ? {} : options.driverConfig,
-    };
-
-    this.driver = this.options.driverConstructor(this.url, this.auth, this.options.driverConfig);
+    const driverConstructor = isTrueFunction(options) ? options
+      : options.driverConstructor ? options.driverConstructor : neo4j.driver;
+    const driverConfig = isTrueFunction(options) || !options.driverConfig
+      ? {} : options.driverConfig;
+    this.options = { driverConstructor, driverConfig };
+    this.driver = driverConstructor(this.url, this.auth, this.options.driverConfig);
     this.open = true;
-
     connections.push(this);
   }
 
@@ -206,19 +208,20 @@ export class Connection extends Builder<Query> {
    * @returns {Promise<Dictionary<R>[]>}
    */
   run<R = any>(query: Query): Promise<Dictionary<R>[]> {
-    if (!this.open) {
-      throw Error('Cannot run query; connection is not open.');
-    }
-
     if (query.getClauses().length === 0) {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
-    const queryObj = query.buildQueryObject();
     const session = this.session();
+    if (!session) {
+      throw Error('Cannot run query: connection is not open.');
+    }
+
+    const queryObj = query.buildQueryObject();
+    const result = session.run(queryObj.query, queryObj.params);
 
     // Need to wrap promise in an any-promise
-    return AnyPromise.resolve(session.run(queryObj.query, queryObj.params))
+    return AnyPromise.resolve(result)
       .then((result) => {
         session.close();
         return this.transformer.transformRecords<R>(result.records);
@@ -305,10 +308,13 @@ export class Connection extends Builder<Query> {
       throw Error('Cannot run query: no clauses attached to the query.');
     }
 
-    const queryObj = query.buildQueryObject();
     const session = this.session();
+    if (!session) {
+      throw Error('Cannot run query: connection is not open.');
+    }
 
     // Run the query
+    const queryObj = query.buildQueryObject();
     const result = session.run(queryObj.query, queryObj.params);
 
     // Subscribe to the result and clean up the session

@@ -24,9 +24,9 @@
   "scripts": {
     "commit": "git-cz",
     "build": "yarn build:declaration && yarn build:rollup",
-    "build:declaration": "tsc --project tsconfig.json --outDir dist/typings --declaration --emitDeclarationOnly",
+    "build:declaration": "tsc --project tsconfig.declaration.json --outDir dist/typings --declaration --emitDeclarationOnly",
     "build:rollup": "rollup -c",
-    "lint": "tslint --project ./tsconfig.lint.json",
+    "lint": "tslint --project ./tsconfig.json",
     "test": "docker-compose -f docker/docker-compose.test.yml -p cypher-query-builder up --exit-code-from tests",
     "test:unit": "nyc --reporter=html --reporter=text-summary mocha src/*.spec.ts src/**/*.spec.ts",
     "validate": "yarn --silent lint && yarn --silent build && yarn --silent test",

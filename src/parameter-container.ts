@@ -4,7 +4,7 @@ import { Dictionary } from 'lodash';
 export class ParameterContainer {
   protected parameterBag = new ParameterBag();
 
-  useParameterBag(newBag) {
+  useParameterBag(newBag: ParameterBag) {
     newBag.importParams(this.parameterBag);
     this.parameterBag = newBag;
   }

@@ -53,6 +53,8 @@ export class TermListClause extends Clause {
     if (isPlainObject(term)) {
       return this.stringifyDictionary(term);
     }
+
+    return '';
   }
 
   private stringifyProperty(prop: string, alias?: string, node?: string): string {
@@ -78,17 +80,20 @@ export class TermListClause extends Clause {
   }
 
   private stringifyDictionary(node: Dictionary<string | Properties>): string[] {
-    const convertToString = (list, prop, key) => {
-      if (isString(prop)) {
-        // Alias
-        list.push(this.stringifyProperty(prop, key));
-      } else {
-        // Node with properties
-        list.push(...this.stringifyProperties(prop, null, key));
-      }
-      return list;
-    };
-    return reduce(node, convertToString, []);
+    return reduce(
+      node,
+      (list, prop, key) => {
+        if (isString(prop)) {
+          // Alias
+          list.push(this.stringifyProperty(prop, key));
+        } else {
+          // Node with properties
+          list.push(...this.stringifyProperties(prop, undefined, key));
+        }
+        return list;
+      },
+      [] as string[],
+    );
   }
 
   build() {

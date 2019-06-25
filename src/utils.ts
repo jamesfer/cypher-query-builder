@@ -9,6 +9,7 @@ import {
   isString,
   map,
   reduce,
+  Many,
 } from 'lodash';
 
 /**
@@ -18,7 +19,7 @@ import {
  * @param {Array<string>} existing
  * @return {string}
  */
-export function uniqueString(str, existing: string[]) {
+export function uniqueString(str: string, existing: string[]) {
   let camelString = camelCase(str);
 
   // Check if the string already has a number extension
@@ -31,14 +32,18 @@ export function uniqueString(str, existing: string[]) {
 
   // Compute all taken suffixes that are similar to the given string
   const regex = new RegExp(`^${camelString}([0-9]*)$`);
-  const collectSuffixes = (suffixes, existingString) => {
-    const matches = existingString.match(regex);
-    if (matches) {
-      return [...suffixes, matches[1] ? +matches[1] : 1];
-    }
-    return suffixes;
-  };
-  const takenSuffixes = reduce(existing, collectSuffixes, []);
+  const takenSuffixes = reduce(
+    existing,
+    (suffixes, existingString) => {
+      const matches = existingString.match(regex);
+      if (matches) {
+        const [, suffix] = matches;
+        suffixes.push(suffix ? +suffix : 1);
+      }
+      return suffixes;
+    },
+    [] as number[],
+  );
 
   // If there was no suffix on the given string or it was already taken,
   // compute the new suffix.
@@ -55,7 +60,7 @@ export function uniqueString(str, existing: string[]) {
  * @param {object|Array|string|boolean|number} value
  * @return {string}
  */
-export function stringifyValue(value) {
+export function stringifyValue(value: any): string {
   if (isNumber(value) || isBoolean(value)) {
     return `${value}`;
   }
@@ -81,11 +86,10 @@ export function stringifyValue(value) {
  * @param relation When true, joins labels by a | instead of :
  * @return {string}
  */
-export function stringifyLabels(labels, relation = false) {
+export function stringifyLabels(labels: Many<string>, relation = false) {
   if (labels.length === 0) {
     return '';
   }
-
   return `:${castArray(labels).join(relation ? '|' : ':')}`;
 }
 
