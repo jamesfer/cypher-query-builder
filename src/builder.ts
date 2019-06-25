@@ -18,7 +18,7 @@ import { RemoveProperties } from './clauses/remove';
  * @internal
  */
 export interface WrapperClause {
-  new (clause: Clause): Clause;
+  new (clause: Set): Clause;
 }
 
 /**
@@ -155,7 +155,7 @@ export class SetBlock<Q> {
     return this.chain(this.wrap(new Set({ variables }, { override })));
   }
 
-  private wrap(clause: Clause): Clause {
+  private wrap(clause: Set): Clause {
     return this.wrapper ? new this.wrapper(clause) : clause;
   }
 }
@@ -253,7 +253,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @returns {Q}
    */
   createNode(
-    name?: Many<string> | Dictionary<any>,
+    name: Many<string> | Dictionary<any>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Dictionary<any>,
   ) {
@@ -266,7 +266,9 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * clause to the query.
    *
    * Delete accepts a single string or an array of them and all of them are
-   * joined together with commas.
+   * joined together with commas. *Note that these strings are not escaped or
+   * passed to Neo4j using parameters, therefore you should not pass user
+   * input into this clause without escaping it first*.
    *
    * You can set `detach: true` in the options to make it a `DETACH DELETE`
    * clause.
@@ -299,7 +301,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {string | number} amount
    * @returns {Q}
    */
-  limit(amount: string | number) {
+  limit(amount: number) {
     return this.continueChainClause(new Limit(amount));
   }
 
@@ -630,7 +632,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {string | number} amount
    * @returns {Q}
    */
-  skip(amount: string | number) {
+  skip(amount: number) {
     return this.continueChainClause(new Skip(amount));
   }
 

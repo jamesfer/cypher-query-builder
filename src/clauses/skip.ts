@@ -1,11 +1,15 @@
 import { Clause } from '../clause';
+import { Parameter } from '../parameter-bag';
 
 export class Skip extends Clause {
-  constructor(public amount: number | string) {
+  protected amountParam: Parameter;
+
+  constructor(public amount: number) {
     super();
+    this.amountParam = this.addParam(amount, 'skipCount');
   }
 
   build() {
-    return `SKIP ${this.amount}`;
+    return `SKIP ${this.amountParam}`;
   }
 }

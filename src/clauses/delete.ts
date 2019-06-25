@@ -10,7 +10,7 @@ export class Delete extends Clause {
 
   constructor(
     variables: Many<string>,
-    protected options: DeleteOptions = { detach: true },
+    protected options: DeleteOptions = { },
   ) {
     super();
     this.variables = castArray(variables);
