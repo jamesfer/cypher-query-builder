@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.0...v4.0.1) (2019-06-25)
+
+
+### Bug Fixes
+
+* update code style and test errors ([1b94118](https://github.com/jamesfer/cypher-query-builder/commit/1b94118))
+
 # [4.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v3.8.5...v4.0.0) (2019-06-25)
 
 
