@@ -1,6 +1,7 @@
 // tslint:disable-next-line import-name
 import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
+import { tap } from 'rxjs/operators';
 import { SinonSpy, spy } from 'sinon';
 import { v1 as neo4j } from 'neo4j-driver';
 import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
@@ -186,12 +187,13 @@ describe('Connection', () => {
       expect(observable).to.be.an.instanceOf(Observable);
 
       let count = 0;
-      return observable
-        .do((row) => {
+      return observable.pipe(
+        tap((row) => {
           expect(row.n.properties).to.deep.equal(records[count]);
           expect(row.n.labels).to.deep.equal(['TestStreamRecord']);
           count += 1;
-        })
+        }),
+      )
         .toPromise()
         .then(() => {
           expect(count).to.equal(records.length);
