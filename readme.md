@@ -1,7 +1,12 @@
 # Cypher Query Builder
 [![Build Status](https://travis-ci.org/jamesfer/cypher-query-builder.svg?branch=master)](https://travis-ci.org/jamesfer/cypher-query-builder)
 [![Coverage Status](https://coveralls.io/repos/github/jamesfer/cypher-query-builder/badge.svg?branch=master)](https://coveralls.io/github/jamesfer/cypher-query-builder?branch=master)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![Greenkeeper badge](https://badges.greenkeeper.io/jamesfer/cypher-query-builder.svg)](https://greenkeeper.io/)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jamesfer/cypher-query-builder.svg)](https://greenkeeper.io/)
+
+<a href="https://www.patreon.com/jamesfer" title="Become a patreon" style="float: right"> 
+  <img alt="Become a patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="240">
+</a>
 
 A flexible and intuitive query builder for Neo4j and Cypher.
 Write queries in Javascript just as you would write them in Cypher.
