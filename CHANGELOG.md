@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.1...v4.0.2) (2019-07-16)
+
+
+### Bug Fixes
+
+* update lodash version ([8e9687f](https://github.com/jamesfer/cypher-query-builder/commit/8e9687f))
+
 ## [4.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.0...v4.0.1) (2019-06-25)
 
 
