@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.2...v4.1.0) (2019-07-16)
+
+
+### Features
+
+* **Union:** create union clause ([7e3b7c8](https://github.com/jamesfer/cypher-query-builder/commit/7e3b7c8))
+
 ## [4.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.1...v4.0.2) (2019-07-16)
 
 
