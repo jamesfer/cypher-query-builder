@@ -13,6 +13,7 @@ import { Term } from './clauses/term-list-clause';
 import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
 import { RemoveProperties } from './clauses/remove';
+import { Union } from './clauses/union';
 
 /**
  * @internal
@@ -634,6 +635,48 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    */
   skip(amount: number) {
     return this.continueChainClause(new Skip(amount));
+  }
+
+  /**
+   * Add a [union]{@link https://neo4j.com/docs/cypher-manual/current/clauses/union/} clause to the
+   * query.
+   *
+   * ```javascript
+   * query.matchNode('people', 'People')
+   *   .return({ 'people.name': 'name' })
+   *   .union()
+   *   .matchNode('departments', 'Department')
+   *   .return({ 'departments.name': 'name' });
+   * // MATCH (people:People)
+   * // RETURN people.name AS name
+   * // UNION
+   * // MATCH (departments:Department)
+   * // RETURN departments.name AS name
+   * ```
+   */
+  union(all?: boolean) {
+    return this.continueChainClause(new Union(all));
+  }
+
+  /**
+   * Add a [union all]{@link https://neo4j.com/docs/cypher-manual/current/clauses/union/} clause to
+   * the query. Just shorthand for `union(true)`.
+   *
+   * ```javascript
+   * query.matchNode('people', 'People')
+   *   .return({ 'people.name': 'name' })
+   *   .unionAll()
+   *   .matchNode('departments', 'Department')
+   *   .return({ 'departments.name': 'name' });
+   * // MATCH (people:People)
+   * // RETURN people.name AS name
+   * // UNION ALL
+   * // MATCH (departments:Department)
+   * // RETURN departments.name AS name
+   * ```
+   */
+  unionAll() {
+    return this.continueChainClause(new Union(true));
   }
 
   /**
