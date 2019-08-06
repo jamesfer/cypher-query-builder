@@ -7,9 +7,10 @@ import {
   last,
   keys,
   isFunction,
+  isRegExp,
 } from 'lodash';
 import { ParameterBag } from '../parameter-bag';
-import { Comparator } from './where-comparators';
+import { Comparator, regexp } from './where-comparators';
 
 export type Condition = any | Comparator;
 export type Conditions = Dictionary<Many<Condition>>;
@@ -56,6 +57,9 @@ export function stringCons(
   }
   if (conditions instanceof WhereOp) {
     return conditions.evaluate(params, precedence, name);
+  }
+  if (isRegExp(conditions)) {
+    return stringifyCondition(params, regexp(conditions), name);
   }
   return stringifyCondition(params, conditions, name);
 }

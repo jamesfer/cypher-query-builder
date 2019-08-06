@@ -695,13 +695,12 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * Adds a [where]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/where}
    * clause to the query.
    *
-   * `where` is probably the most complex clause in this package but the rule of
-   * thumb is when you see an array it becomes an `OR` and when you see a
-   * dictionary, it becomes an `AND`. The many different ways of specifying your
+   * `where` is probably the most complex clause in this package because of the flexible ways to
+   * combine conditions. A handy rule of thumb is when you see an array it becomes an `OR` and when
+   * you see a dictionary, it becomes an `AND`. The many different ways of specifying your
    * constraints are listed below.
    *
-   * As a simple object. The comparison of each property is just `AND`ed
-   * together.
+   * As a simple object, the comparison of each property is just `AND`ed together.
    * ```javascript
    * query.where({
    *   name: 'Alan',
@@ -710,14 +709,47 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // WHERE name = 'Alan' AND age = 54
    * ```
    *
-   * Each property can also be an array, in which case each element of the array
-   * is considered a possible value of that property.
+   * You can wrap your constraints in a top level dictionary in which case the key of the outer
+   * dictionary will be considered the name of the node.
    * ```javascript
    * query.where({
-   *   name: [ 'Alan', 'Steve', 'Barry' ],
-   *   age: 54,
+   *   person: {
+   *     name: 'Alan',
+   *     age: 54,
+   *   },
    * })
-   * // WHERE (name = 'Alan' OR name = 'Steve' OR name = 'Barry') AND age = 54
+   * // WHERE person.name = 'Alan' AND person.age = 54
+   * ```
+   *
+   * Using an array, you can generate `OR`ed conditions.
+   * ```javascript
+   * query.where([
+   *   { name: 'Alan' },
+   *   { age: 54 },
+   * ])
+   * // WHERE name = 'Alan' OR age = 54
+   * ```
+   *
+   * Arrays can be placed at many levels in the conditions.
+   * ```javascript
+   * query.where({
+   *   name: [ 'Alan', 'Steve', 'Bob' ],
+   * })
+   * // WHERE name = 'Alan' OR name = 'Steve' OR name = 'Bob'
+   *
+   * query.where({
+   *   person: [
+   *     { name: 'Alan' },
+   *     { age: 54 },
+   *   ],
+   * })
+   * // WHERE person.name = 'Alan' OR person.age = 54
+   *
+   * query.where([
+   *   { employee: { name: 'Alan' } },
+   *   { department: { code: 765 } },
+   * })
+   * // WHERE employee.name = 'Alan' OR department.code = 765
    * ```
    *
    * For more complex comparisons, you can use the comparator functions such as:
@@ -728,41 +760,59 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // WHERE age > 30
    * ```
    *
+   * The full list of comparators currently supported are:
+   *  - [between]{@link http://jamesfer.me/cypher-query-builder/globals.html#between}
+   *  - [contains]{@link http://jamesfer.me/cypher-query-builder/globals.html#contains}
+   *  - [endsWith]{@link http://jamesfer.me/cypher-query-builder/globals.html#endswith}
+   *  - [equals]{@link http://jamesfer.me/cypher-query-builder/globals.html#equals}
+   *  - [exists]{@link http://jamesfer.me/cypher-query-builder/globals.html#exists}
+   *  - [greaterEqualTo]{@link http://jamesfer.me/cypher-query-builder/globals.html#greaterequalto}
+   *  - [greaterThan]{@link http://jamesfer.me/cypher-query-builder/globals.html#greaterthan}
+   *  - [hasLabel]{@link http://jamesfer.me/cypher-query-builder/globals.html#haslabel}
+   *  - [inArray]{@link http://jamesfer.me/cypher-query-builder/globals.html#inarray}
+   *  - [isNull]{@link http://jamesfer.me/cypher-query-builder/globals.html#isnull}
+   *  - [lessEqualTo]{@link http://jamesfer.me/cypher-query-builder/globals.html#lessequalto}
+   *  - [lessThan]{@link http://jamesfer.me/cypher-query-builder/globals.html#lessthan}
+   *  - [regexp]{@link http://jamesfer.me/cypher-query-builder/globals.html#regexp}
+   *  - [startsWith]{@link http://jamesfer.me/cypher-query-builder/globals.html#startswith}
+   *
    * You can import the comparisons one at a time or all at once.
-   * ```
+   * ```javascript
    * import { greaterThan, regexp } from 'cypher-query-builder';
+   * // or
    * import { comparisons } form 'cypher-query-builder';
    * ```
    *
-   * You can wrap each of the above examples in another dictionary in which case
-   * the key of the outer dictionary will be considered the name of the node.
+   * For convenience you can also pass a Javascript RegExp object as a value,
+   * which will then be converted into a string before it is passed to cypher.
+   * *However*, beware that the cypher regexp syntax is inherited from
+   * [java]{@link
+    * https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html},
+   * and may have slight differences to the Javascript syntax. If you would
+   * prefer, you can use the `regexp` comparator and use strings instead of
+   * RegExp objects. For example, Javascript RegExp flags will not be
+   * preserved when sent to cypher.
    * ```javascript
    * query.where({
-   *   person: {
-   *     name: [ 'Alan', 'Steve', 'Barry' ],
-   *     age: 54,
-   *   },
+   *   name: /[A-Z].*son/,
    * })
-   * // WHERE
-   * //   (person.name = 'Alan' OR person.name = 'Steve' OR person.name = 'Barry')
-   * //   AND person.age = 54
+   * // WHERE age =~ '[A-Z].*son'
    * ```
-   * Finally, you can also wrap your conditions in an array at most levels to
-   * produce an `OR`
+   *
+   * All the binary operators including `xor` and `not` are available as well and can also be
+   * imported individually or all at once.
+   * ```javascript
+   * import { xor, and } from 'cypher-query-builder';
+   * // or
+   * import { operators } form 'cypher-query-builder';
+   * ```
+   *
+   * The operators can be placed at any level of the query.
    * ```javascript
    * query.where({
-   *   person: [
-   *     { name: 'Alan' },
-   *     { age: 54 },
-   *   ],
+   *   age: xor([lessThan(12), greaterThan(65)])
    * })
-   * // WHERE person.name = 'Alan' OR person.age = 54
-   *
-   * query.where([
-   *   { employee: { age: lessThan(18) }},
-   *   { department: { funding: greaterThan(10000) }}
-   * })
-   * // WHERE employee.age < 18 OR department.funding > 10000
+   * // WHERE age < 12 XOR age > 65
    * ```
    *
    * @param {AnyConditions} conditions
