@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.1.0...v4.2.0) (2019-08-06)
+
+
+### Features
+
+* **Where:** allow RegExp objects directly in where clause ([595b6a9](https://github.com/jamesfer/cypher-query-builder/commit/595b6a9)), closes [#13](https://github.com/jamesfer/cypher-query-builder/issues/13)
+
 # [4.1.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.0.2...v4.1.0) (2019-07-16)
 
 
