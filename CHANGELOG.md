@@ -1,3 +1,10 @@
+# [4.3.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.2.0...v4.3.0) (2019-08-25)
+
+
+### Features
+
+* **return:** add distinct option ([205960a](https://github.com/jamesfer/cypher-query-builder/commit/205960a)), closes [#90](https://github.com/jamesfer/cypher-query-builder/issues/90)
+
 # [4.2.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.1.0...v4.2.0) (2019-08-06)
 
 
