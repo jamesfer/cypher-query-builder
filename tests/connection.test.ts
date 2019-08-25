@@ -234,6 +234,7 @@ describe('Connection', () => {
       createNode: () => connection.createNode('Node'),
       create: () => connection.create(new NodePattern('Node')),
       return: () => connection.return('node'),
+      returnDistinct: () => connection.returnDistinct('node'),
       remove: () => connection.remove({ properties: { node: ['prop1', 'prop2'] } }),
       removeProperties: () => connection.removeProperties({ node: ['prop1', 'prop2'] }),
       removeLabels: () => connection.removeLabels({ node: 'label' }),

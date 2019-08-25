@@ -14,6 +14,7 @@ import { AnyConditions } from './clauses/where-utils';
 import { Clause } from './clause';
 import { RemoveProperties } from './clauses/remove';
 import { Union } from './clauses/union';
+import { ReturnOptions } from './clauses/return';
 
 /**
  * @internal
@@ -619,11 +620,22 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *
    * You can also pass an array of any of the above methods.
    *
-   * @param {_.Many<Term>} terms
-   * @returns {Q}
+   * The return method also accepts a `distinct` option which will cause a `RETURN DISTINCT` to be
+   * emitted instead.
+   * ```javascript
+   * query.return('people', { distinct: true })
+   * // RETURN DISTINCT people
+   * ```
    */
-  return(terms: Many<Term>) {
+  return(terms: Many<Term>, options?: ReturnOptions) {
     return this.continueChainClause(new Return(terms));
+  }
+
+  /**
+   * Shorthand for `return(terms, { distinct: true });
+   */
+  returnDistinct(terms: Many<Term>) {
+    return this.return(terms, { distinct: true });
   }
 
   /**
