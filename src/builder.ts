@@ -4,6 +4,7 @@ import {
   Return, With, Unwind, Delete, Raw, OrderBy, Merge, OnCreate, OnMatch,
   Remove,
 } from './clauses';
+import { CreateOptions } from './clauses/create';
 import { DeleteOptions } from './clauses/delete';
 import { MatchOptions } from './clauses/match';
 import { Direction, OrderConstraint, OrderConstraints } from './clauses/order-by';
@@ -238,29 +239,47 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * CREATE (people:Person { age: 30 })-[:FriendsWith]->(friend:Friend)
    * ```
    *
-   * @param {PatternCollection} patterns
-   * @returns {Q}
+   * The create method also accepts a `unique` option which will cause a `CREATE UNIQUE` clause to
+   * be emitted instead.
+   * ```javascript
+   * query.create([node('people', 'Person', { age: 30 })], { unique: true });
+   * // CREATE UNIQUE (people:Person { age: 30 })
+   * ```
    */
-  create(patterns: PatternCollection) {
-    return this.continueChainClause(new Create(patterns));
+  create(patterns: PatternCollection, options?: CreateOptions) {
+    return this.continueChainClause(new Create(patterns, options));
   }
 
   /**
-   * Shorthand for `create(node(name, labels, conditions))`. For more details
+   * Shorthand for `create(patterns, { unique: true })`
+   */
+  createUnique(patterns: PatternCollection) {
+    return this.create(patterns, { unique: true });
+  }
+
+  /**
+   * Shorthand for `create(node(name, labels, conditions), options)`. For more details
    * the arguments see @{link node}.
-   *
-   * @param {_.Many<string> | _.Dictionary<any>} name
-   * @param {_.Many<string> | _.Dictionary<any>} labels
-   * @param {_.Dictionary<any>} conditions
-   * @returns {Q}
    */
   createNode(
     name: Many<string> | Dictionary<any>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Dictionary<any>,
+    options?: CreateOptions,
   ) {
-    const clause = new Create(new NodePattern(name, labels, conditions));
+    const clause = new Create(new NodePattern(name, labels, conditions), options);
     return this.continueChainClause(clause);
+  }
+
+  /**
+   * Shorthand for `createNode(name, labels, conditions, { unique: true })`
+   */
+  createUniqueNode(
+    name: Many<string> | Dictionary<any>,
+    labels?: Many<string> | Dictionary<any>,
+    conditions?: Dictionary<any>,
+  ) {
+    return this.createNode(name, labels, conditions, { unique: true });
   }
 
   /**
