@@ -620,15 +620,15 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *
    * You can also pass an array of any of the above methods.
    *
-   * The return method also accepts a `distinct` option which will cause a `RETURN DISTINCT` to be
-   * emitted instead.
+   * The return method also accepts a `distinct` option which will cause a `RETURN DISTINCT` clause
+   * to be emitted instead.
    * ```javascript
    * query.return('people', { distinct: true })
    * // RETURN DISTINCT people
    * ```
    */
   return(terms: Many<Term>, options?: ReturnOptions) {
-    return this.continueChainClause(new Return(terms));
+    return this.continueChainClause(new Return(terms, options));
   }
 
   /**
