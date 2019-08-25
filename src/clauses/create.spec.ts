@@ -10,7 +10,7 @@ describe('Create', () => {
     });
 
     it('should start with CREATE UNIQUE when unique option is set to true', () => {
-      const create = new Create(new NodePattern('node', { unique: true }));
+      const create = new Create(new NodePattern('node'), { unique: true });
       expect(create.build()).to.equal('CREATE UNIQUE (node)');
     });
 
