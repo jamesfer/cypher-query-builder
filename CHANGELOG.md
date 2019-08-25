@@ -1,3 +1,11 @@
+# [4.4.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.3.1...v4.4.0) (2019-08-25)
+
+
+### Features
+
+* **create:** add unique option ([202bc4c](https://github.com/jamesfer/cypher-query-builder/commit/202bc4c)), closes [#105](https://github.com/jamesfer/cypher-query-builder/issues/105)
+* **create:** add unique option ([39c860d](https://github.com/jamesfer/cypher-query-builder/commit/39c860d)), closes [#105](https://github.com/jamesfer/cypher-query-builder/issues/105)
+
 ## [4.3.1](https://github.com/jamesfer/cypher-query-builder/compare/v4.3.0...v4.3.1) (2019-08-25)
 
 
