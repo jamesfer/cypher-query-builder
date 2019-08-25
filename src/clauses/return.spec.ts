@@ -7,5 +7,10 @@ describe('Return', () => {
       const query = new Return('node');
       expect(query.build()).to.equal('RETURN node');
     });
+
+    it('should start with RETURN DISTINCT', () => {
+      const query = new Return('node', { distinct: true });
+      expect(query.build()).to.equal('RETURN DISTINCT node');
+    });
   });
 });
