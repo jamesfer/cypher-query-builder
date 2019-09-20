@@ -208,8 +208,16 @@ export class Connection extends Builder<Query> {
    * @returns {Promise<Dictionary<R>[]>}
    */
   run<R = any>(query: Query): Promise<Dictionary<R>[]> {
+    if (!this.open) {
+      return AnyPromise.reject(
+        new Error('Cannot run query; connection is not open.'),
+      ) as Promise<Dictionary<R>[]>;
+    }
+
     if (query.getClauses().length === 0) {
-      throw Error('Cannot run query: no clauses attached to the query.');
+      return AnyPromise.reject(
+        new Error('Cannot run query: no clauses attached to the query.'),
+      ) as Promise<Dictionary<R>[]>;
     }
 
     const session = this.session();
@@ -229,7 +237,7 @@ export class Connection extends Builder<Query> {
       .catch((error) => {
         session.close();
         return Promise.reject(error);
-      }) as any;
+      }) as Promise<Dictionary<R>[]>;
   }
 
   /**
@@ -300,25 +308,27 @@ export class Connection extends Builder<Query> {
    * In practice this should never happen unless you're doing some strange things.
    */
   stream<R = any>(query: Query): Observable<Dictionary<R>> {
-    if (!this.open) {
-      throw Error('Cannot run query; connection is not open.');
-    }
-
-    if (query.getClauses().length === 0) {
-      throw Error('Cannot run query: no clauses attached to the query.');
-    }
-
-    const session = this.session();
-    if (!session) {
-      throw Error('Cannot run query: connection is not open.');
-    }
-
-    // Run the query
-    const queryObj = query.buildQueryObject();
-    const result = session.run(queryObj.query, queryObj.params);
-
-    // Subscribe to the result and clean up the session
     return new Observable((subscriber: Observer<Dictionary<R>>): void => {
+      if (!this.open) {
+        subscriber.error(new Error('Cannot run query; connection is not open.'));
+        return;
+      }
+
+      if (query.getClauses().length === 0) {
+        subscriber.error(Error('Cannot run query: no clauses attached to the query.'));
+        return;
+      }
+
+      const session = this.session();
+      if (!session) {
+        throw Error('Cannot run query: connection is not open.');
+      }
+
+      // Run the query
+      const queryObj = query.buildQueryObject();
+      const result = session.run(queryObj.query, queryObj.params);
+
+      // Subscribe to the result and clean up the session
       // Note: Neo4j observables use a different subscribe syntax to RxJS observables
       result.subscribe({
         onNext: (record) => {

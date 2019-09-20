@@ -1,10 +1,12 @@
-import { Query } from './query';
-import { expect } from '../test-setup';
+// tslint:disable-next-line import-name
+import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
-import { node, NodePattern } from './clauses';
-import { mockConnection } from '../tests/connection.mock';
 import { spy, stub } from 'sinon';
+import { expect } from '../test-setup';
+import { mockConnection } from '../tests/connection.mock';
 import { ClauseCollection } from './clause-collection';
+import { node, NodePattern } from './clauses';
+import { Query } from './query';
 
 describe('Query', () => {
   describe('query methods', () => {
@@ -96,9 +98,17 @@ describe('Query', () => {
   });
 
   describe('#stream', () => {
-    it('should throw if there is no attached connection object', () => {
-      const query = new Query();
-      expect(() => query.stream()).to.throw(Error, 'no connection object available');
+    it('should return an errored observable if there is no attached connection object', () => {
+      const observable = new Query().stream();
+      expect(observable).to.be.an.instanceOf(Observable);
+      observable.subscribe({
+        next: () => expect.fail(null, null, 'Observable should not emit anything'),
+        error(error) {
+          expect(error).to.be.instanceOf(Error);
+          expect(error.message).to.include('no connection object available');
+        },
+        complete: () => expect.fail(null, null, 'Observable should not complete successfully'),
+      });
     });
 
     it('should run the query on its connection', () => {
