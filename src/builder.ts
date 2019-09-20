@@ -119,16 +119,17 @@ export class SetBlock<Q> {
    * `setValues` accepts a dictionary where the keys are nodes or property names
    * to be updated.
    *
-   * `setValues` and `setVariables` by default set override to false meaning
-   * that the `+=` operator will be used to merge values. You can set override
-   * to `true` to use the `=` operator instead.
-   *
-   * @param {_.Dictionary<any>} values
-   * @param {boolean} override
-   * @returns {Q}
+   * To use the `+=` operator to merge properties of a node, you can pass
+   * `true` to the merge option.
+   * ```
+   * query.setValues({
+   *   'sale': { active: true },
+   * }, true)
+   * // SET sale += $sale
+   * ```
    */
-  setValues(values: Dictionary<any>, override?: boolean) {
-    return this.chain(this.wrap(new Set({ values }, { override })));
+  setValues(values: Dictionary<any>, merge?: boolean) {
+    return this.chain(this.wrap(new Set({ values }, { merge })));
   }
 
   /**
@@ -142,20 +143,21 @@ export class SetBlock<Q> {
    * query.setVariables({
    *   'sale.activatedAt': 'timestamp()',
    * })
-   * // SET sale.activatedAt += timestamp()
+   * // SET sale.activatedAt = timestamp()
    * ```
    * Note how values are inserted into the query, as is.
    *
-   * `setValues` and `setVariables` by default set override to false meaning
-   * that the `+=` operator will be used to merge values. You can set override
-   * to `true` to use the `=` operator instead.
-   *
-   * @param {_.Dictionary<string | _.Dictionary<string>>} variables
-   * @param {boolean} override
-   * @returns {Q}
+   * To use the `+=` operator to merge properties of a node, you can pass
+   * `true` to the merge option.
+   * ```
+   * query.setVariables({
+   *   'sale': 'newSaleDetails'
+   * }, true)
+   * // SET sale += newSaleDetails
+   * ```
    */
-  setVariables(variables: Dictionary<string | Dictionary<string>>, override?: boolean) {
-    return this.chain(this.wrap(new Set({ variables }, { override })));
+  setVariables(variables: Dictionary<string | Dictionary<string>>, merge?: boolean) {
+    return this.chain(this.wrap(new Set({ variables }, { merge })));
   }
 
   private wrap(clause: Set): Clause {
