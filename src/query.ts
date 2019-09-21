@@ -1,8 +1,10 @@
 // tslint:disable-next-line import-name
 import AnyPromise from 'any-promise';
+// tslint:disable-next-line import-name
+import Observable from 'any-observable';
 import { Observable as RxObservable } from 'rxjs';
 import { Dictionary } from 'lodash';
-import { Connection } from './connection';
+import { Connection, Observer } from './connection';
 import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
@@ -75,16 +77,12 @@ export class Query extends Builder<Query> {
    */
   run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
-      return AnyPromise.reject(Error('Cannot run query; no connection object available.')) as any;
+      return AnyPromise.reject(
+        new Error('Cannot run query; no connection object available.'),
+      ) as Promise<Dictionary<R>[]>;
     }
 
-    // connection.run can throw errors synchronously. This is highly inconsistent and will be
-    // fixed in the future, but for now we need to catch synchronous errors and reject them.
-    try {
-      return this.connection.run<R>(this);
-    } catch (error) {
-      return AnyPromise.reject(error) as any;
-    }
+    return this.connection.run<R>(this);
   }
 
   /**
@@ -135,7 +133,9 @@ export class Query extends Builder<Query> {
    */
   stream<R = any>(): RxObservable<Dictionary<R>> {
     if (!this.connection) {
-      throw Error('Cannot run query; no connection object available.');
+      return new Observable((subscriber: Observer<Dictionary<R>>): void => {
+        subscriber.error(new Error('Cannot run query; no connection object available.'));
+      });
     }
 
     return this.connection.stream<R>(this);

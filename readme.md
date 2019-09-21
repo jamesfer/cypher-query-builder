@@ -4,8 +4,8 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) 
 [![Greenkeeper badge](https://badges.greenkeeper.io/jamesfer/cypher-query-builder.svg)](https://greenkeeper.io/)
 
-<a href="https://www.patreon.com/jamesfer" title="Become a patreon" style="float: right"> 
-  <img alt="Become a patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="240">
+<a href="https://www.patreon.com/jamesfer" title="Become a patreon"> 
+  <img alt="Become a patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="200">
 </a>
 
 A flexible and intuitive query builder for Neo4j and Cypher.
@@ -41,6 +41,18 @@ let results = await db.matchNode('user', 'User', { active: true })
 //   },
 // }]
 ```
+
+## Contents
+
+- [Quick start](#quick-start)
+  - [Installation](#installation)
+  - [Importing](#importing)
+  - [Connecting](#connecting)
+  - [Querying](#querying)
+  - [Processing](#processing)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Quick start
 
@@ -113,7 +125,7 @@ const results = await db.matchNode('projects', 'Project')
 _standardish_ Neo4j form an array of records:
 
 ```javascript
-results = [
+const results = [
   {
     projects: {
       // Internal Neo4j node id, don't rely on this to stay constant.
@@ -165,11 +177,26 @@ let projectProps = results.map(row => row.projects.properties);
 
 ## Documentation
 
-For more details on creating a connection, see the
-[Connection](http://jamesfer.me/cypher-query-builder/classes/connection.html) class.
+All the reference documentation can be found [here](http://jamesfer.me/cypher-query-builder).
+However, the two most useful pages are probably:
 
-For more details on clauses and running queries, see the
-[Query](http://jamesfer.me/cypher-query-builder/classes/query.html) class.
+ - The [Connection](https://jamesfer.me/cypher-query-builder/classes/connection.html) class, for 
+   details on creating and using a connection.
+ - The [Query](https://jamesfer.me/cypher-query-builder/classes/query.html) class, for details on 
+   all the available clauses, and building and running queries.
+
+## Contributing
+
+Please feel free to submit any bugs or questions you may have in an 
+[issue](https://github.com/jamesfer/cypher-query-builder/issues). I'm very open to discussing 
+suggestions or new ideas so don't hesitate to reach out.
+
+Maintaining the library does take some time out of my schedule so if you'd like to show your 
+appreciation please consider donating. Even the smallest amount is really encouraging.
+
+<a href="https://www.patreon.com/jamesfer" title="Become a patreon"> 
+  <img alt="Become a patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="200">
+</a>
 
 ## License
 
