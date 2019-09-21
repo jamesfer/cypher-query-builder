@@ -45,9 +45,16 @@ function isCredentials(credentials: any): credentials is Credentials {
 // union types such as the options parameter passed to the connection constructor.
 const isTrueFunction: (value: any) => value is Function = isFunction;
 
+// tslint:disable max-line-length
 /**
- * A connection lets you access the Neo4j server and run queries against it.
+ * The Connection class lets you access the Neo4j server and run queries against it. Under the hood,
+ * the Connection class uses the official Neo4j Nodejs driver which manages connection pooling on a
+ * [session basis]{@link https://neo4j.com/docs/api/javascript-driver/current/class/src/v1/driver.js~Driver.html#instance-method-session}.
+ * It should be enough to have a single Connection instance per database per application.
  *
+ * To create the connection, simply call the
+ * [constructor]{@link https://jamesfer.me/cypher-query-builder/classes/connection.html#constructor}
+ * and pass in the database url, username and password.
  * ```
  * const db = new Connection('bolt://localhost', {
  *   username: 'neo4j',
@@ -55,25 +62,37 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  * })
  * ```
  *
- * Once you've finished with the connection you should close the connection.
- * ```
- * db.close()
- * ```
- *
- * The library will attempt to clean up all connections when the process exits,
- * but if you are using many connections for a short period of time you should
- * close them yourself.
- *
- * To use the connection, the chainable query builder methods will probably be
- * most useful such as `match`, `create`, `matchNode` etc etc.
- *
+ * To use the connection, just start calling any of the clause methods such as `match`, `create` or
+ * `matchNode` etc. They automatically create a {@link Query} object that you can then chain other
+ * methods off of.
  * ```
  * db.matchNode('people', 'Person')
  *   .where({ 'people.age': greaterThan(18) })
  *   .return('people')
  *   .run()
  * ```
+ *
+ * You can also pass a query to the
+ * [run]{@link https://jamesfer.me/cypher-query-builder/classes/connection.html#run} method,
+ * however, this is probably much less convenient.
+ * ```
+ * db.run(
+ *   new Query().matchNode('people', 'Person')
+ *     .where({ 'people.age': greaterThan(18) })
+ *     .return('people')
+ *     .run()
+ * );
+ * ```
+ *
+ * Once you've finished with the connection you should close the connection.
+ * ```
+ * db.close()
+ * ```
+ *
+ * The library will attempt to clean up all connections when the process exits, but it is better to
+ * be explicit.
  */
+// tslint:enable max-line-length
 export class Connection extends Builder<Query> {
   protected auth: AuthToken;
   protected driver: Driver;
