@@ -1,3 +1,19 @@
+# [5.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.4.0...v5.0.0) (2019-09-21)
+
+
+### Bug Fixes
+
+* **Set:** replace override option with merge ([91ab4f6](https://github.com/jamesfer/cypher-query-builder/commit/91ab4f6))
+* make error handling more consistent ([56a7591](https://github.com/jamesfer/cypher-query-builder/commit/56a7591))
+
+
+### BREAKING CHANGES
+
+* The run and stream methods of the Connection and Query classes no longer throw
+exceptions. Instead they return a rejected promise or an observable that will immediately error.
+* **Set:** The default behaviour of the Set clause has changed to use the `=` operator.
+This is to be more consistent with cypher.
+
 # [4.4.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.3.1...v4.4.0) (2019-08-25)
 
 
