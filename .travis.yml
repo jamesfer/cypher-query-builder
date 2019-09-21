@@ -23,8 +23,16 @@ after_success:
   - '[[ $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH = "master" ]] && yarn docs'
 
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: yarn semantic-release
-  on:
-    branch: master
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GH_TOKEN
+    keep_history: true
+    allow_empty_commit: true
+    local_dir: docs
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: yarn semantic-release
+    on:
+      branch: master
