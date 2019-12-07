@@ -1,10 +1,10 @@
 {
-  "name": "cypher-query-builder",
-  "version": "5.0.0",
+  "name": "@hammerbot/cypher-query-builder",
+  "version": "5.0.1",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "author": "James Ferguson",
   "license": "MIT",
-  "repository": "github:jamesfer/cypher-query-builder",
+  "repository": "github:elmatella/cypher-query-builder",
   "main": "dist/cjs5.js",
   "module": "dist/esm5.js",
   "es2015": "dist/esm2015.js",
