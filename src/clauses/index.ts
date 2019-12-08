@@ -1,4 +1,7 @@
 import { Dictionary, Many } from 'lodash';
+import { NodePattern } from './node-pattern';
+import { RelationDirection, RelationPattern } from './relation-pattern';
+import { PathLength } from '../utils';
 
 export { Create } from './create';
 export { NodePattern } from './node-pattern';
@@ -36,10 +39,6 @@ export {
   regexp,
   comparisions,
 } from './where-comparators';
-
-import { NodePattern } from './node-pattern';
-import { RelationDirection, RelationPattern } from './relation-pattern';
-import { PathLength } from '../utils';
 
 /**
  * Creates a node pattern like `(parent:Person { name: 'Gwenn' })`.
