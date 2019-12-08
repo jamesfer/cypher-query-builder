@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.0...v5.0.1) (2019-12-08)
+
+
+### Bug Fixes
+
+* export builder, clause and clause collection ([6dde494](https://github.com/jamesfer/cypher-query-builder/commit/6dde494)), closes [#116](https://github.com/jamesfer/cypher-query-builder/issues/116)
+
 # [5.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v4.4.0...v5.0.0) (2019-09-21)
 
 
