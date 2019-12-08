@@ -1,5 +1,5 @@
 import {
-  flattenDeep,
+  flatMapDeep,
   map,
   isPlainObject,
   isString,
@@ -35,7 +35,7 @@ export class TermListClause extends Clause {
   }
 
   toString() {
-    return flattenDeep(map(this.terms, term => this.stringifyTerm(term))).join(', ');
+    return flatMapDeep(this.terms, term => this.stringifyTerm(term)).join(', ');
   }
 
   private stringifyTerm(term: Term): Many<string> {

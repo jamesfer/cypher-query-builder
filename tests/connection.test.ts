@@ -3,7 +3,7 @@ import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
 import { tap } from 'rxjs/operators';
 import { v1 as neo4j } from 'neo4j-driver';
-import { Driver } from 'neo4j-driver/types/v1';
+import { Driver, Session } from 'neo4j-driver/types/v1';
 import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
 import { SinonSpy, spy } from 'sinon';
 import { Connection, Node, Query } from '../src';
@@ -11,13 +11,16 @@ import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
 import { neo4jCredentials, neo4jUrl, waitForNeo } from './utils';
 
+type SinonSpyFor<T, K extends keyof T> =
+  T[K] extends (...a: infer Args) => infer Return ? SinonSpy<Args, Return> : never;
+
 describe('Connection', () => {
   let connection: Connection;
   let driver: Driver;
-  let driverCloseSpy: SinonSpy;
-  let driverSessionSpy: SinonSpy;
-  let sessionRunSpy: SinonSpy;
-  let sessionCloseSpy: SinonSpy;
+  let driverCloseSpy: SinonSpyFor<Driver, 'close'>;
+  let driverSessionSpy: SinonSpyFor<Driver, 'session'>;
+  let sessionRunSpy: SinonSpyFor<Session, 'run'>;
+  let sessionCloseSpy: SinonSpyFor<Session, 'close'>;
 
   function makeSessionMock(driver: Driver): Driver {
     const defaultSessionConstructor = driver.session;
