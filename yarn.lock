@@ -4120,12 +4120,13 @@ neo-async@^2.6.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
-neo4j-driver@^1.5.0:
-  version "1.7.6"
-  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-1.7.6.tgz#eccb135a71eba9048c68717444593a6424cffc49"
-  integrity sha512-6c3ALO3vYDfUqNoCy8OFzq+fQ7q/ab3LCuJrmm8P04M7RmyRCCnUtJ8IzSTGbiZvyhcehGK+azNDAEJhxPV/hA==
+neo4j-driver@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.0.1.tgz#b25ffde0f16602e94c46d097e16a8bacbd773d5a"
+  integrity sha512-SqBhXyyyayVs5gV/6BrgdKbcmU5AsYQXkFAiYO74XAE8XPLJ1HVR/Hu4wjonAX7+70DsalkWEiFN1c6UaCVzlQ==
   dependencies:
     "@babel/runtime" "^7.5.5"
+    rxjs "^6.5.2"
     text-encoding-utf-8 "^1.0.2"
     uri-js "^4.2.2"
 
