@@ -1,3 +1,13 @@
+## [5.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.1...v5.0.2) (2019-12-16)
+
+
+### Bug Fixes
+
+* remove rimraf dependency ([e2aa8f3](https://github.com/jamesfer/cypher-query-builder/commit/e2aa8f336f2aee5f4d58864612bb66f71ed0890e))
+* update any-observable ([c5cb388](https://github.com/jamesfer/cypher-query-builder/commit/c5cb3885e573ded3b4d4e8776bef0f41a33c79ed))
+* update lodash version in package.json ([67e71c4](https://github.com/jamesfer/cypher-query-builder/commit/67e71c429cefcedae08f09323c4edde25d646640))
+* update typedoc dependency ([f4bde55](https://github.com/jamesfer/cypher-query-builder/commit/f4bde5546dfafa575f499fb5feb524cb5696ecc3))
+
 ## [5.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.0...v5.0.1) (2019-12-08)
 
 
