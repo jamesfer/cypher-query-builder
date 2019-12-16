@@ -1,6 +1,6 @@
 {
   "name": "cypher-query-builder",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "author": "James Ferguson",
   "license": "MIT",

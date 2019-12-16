@@ -1,3 +1,10 @@
+## [5.0.3](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.2...v5.0.3) (2019-12-16)
+
+
+### Bug Fixes
+
+* update package versions in lockfile ([2d8534e](https://github.com/jamesfer/cypher-query-builder/commit/2d8534ebf8b1f20cdb4a75fc542c592dd27cd9da))
+
 ## [5.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.1...v5.0.2) (2019-12-16)
 
 
