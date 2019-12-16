@@ -1,31 +1,34 @@
 // tslint:disable-next-line import-name
 import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
+// tslint:disable-next-line import-name
+import neo4j from 'neo4j-driver';
+import { Driver, Session } from 'neo4j-driver/types';
+import { AuthToken, Config } from 'neo4j-driver/types/driver';
 import { tap } from 'rxjs/operators';
-import { v1 as neo4j } from 'neo4j-driver';
-import { Driver, Session } from 'neo4j-driver/types/v1';
-import { AuthToken, Config } from 'neo4j-driver/types/v1/driver';
 import { SinonSpy, spy } from 'sinon';
 import { Connection, Node, Query } from '../src';
 import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
 import { neo4jCredentials, neo4jUrl, waitForNeo } from './utils';
 
-type SinonSpyFor<T, K extends keyof T> =
-  T[K] extends (...a: infer Args) => infer Return ? SinonSpy<Args, Return> : never;
+type ArgumentTypes<T extends (...args: any) => any>
+  = T extends (...a: infer Args) => any ? Args : never;
+type SinonSpyFor<T extends (...args: any) => any>
+  = SinonSpy<ArgumentTypes<T>, ReturnType<T>>;
 
 describe('Connection', () => {
   let connection: Connection;
   let driver: Driver;
-  let driverCloseSpy: SinonSpyFor<Driver, 'close'>;
-  let driverSessionSpy: SinonSpyFor<Driver, 'session'>;
-  let sessionRunSpy: SinonSpyFor<Session, 'run'>;
-  let sessionCloseSpy: SinonSpyFor<Session, 'close'>;
+  let driverCloseSpy: SinonSpyFor<Driver['close']>;
+  let driverSessionSpy: SinonSpyFor<Driver['session']>;
+  let sessionRunSpy: SinonSpyFor<Session['run']>;
+  let sessionCloseSpy: SinonSpyFor<Session['close']>;
 
   function makeSessionMock(driver: Driver): Driver {
     const defaultSessionConstructor = driver.session;
-    driver.session = function (mode?, bookmark?) {
-      const session = defaultSessionConstructor.call(this, mode, bookmark);
+    driver.session = function (...args: ArgumentTypes<typeof driver.session>) {
+      const session = defaultSessionConstructor.call(this, ...args);
       sessionRunSpy = spy(session, 'run');
       sessionCloseSpy = spy(session, 'close');
       return session;
@@ -70,7 +73,7 @@ describe('Connection', () => {
 
     it('should pass driver options to the driver constructor', () => {
       const constructorSpy = spy(driverConstructor);
-      const driverConfig = { connectionPoolSize: 5 };
+      const driverConfig = { maxConnectionPoolSize: 5 };
       const connection = new Connection(neo4jUrl, neo4jCredentials, {
         driverConfig,
         driverConstructor: constructorSpy,

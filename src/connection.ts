@@ -2,12 +2,13 @@
 import AnyPromise from 'any-promise';
 // tslint:disable-next-line import-name
 import Observable from 'any-observable';
+// tslint:disable-next-line import-name
+import neo4j from 'neo4j-driver';
+import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types';
 import nodeCleanup from 'node-cleanup';
 import { Dictionary, isFunction } from 'lodash';
-import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
 import { Transformer } from './transformer';
 import { Query } from './query';
-import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
 import { Clause } from './clause';
 
@@ -249,12 +250,12 @@ export class Connection extends Builder<Query> {
 
     // Need to wrap promise in an any-promise
     return AnyPromise.resolve(result)
-      .then((result) => {
-        session.close();
+      .then(async (result) => {
+        await session.close();
         return this.transformer.transformRecords<R>(result.records);
       })
-      .catch((error) => {
-        session.close();
+      .catch(async (error) => {
+        await session.close();
         return Promise.reject(error);
       }) as Promise<Dictionary<R>[]>;
   }
@@ -356,16 +357,26 @@ export class Connection extends Builder<Query> {
           }
         },
         onError: (error) => {
-          session.close();
-          if (!subscriber.closed) {
-            subscriber.error(error);
-          }
+          session.close()
+            .catch((sessionCloseError) => {
+              console.log('Failed to close Neo4j session', sessionCloseError);
+            })
+            .then(() => {
+              if (!subscriber.closed) {
+                subscriber.error(error);
+              }
+            });
         },
         onCompleted: () => {
-          session.close();
-          if (!subscriber.closed) {
-            subscriber.complete();
-          }
+          session.close()
+            .catch((sessionCloseError) => {
+              console.log('Failed to close Neo4j session', sessionCloseError);
+            })
+            .then(() => {
+              if (!subscriber.closed) {
+                subscriber.complete();
+              }
+            });
         },
       });
     });
