@@ -1,4 +1,5 @@
-FROM node:10
+ARG NODE_VERSION
+FROM node:${NODE_VERSION}
 
 WORKDIR /app
 
