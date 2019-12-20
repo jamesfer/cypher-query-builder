@@ -50,25 +50,25 @@ describe('Connection', () => {
   afterEach(() => connection.close());
 
   describe('#constructor', () => {
-    it('should default to neo4j driver', () => {
+    it('should default to neo4j driver', async () => {
       const driverSpy = spy(neo4j, 'driver');
       const connection = new Connection(neo4jUrl, neo4jCredentials);
 
       expect(driverSpy.calledOnce);
 
-      connection.close();
+      await connection.close();
       driverSpy.restore();
     });
 
-    it('should accept a custom driver constructor function', () => {
+    it('should accept a custom driver constructor function', async () => {
       const constructorSpy = spy(driverConstructor);
       const connection = new Connection(neo4jUrl, neo4jCredentials, constructorSpy);
       expect(constructorSpy.calledOnce).to.equal(true);
       expect(constructorSpy.firstCall.args[0]).to.equal(neo4jUrl);
-      connection.close();
+      await connection.close();
     });
 
-    it('should pass driver options to the driver constructor', () => {
+    it('should pass driver options to the driver constructor', async () => {
       const constructorSpy = spy(driverConstructor);
       const driverConfig = { connectionPoolSize: 5 };
       const connection = new Connection(neo4jUrl, neo4jCredentials, {
@@ -78,19 +78,19 @@ describe('Connection', () => {
       expect(constructorSpy.calledOnce).to.equal(true);
       expect(constructorSpy.firstCall.args[0]).to.equal(neo4jUrl);
       expect(constructorSpy.firstCall.args[2]).to.deep.equal(driverConfig);
-      connection.close();
+      await connection.close();
     });
   });
 
   describe('#close', () => {
-    it('should close the driver', () => {
-      connection.close();
+    it('should close the driver', async () => {
+      await connection.close();
       expect(driverCloseSpy.calledOnce);
     });
 
-    it('should only close the driver once', () => {
-      connection.close();
-      connection.close();
+    it('should only close the driver once', async () => {
+      await connection.close();
+      await connection.close();
       expect(driverCloseSpy.calledOnce);
     });
   });
@@ -101,8 +101,8 @@ describe('Connection', () => {
       expect(driverSessionSpy.calledOnce);
     });
 
-    it('should return null if the connection has been closed', () => {
-      connection.close();
+    it('should return null if the connection has been closed', async () => {
+      await connection.close();
       const result = connection.session();
 
       expect(driverSessionSpy.notCalled);
@@ -111,44 +111,44 @@ describe('Connection', () => {
   });
 
   describe('#run', () => {
-    it('should reject if there are no clauses in the query', () => {
+    it('should reject if there are no clauses in the query', async () => {
       const promise = connection.run(connection.query());
-      expect(promise).to.be.rejectedWith(Error, 'no clauses');
+      await expect(promise).to.be.rejectedWith(Error, 'no clauses');
     });
 
-    it('should reject if the connection has been closed', () => {
-      connection.close();
-      const promise = connection.run(connection.query().matchNode('node'));
-      expect(promise).to.be.rejectedWith(Error, 'connection is not open');
+    it('should reject if the connection has been closed', async () => {
+      await connection.close();
+      const promise = connection.run(connection.query().return('1'));
+      await expect(promise).to.be.rejectedWith(Error, 'connection is not open');
     });
 
-    it('should run the query through a session', () => {
+    it('should run the query through a session', async () => {
       const params = {};
-      const query = (new Query()).raw('RETURN 1', params);
+      const query = new Query().raw('RETURN 1', params);
 
       const promise = connection.run(query);
-      return expect(promise).to.be.fulfilled.then(() => {
+      await expect(promise).to.be.fulfilled.then(() => {
         expect(sessionRunSpy.calledOnce);
         expect(sessionRunSpy.calledWith('RETURN 1', params));
       });
     });
 
-    it('should close the session after running a query', () => {
+    it('should close the session after running a query', async () => {
       const promise = connection.run((new Query()).raw('RETURN 1'));
-      return expect(promise).to.be.fulfilled
+      await expect(promise).to.be.fulfilled
         .then(() => expect(sessionCloseSpy.calledOnce));
     });
 
     it('should close the session when run() throws', async () => {
       const promise = connection.run((new Query()).raw('RETURN a'));
-      return expect(promise).to.be.rejectedWith(Error)
+      await expect(promise).to.be.rejectedWith(Error)
         .then(() => expect(sessionCloseSpy.calledOnce));
     });
   });
 
   describe('stream', () => {
     const params = {};
-    const query = (new Query()).matchNode('n', 'TestStreamRecord').return('n');
+    const query = new Query().matchNode('n', 'TestStreamRecord').return('n');
     const records = [
       { number: 1 },
       { number: 2 },
@@ -162,7 +162,7 @@ describe('Connection', () => {
         .createNode('n', 'TestStreamRecord')
         .setVariables({ n: 'map' })
         .run();
-      connection.close();
+      await connection.close();
     });
 
     after('clear the database', async () => {
@@ -171,7 +171,7 @@ describe('Connection', () => {
         .matchNode('n', 'TestStreamRecord')
         .delete('n')
         .run();
-      connection.close();
+      await connection.close();
     });
 
     it('should return errored observable if there are no clauses in the query', () => {
@@ -188,9 +188,9 @@ describe('Connection', () => {
       });
     });
 
-    it('should return errored observable if the connection has been closed', () => {
-      connection.close();
-      const observable = connection.stream(query);
+    it('should return errored observable if the connection has been closed', async () => {
+      await connection.close();
+      const observable = connection.stream(new Query().return('1'));
       expect(observable).to.be.an.instanceOf(Observable);
 
       observable.subscribe({
