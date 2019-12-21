@@ -64,7 +64,7 @@ export class Transformer {
 
   private isPlainValue(value: any): value is PlainValue {
     const type = typeof value;
-    return value === null || type === 'string' || type === 'boolean' || type === 'number';
+    return value == null || type === 'string' || type === 'boolean' || type === 'number';
   }
 
   private isNode(node: any): node is NeoNode {
