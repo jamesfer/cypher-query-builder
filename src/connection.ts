@@ -1,6 +1,4 @@
 // tslint:disable-next-line import-name
-import AnyPromise from 'any-promise';
-// tslint:disable-next-line import-name
 import Observable from 'any-observable';
 import { Dictionary, isFunction } from 'lodash';
 import nodeCleanup from 'node-cleanup';
@@ -226,37 +224,33 @@ export class Connection extends Builder<Query> {
    * @param {Query} query
    * @returns {Promise<Dictionary<R>[]>}
    */
-  run<R = any>(query: Query): Promise<Dictionary<R>[]> {
+  async run<R = any>(query: Query): Promise<Dictionary<R>[]> {
     if (!this.open) {
-      return AnyPromise.reject(
-        new Error('Cannot run query; connection is not open.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query; connection is not open.');
     }
 
     if (query.getClauses().length === 0) {
-      return AnyPromise.reject(
-        new Error('Cannot run query: no clauses attached to the query.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query: no clauses attached to the query.');
     }
 
     const session = this.session();
     if (!session) {
-      throw Error('Cannot run query: connection is not open.');
+      throw new Error('Cannot run query: connection is not open.');
     }
 
     const queryObj = query.buildQueryObject();
-    const result = session.run(queryObj.query, queryObj.params);
 
-    // Need to wrap promise in an any-promise
-    return AnyPromise.resolve(result)
-      .then(async (result) => {
-        await session.close();
-        return this.transformer.transformRecords<R>(result.records);
-      })
-      .catch(async (error) => {
-        await session.close();
-        return Promise.reject(error);
-      }) as Promise<Dictionary<R>[]>;
+    return session.run(queryObj.query, queryObj.params)
+      .then(
+        async ({ records }) => {
+          await session.close();
+          return this.transformer.transformRecords<R>(records);
+        },
+        async (error) => {
+          await session.close();
+          throw error;
+        },
+      );
   }
 
   /**

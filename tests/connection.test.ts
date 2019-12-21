@@ -5,7 +5,7 @@ import * as neo4j from 'neo4j-driver';
 import { Driver, Session } from 'neo4j-driver/types';
 import { AuthToken, Config } from 'neo4j-driver/types/driver';
 import { tap } from 'rxjs/operators';
-import { SinonSpy, spy } from 'sinon';
+import { SinonSpy, SinonStub, spy, stub } from 'sinon';
 import { Connection, Node, Query } from '../src';
 import { NodePattern } from '../src/clauses';
 import { expect } from '../test-setup';
@@ -15,30 +15,36 @@ type ArgumentTypes<T extends (...args: any) => any>
   = T extends (...a: infer Args) => any ? Args : never;
 type SinonSpyFor<T extends (...args: any) => any>
   = SinonSpy<ArgumentTypes<T>, ReturnType<T>>;
+type SinonStubFor<T extends (...args: any) => any>
+  = SinonStub<ArgumentTypes<T>, ReturnType<T>>;
 
 describe('Connection', () => {
   let connection: Connection;
   let driver: Driver;
   let driverCloseSpy: SinonSpyFor<Driver['close']>;
-  let driverSessionSpy: SinonSpyFor<Driver['session']>;
+  let driverSessionStub: SinonStubFor<Driver['session']>;
   let sessionRunSpy: SinonSpyFor<Session['run']>;
   let sessionCloseSpy: SinonSpyFor<Session['close']>;
+  const stubSession = stub<[Session], void>();
 
-  function makeSessionMock(driver: Driver): Driver {
-    const defaultSessionConstructor = driver.session;
-    driver.session = function (...args: ArgumentTypes<typeof driver.session>) {
-      const session = defaultSessionConstructor.call(this, ...args);
-      sessionRunSpy = spy(session, 'run');
-      sessionCloseSpy = spy(session, 'close');
+  function attachSessionSpies(session: Session): void {
+    sessionRunSpy = spy(session, 'run');
+    sessionCloseSpy = spy(session, 'close');
+  }
+
+  function makeSessionMock(createSession: Driver['session']): Driver['session'] {
+    return (...args) => {
+      const session = createSession(...args);
+      stubSession(session);
       return session;
     };
-    return driver;
   }
 
   function driverConstructor(url: string, authToken?: AuthToken, config?: Config) {
-    driver = makeSessionMock(neo4j.driver(url, authToken, config));
+    driver = neo4j.driver(url, authToken, config);
+    const mock = makeSessionMock(driver.session.bind(driver));
+    driverSessionStub = stub(driver, 'session').callsFake(mock);
     driverCloseSpy = spy(driver, 'close');
-    driverSessionSpy = spy(driver, 'session');
     return driver;
   }
 
@@ -46,6 +52,7 @@ describe('Connection', () => {
   before(waitForNeo);
 
   beforeEach(() => {
+    stubSession.callsFake(attachSessionSpies);
     connection = new Connection(neo4jUrl, neo4jCredentials, driverConstructor);
   });
 
@@ -100,14 +107,14 @@ describe('Connection', () => {
   describe('#session', () => {
     it('should use the driver to create a session', () => {
       connection.session();
-      expect(driverSessionSpy.calledOnce);
+      expect(driverSessionStub.calledOnce);
     });
 
     it('should return null if the connection has been closed', async () => {
       await connection.close();
       const result = connection.session();
 
-      expect(driverSessionSpy.notCalled);
+      expect(driverSessionStub.notCalled);
       expect(result).to.equal(null);
     });
   });
@@ -122,6 +129,13 @@ describe('Connection', () => {
       await connection.close();
       const promise = connection.run(connection.query().return('1'));
       await expect(promise).to.be.rejectedWith(Error, 'connection is not open');
+    });
+
+    it('should reject if a session cannot be opened', async () => {
+      const connectionSessionStub = stub(connection, 'session').returns(null);
+      const promise = connection.run(connection.query().return('1'));
+      await expect(promise).to.be.rejectedWith(Error, 'connection is not open');
+      connectionSessionStub.restore();
     });
 
     it('should run the query through a session', async () => {
@@ -145,6 +159,30 @@ describe('Connection', () => {
       const promise = connection.run((new Query()).raw('RETURN a'));
       await expect(promise).to.be.rejectedWith(Error)
         .then(() => expect(sessionCloseSpy.calledOnce));
+    });
+
+    describe('when session.close throws', async () => {
+      const message = 'Fake error';
+      let sessionCloseStub: SinonStubFor<Session['close']>;
+
+      beforeEach(() => {
+        stubSession.resetBehavior();
+        stubSession.callsFake((session) => {
+          sessionCloseStub = stub(session, 'close').throws(new Error(message));
+        });
+      });
+
+      it('the error should bubble up', async () => {
+        const promise = connection.run(new Query().raw('RETURN 1'));
+        await expect(promise).to.be.rejectedWith(Error, message);
+      });
+
+      it('does not call session.close again', async () => {
+        try {
+          await connection.run(new Query().raw('RETURN a'));
+        } catch (e) {}
+        expect(sessionCloseStub.calledOnce);
+      });
     });
   });
 
