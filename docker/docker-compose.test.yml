@@ -1,16 +1,19 @@
 version: "3"
 services:
   neo4j:
-    image: neo4j
+    image: neo4j:${NEO4J_VERSION-latest}
     ports:
       - 7474:7474
       - 7687:7687
     environment:
       - NEO4J_AUTH=neo4j/admin
   tests:
+    image: cypher-query-builder:${TRAVIS_NODE_VERSION-latest}
     build:
       context: ..
       dockerfile: docker/Dockerfile-test
+      args:
+        - NODE_VERSION=${TRAVIS_NODE_VERSION-lts}
     environment:
       - NEO4J_URL=bolt://neo4j
       - NEO4J_USER=neo4j

@@ -1,6 +1,6 @@
-import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, map, mapValues, isArray } from 'lodash';
-import { Record, Integer } from 'neo4j-driver/types/v1';
+import * as neo4j from 'neo4j-driver';
+import { Record, Integer } from 'neo4j-driver/types';
 
 export type NeoValue = string | boolean | null | number | Integer;
 export interface NeoNode {

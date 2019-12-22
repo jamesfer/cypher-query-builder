@@ -2,12 +2,12 @@
 import AnyPromise from 'any-promise';
 // tslint:disable-next-line import-name
 import Observable from 'any-observable';
-import nodeCleanup from 'node-cleanup';
 import { Dictionary, isFunction } from 'lodash';
-import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
+import nodeCleanup from 'node-cleanup';
+import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types';
+import * as neo4j from 'neo4j-driver';
 import { Transformer } from './transformer';
 import { Query } from './query';
-import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
 import { Clause } from './clause';
 
@@ -144,9 +144,9 @@ export class Connection extends Builder<Query> {
    * Closes this connection if it is open. Closed connections cannot be
    * reopened.
    */
-  close() {
+  async close(): Promise<void> {
     if (this.open) {
-      this.driver.close();
+      await this.driver.close();
       this.open = false;
     }
   }
@@ -249,12 +249,12 @@ export class Connection extends Builder<Query> {
 
     // Need to wrap promise in an any-promise
     return AnyPromise.resolve(result)
-      .then((result) => {
-        session.close();
+      .then(async (result) => {
+        await session.close();
         return this.transformer.transformRecords<R>(result.records);
       })
-      .catch((error) => {
-        session.close();
+      .catch(async (error) => {
+        await session.close();
         return Promise.reject(error);
       }) as Promise<Dictionary<R>[]>;
   }
@@ -355,14 +355,14 @@ export class Connection extends Builder<Query> {
             subscriber.next(this.transformer.transformRecord<R>(record));
           }
         },
-        onError: (error) => {
-          session.close();
+        onError: async (error) => {
+          await session.close();
           if (!subscriber.closed) {
             subscriber.error(error);
           }
         },
-        onCompleted: () => {
-          session.close();
+        onCompleted: async () => {
+          await session.close();
           if (!subscriber.closed) {
             subscriber.complete();
           }
