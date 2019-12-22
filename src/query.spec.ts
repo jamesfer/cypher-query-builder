@@ -1,5 +1,3 @@
-// tslint:disable-next-line import-name
-import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
 import { spy, stub } from 'sinon';
 import { expect } from '../test-setup';
@@ -7,6 +5,7 @@ import { mockConnection } from '../tests/connection.mock';
 import { ClauseCollection } from './clause-collection';
 import { node, NodePattern } from './clauses';
 import { Query } from './query';
+import { Observable } from 'rxjs';
 
 describe('Query', () => {
   describe('query methods', () => {
