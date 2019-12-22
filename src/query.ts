@@ -1,6 +1,4 @@
 // tslint:disable-next-line import-name
-import AnyPromise from 'any-promise';
-// tslint:disable-next-line import-name
 import Observable from 'any-observable';
 import { Observable as RxObservable } from 'rxjs';
 import { Dictionary } from 'lodash';
@@ -75,11 +73,9 @@ export class Query extends Builder<Query> {
    *
    * @returns {Promise<Dictionary<R>[]>}
    */
-  run<R = any>(): Promise<Dictionary<R>[]> {
+  async run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
-      return AnyPromise.reject(
-        new Error('Cannot run query; no connection object available.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query; no connection object available.');
     }
 
     return this.connection.run<R>(this);
