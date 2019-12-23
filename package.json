@@ -89,7 +89,6 @@
   "dependencies": {
     "@types/lodash": "^4.14.136",
     "@types/node": "^12.6.1",
-    "any-observable": "^0.5.0",
     "lodash": "^4.17.15",
     "neo4j-driver": "^4.0.1",
     "node-cleanup": "^2.1.2",

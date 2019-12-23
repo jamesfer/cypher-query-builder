@@ -157,11 +157,6 @@ const results = db.matchNode('project', 'Project')
 results.subscribe(row => console.log(row.project.properties.name));
 ```
 
-Under the hood, the observables used by this library are constructed by
-[any-observable](https://github.com/sindresorhus/any-observable). They
-default to using the RxJS observable library, but you can change that by registering another 
-implementation before importing this module.
-
 ### Processing
 
 To extract the results, you can use ES5 array methods or a library like lodash:

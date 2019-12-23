@@ -1,9 +1,8 @@
-// tslint:disable-next-line import-name
-import Observable from 'any-observable';
 import { Dictionary, each } from 'lodash';
 import * as neo4j from 'neo4j-driver';
 import { Driver, Session } from 'neo4j-driver/types';
 import { AuthToken, Config } from 'neo4j-driver/types/driver';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SinonSpy, SinonStub, spy, stub } from 'sinon';
 import { Connection, Node, Query } from '../src';
