@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+kind="$1"
+case "$kind" in
+  rollup)
+    yarn rollup -c
+    ;;
+  declaration)
+    tsc --project tsconfig.declaration.json --outDir dist/typings --declaration --emitDeclarationOnly
+    ;;
+  *)
+    >&2 echo "Unknown build kind '$kind'. Expected rollup or declaration."
+    exit 1
+    ;;
+esac
