@@ -1,3 +1,10 @@
+## [5.0.4](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.3...v5.0.4) (2019-12-23)
+
+
+### Bug Fixes
+
+* **Transformer:** handle undefined values better ([b819b9a](https://github.com/jamesfer/cypher-query-builder/commit/b819b9a1c9028fce4a11e0086b90617cae2fbf71)), closes [/github.com/neo4j/neo4j-javascript-driver/blob/4.0/types/spatial-types.d.ts#L27](https://github.com//github.com/neo4j/neo4j-javascript-driver/blob/4.0/types/spatial-types.d.ts/issues/L27)
+
 ## [5.0.3](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.2...v5.0.3) (2019-12-16)
 
 
