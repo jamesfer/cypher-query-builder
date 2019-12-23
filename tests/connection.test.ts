@@ -63,7 +63,7 @@ describe('Connection', () => {
       const driverSpy = spy(neo4j, 'driver');
       const connection = new Connection(neo4jUrl, neo4jCredentials);
 
-      expect(driverSpy.calledOnce);
+      expect(driverSpy.calledOnce).to.equal(true);
 
       await connection.close();
       driverSpy.restore();
@@ -94,27 +94,27 @@ describe('Connection', () => {
   describe('#close', () => {
     it('should close the driver', async () => {
       await connection.close();
-      expect(driverCloseSpy.calledOnce);
+      expect(driverCloseSpy.calledOnce).to.equal(true);
     });
 
     it('should only close the driver once', async () => {
       await connection.close();
       await connection.close();
-      expect(driverCloseSpy.calledOnce);
+      expect(driverCloseSpy.calledOnce).to.equal(true);
     });
   });
 
   describe('#session', () => {
     it('should use the driver to create a session', () => {
       connection.session();
-      expect(driverSessionStub.calledOnce);
+      expect(driverSessionStub.calledOnce).to.equal(true);
     });
 
     it('should return null if the connection has been closed', async () => {
       await connection.close();
       const result = connection.session();
 
-      expect(driverSessionStub.notCalled);
+      expect(driverSessionStub.notCalled).to.equal(true);
       expect(result).to.equal(null);
     });
   });
@@ -144,7 +144,7 @@ describe('Connection', () => {
 
       const promise = connection.run(query);
       await expect(promise).to.be.fulfilled.then(() => {
-        expect(sessionRunSpy.calledOnce);
+        expect(sessionRunSpy.calledOnce).to.equal(true);
         expect(sessionRunSpy.calledWith('RETURN 1', params));
       });
     });
@@ -152,7 +152,7 @@ describe('Connection', () => {
     it('should close the session after running a query', async () => {
       const promise = connection.run((new Query()).raw('RETURN 1'));
       await expect(promise).to.be.fulfilled
-        .then(() => expect(sessionCloseSpy.calledOnce));
+        .then(() => expect(sessionCloseSpy.calledOnce).to.equal(true));
     });
 
     it('should close the session when run() throws', async () => {
@@ -181,7 +181,7 @@ describe('Connection', () => {
         try {
           await connection.run(new Query().raw('RETURN a'));
         } catch (e) {}
-        expect(sessionCloseStub.calledOnce);
+        expect(sessionCloseStub.calledOnce).to.equal(true);
       });
     });
   });
@@ -258,7 +258,7 @@ describe('Connection', () => {
         .toPromise()
         .then(() => {
           expect(count).to.equal(records.length);
-          expect(sessionRunSpy.calledOnce);
+          expect(sessionRunSpy.calledOnce).to.equal(true);
           expect(sessionRunSpy.calledWith(query.build(), params));
         });
     });
@@ -278,7 +278,7 @@ describe('Connection', () => {
       observable.subscribe({
         next: () => expect.fail(null, null, 'Observable should not emit any items'),
         error() {
-          expect(sessionCloseSpy.calledOnce);
+          expect(sessionCloseSpy.calledOnce).to.equal(true);
           done();
         },
         complete: () => expect.fail(null, null, 'Observable should not complete without an error'),

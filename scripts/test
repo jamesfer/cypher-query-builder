@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+yarn --silent nyc \
+  --reporter=html \
+  --reporter=text-summary \
+  mocha \
+  src/**/*.spec.ts
