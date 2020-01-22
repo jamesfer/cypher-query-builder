@@ -5,7 +5,7 @@ import Observable from 'any-observable';
 import nodeCleanup from 'node-cleanup';
 import { Dictionary, isFunction } from 'lodash';
 import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
-import { Transformer } from './transformer';
+import { ITransformer, Transformer } from './transformer';
 import { Query } from './query';
 import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
@@ -31,6 +31,7 @@ export type DriverConstructor = typeof neo4j.driver;
 export interface FullConnectionOptions {
   driverConstructor: DriverConstructor;
   driverConfig: Config;
+  transformer: ITransformer;
 }
 
 export type ConnectionOptions = Partial<FullConnectionOptions>;
@@ -98,7 +99,7 @@ export class Connection extends Builder<Query> {
   protected driver: Driver;
   protected options: FullConnectionOptions;
   protected open: boolean;
-  protected transformer = new Transformer();
+  protected transformer: ITransformer;
 
   /**
    * Creates a new connection to the database.
@@ -134,7 +135,10 @@ export class Connection extends Builder<Query> {
       : options.driverConstructor ? options.driverConstructor : neo4j.driver;
     const driverConfig = isTrueFunction(options) || !options.driverConfig
       ? {} : options.driverConfig;
-    this.options = { driverConstructor, driverConfig };
+    const transformer = isTrueFunction(options) || !options.transformer
+      ? new Transformer() : options.transformer;
+    this.transformer = transformer;
+    this.options = { driverConstructor, driverConfig, transformer };
     this.driver = driverConstructor(this.url, this.auth, this.options.driverConfig);
     this.open = true;
     connections.push(this);
