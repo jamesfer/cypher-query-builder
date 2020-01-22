@@ -1,6 +1,15 @@
 import { v1 as neo4j } from 'neo4j-driver';
 import { Dictionary, map, mapValues, isArray, isObject } from 'lodash';
-import { Record, Integer } from 'neo4j-driver/types/v1';
+import {
+  Date as NeoDate,
+  DateTime as NeoDateTime,
+  Duration,
+  Integer,
+  LocalTime,
+  LocalDateTime,
+  Record,
+  Time,
+} from 'neo4j-driver/types/v1';
 
 export type NeoValue = string | boolean | null | number | Integer;
 export interface NeoNode {
@@ -60,6 +69,24 @@ export class Transformer implements ITransformer {
     }
     if (this.isRelation(value)) {
       return this.transformRelation(value);
+    }
+    if (this.isDuration(value)) {
+      return this.transformDuration(value);
+    }
+    if (this.isLocalTime(value)) {
+      return this.transformLocalTime(value);
+    }
+    if (this.isTime(value)) {
+      return this.transformTime(value);
+    }
+    if (this.isDate(value)) {
+      return this.transformDate(value);
+    }
+    if (this.isLocalDateTime(value)) {
+      return this.transformLocalDateTime(value);
+    }
+    if (this.isDateTime(value)) {
+      return this.transformDateTime(value);
     }
     if (isObject(value)) {
       return this.transformObject(value);
@@ -127,5 +154,59 @@ export class Transformer implements ITransformer {
 
   protected transformObject(value: object): any {
     return mapValues(value, v => this.transformValue(v));
+  }
+
+  protected isDuration(value: unknown): value is Duration {
+    return isObject(value) && neo4j.isDuration(value);
+  }
+
+  protected transformDuration(value: Duration): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
+  }
+
+  protected isLocalTime(value: unknown): value is LocalTime {
+    return isObject(value) && neo4j.isLocalTime(value);
+  }
+
+  protected transformLocalTime(value: LocalTime): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
+  }
+
+  protected isTime(value: unknown): value is Time {
+    return isObject(value) && neo4j.isTime(value);
+  }
+
+  protected transformTime(value: Time): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
+  }
+
+  protected isDate(value: unknown): value is NeoDate {
+    return isObject(value) && neo4j.isDate(value);
+  }
+
+  protected transformDate(value: NeoDate): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
+  }
+
+  protected isLocalDateTime(value: unknown): value is LocalDateTime {
+    return isObject(value) && neo4j.isLocalDateTime(value);
+  }
+
+  protected transformLocalDateTime(value: LocalDateTime): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
+  }
+
+  protected isDateTime(value: unknown): value is NeoDateTime {
+    return isObject(value) && neo4j.isDateTime(value);
+  }
+
+  protected transformDateTime(value: NeoDateTime): any {
+    // Maintain compatibility for v5. Do something different in v6.
+    return this.transformObject(value);
   }
 }
