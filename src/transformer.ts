@@ -45,7 +45,7 @@ export class Transformer implements ITransformer {
     return mapValues(record.toObject() as any, node => this.transformValue(node));
   }
 
-  private transformValue(value: unknown): any {
+  protected transformValue(value: unknown): any {
     if (this.isPlainValue(value)) {
       return value;
     }
@@ -53,7 +53,7 @@ export class Transformer implements ITransformer {
       return map(value, v => this.transformValue(v));
     }
     if (this.isInteger(value)) {
-      return this.convertInteger(value);
+      return this.transformInteger(value);
     }
     if (this.isNode(value)) {
       return this.transformNode(value);
@@ -62,17 +62,17 @@ export class Transformer implements ITransformer {
       return this.transformRelation(value);
     }
     if (isObject(value)) {
-      return mapValues(value, v => this.transformValue(v));
+      return this.transformObject(value);
     }
     return null;
   }
 
-  private isPlainValue(value: unknown): value is PlainValue {
+  protected isPlainValue(value: unknown): value is PlainValue {
     const type = typeof value;
     return value == null || type === 'string' || type === 'boolean' || type === 'number';
   }
 
-  private isNode(val: unknown): val is NeoNode {
+  protected isNode(val: unknown): val is NeoNode {
     if (!isObject(val) || isArray(val)) {
       return false;
     }
@@ -82,15 +82,16 @@ export class Transformer implements ITransformer {
       && !!node.properties;
   }
 
-  private transformNode(node: NeoNode): Node {
-    return {
+  protected transformNode(node: NeoNode): any {
+    const n: Node = {
       identity: neo4j.integer.toString(node.identity),
       labels: node.labels,
       properties: mapValues(node.properties, this.transformValue.bind(this)),
     };
+    return n;
   }
 
-  private isRelation(val: unknown): val is NeoRelation {
+  protected isRelation(val: unknown): val is NeoRelation {
     if (!isObject(val) || isArray(val)) {
       return false;
     }
@@ -102,24 +103,29 @@ export class Transformer implements ITransformer {
       && !!rel.end;
   }
 
-  private transformRelation(rel: NeoRelation): Relation {
-    return {
+  protected transformRelation(rel: NeoRelation): any {
+    const relation: Relation = {
       identity: neo4j.integer.toString(rel.identity),
       start: neo4j.integer.toString(rel.start),
       end: neo4j.integer.toString(rel.end),
       label: rel.type,
       properties: mapValues(rel.properties, this.transformValue.bind(this)),
     };
+    return relation;
   }
 
-  private isInteger(val: unknown): val is Integer {
+  protected isInteger(val: unknown): val is Integer {
     return isObject(val) && neo4j.isInt(val);
   }
 
-  private convertInteger(num: Integer) {
+  protected transformInteger(num: Integer): any {
     if (neo4j.integer.inSafeRange(num)) {
       return neo4j.integer.toNumber(num);
     }
     return neo4j.integer.toString(num);
+  }
+
+  protected transformObject(value: object): any {
+    return mapValues(value, v => this.transformValue(v));
   }
 }
