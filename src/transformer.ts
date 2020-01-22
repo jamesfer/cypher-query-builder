@@ -31,8 +31,13 @@ export interface Relation<P = Dictionary<PlainValue | PlainArray>> {
   properties: P;
 }
 
-export class Transformer {
-  transformRecords<T= any>(records: Record[]): Dictionary<T>[] {
+export interface ITransformer {
+  transformRecords<T = any>(records: Record[]): Dictionary<T>[];
+  transformRecord<T = any>(record: Record): Dictionary<T>;
+}
+
+export class Transformer implements ITransformer {
+  transformRecords<T = any>(records: Record[]): Dictionary<T>[] {
     return map(records, rec => this.transformRecord(rec));
   }
 
