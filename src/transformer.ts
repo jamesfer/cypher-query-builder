@@ -1,5 +1,5 @@
 import { v1 as neo4j } from 'neo4j-driver';
-import { Dictionary, map, mapValues, isArray } from 'lodash';
+import { Dictionary, map, mapValues, isArray, isObject } from 'lodash';
 import { Record, Integer } from 'neo4j-driver/types/v1';
 
 export type NeoValue = string | boolean | null | number | Integer;
@@ -45,14 +45,14 @@ export class Transformer implements ITransformer {
     return mapValues(record.toObject() as any, node => this.transformValue(node));
   }
 
-  private transformValue(value: any): any {
+  private transformValue(value: unknown): any {
     if (this.isPlainValue(value)) {
       return value;
     }
     if (isArray(value)) {
       return map(value, v => this.transformValue(v));
     }
-    if (neo4j.isInt(value)) {
+    if (this.isInteger(value)) {
       return this.convertInteger(value);
     }
     if (this.isNode(value)) {
@@ -61,24 +61,25 @@ export class Transformer implements ITransformer {
     if (this.isRelation(value)) {
       return this.transformRelation(value);
     }
-    if (typeof value === 'object') {
+    if (isObject(value)) {
       return mapValues(value, v => this.transformValue(v));
     }
     return null;
   }
 
-  private isPlainValue(value: any): value is PlainValue {
+  private isPlainValue(value: unknown): value is PlainValue {
     const type = typeof value;
     return value == null || type === 'string' || type === 'boolean' || type === 'number';
   }
 
-  private isNode(node: any): node is NeoNode {
-    return node !== null
-      && typeof node === 'object'
-      && !isArray(node)
-      && node.identity
-      && node.labels
-      && node.properties;
+  private isNode(val: unknown): val is NeoNode {
+    if (!isObject(val) || isArray(val)) {
+      return false;
+    }
+    const node = val as NeoNode;
+    return !!node.identity
+      && !!node.labels
+      && !!node.properties;
   }
 
   private transformNode(node: NeoNode): Node {
@@ -89,8 +90,16 @@ export class Transformer implements ITransformer {
     };
   }
 
-  private isRelation(rel: Dictionary<any>): rel is NeoRelation {
-    return rel.identity && rel.type && rel.properties && rel.start && rel.end;
+  private isRelation(val: unknown): val is NeoRelation {
+    if (!isObject(val) || isArray(val)) {
+      return false;
+    }
+    const rel = val as NeoRelation;
+    return !!rel.identity
+      && !!rel.type
+      && !!rel.properties
+      && !!rel.start
+      && !!rel.end;
   }
 
   private transformRelation(rel: NeoRelation): Relation {
@@ -101,6 +110,10 @@ export class Transformer implements ITransformer {
       label: rel.type,
       properties: mapValues(rel.properties, this.transformValue.bind(this)),
     };
+  }
+
+  private isInteger(val: unknown): val is Integer {
+    return isObject(val) && neo4j.isInt(val);
   }
 
   private convertInteger(num: Integer) {
