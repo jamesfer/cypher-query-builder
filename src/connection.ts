@@ -2,11 +2,12 @@ import { Dictionary, isFunction } from 'lodash';
 import nodeCleanup from 'node-cleanup';
 import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types';
 import * as neo4j from 'neo4j-driver';
-import { Transformer } from './transformer';
 import { Query } from './query';
 import { Builder } from './builder';
 import { Clause } from './clause';
 import { Observable } from 'rxjs';
+import { Transformer } from './transformer/transformer';
+import { defaultTransformer } from './transformer/default-transformer';
 
 let connections: Connection[] = [];
 
@@ -25,14 +26,16 @@ export interface Observer<T> {
 
 export type DriverConstructor = typeof neo4j.driver;
 
-export interface FullConnectionOptions {
-  driverConstructor: DriverConstructor;
-  driverConfig: Config;
+export interface ConnectionOptions {
+  driverConstructor?: DriverConstructor;
+  driverConfig?: Config;
+  transformer?: Transformer<any>;
 }
 
-export type ConnectionOptions = Partial<FullConnectionOptions>;
-
-export interface Credentials { username: string; password: string; }
+export interface Credentials {
+  username: string;
+  password: string;
+}
 
 function isCredentials(credentials: any): credentials is Credentials {
   return 'username' in credentials && 'password' in credentials;
@@ -92,10 +95,9 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
 // tslint:enable max-line-length
 export class Connection extends Builder<Query> {
   protected auth: AuthToken;
-  protected driver: Driver;
-  protected options: FullConnectionOptions;
   protected open: boolean;
-  protected transformer = new Transformer();
+  protected driver: Driver;
+  protected transformer: Transformer<any>;
 
   /**
    * Creates a new connection to the database.
@@ -131,8 +133,9 @@ export class Connection extends Builder<Query> {
       : options.driverConstructor ? options.driverConstructor : neo4j.driver;
     const driverConfig = isTrueFunction(options) || !options.driverConfig
       ? {} : options.driverConfig;
-    this.options = { driverConstructor, driverConfig };
-    this.driver = driverConstructor(this.url, this.auth, this.options.driverConfig);
+    this.driver = driverConstructor(this.url, this.auth, driverConfig);
+    this.transformer = isTrueFunction(options) || !options.transformer
+      ? defaultTransformer : options.transformer;
     this.open = true;
     connections.push(this);
   }
@@ -243,7 +246,7 @@ export class Connection extends Builder<Query> {
       .then(
         async ({ records }) => {
           await session.close();
-          return this.transformer.transformRecords<R>(records);
+          return records.map<Dictionary<R>>(this.transformer);
         },
         async (error) => {
           await session.close();
@@ -341,7 +344,7 @@ export class Connection extends Builder<Query> {
       result.subscribe({
         onNext: (record) => {
           if (!subscriber.closed) {
-            subscriber.next(this.transformer.transformRecord<R>(record));
+            subscriber.next(this.transformer(record));
           }
         },
         onError: async (error) => {
