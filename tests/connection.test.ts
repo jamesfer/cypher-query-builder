@@ -88,6 +88,12 @@ describe('Connection', () => {
       expect(constructorSpy.firstCall.args[2]).to.deep.equal(driverConfig);
       await connection.close();
     });
+
+    it('uses the provided transformer', async () => {
+      const connection = new Connection(neo4jUrl, neo4jCredentials, { transformer: () => 'World' });
+      const result = await connection.raw`WITH 'Hello' as word RETURN word`.run();
+      expect(result).to.eql(['World']);
+    });
   });
 
   describe('#close', () => {

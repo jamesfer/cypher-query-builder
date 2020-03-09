@@ -30,6 +30,6 @@ export interface Relation<P = Dictionary<PlainValue | PlainArray>> {
   properties: P;
 }
 
-export interface TransformerI<R> {
+export interface Transformer<R> {
   (record: Record): R;
 }
