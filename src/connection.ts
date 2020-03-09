@@ -2,11 +2,11 @@ import { Dictionary, isFunction } from 'lodash';
 import nodeCleanup from 'node-cleanup';
 import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types';
 import * as neo4j from 'neo4j-driver';
-import { Transformer } from './transformer';
 import { Query } from './query';
 import { Builder } from './builder';
 import { Clause } from './clause';
 import { Observable } from 'rxjs';
+import { defaultTransformer } from './transformer/default-transformer';
 
 let connections: Connection[] = [];
 
@@ -95,7 +95,7 @@ export class Connection extends Builder<Query> {
   protected driver: Driver;
   protected options: FullConnectionOptions;
   protected open: boolean;
-  protected transformer = new Transformer();
+  protected transformer = defaultTransformer;
 
   /**
    * Creates a new connection to the database.
@@ -243,7 +243,7 @@ export class Connection extends Builder<Query> {
       .then(
         async ({ records }) => {
           await session.close();
-          return this.transformer.transformRecords<R>(records);
+          return records.map<Dictionary<R>>(this.transformer);
         },
         async (error) => {
           await session.close();
@@ -341,7 +341,7 @@ export class Connection extends Builder<Query> {
       result.subscribe({
         onNext: (record) => {
           if (!subscriber.closed) {
-            subscriber.next(this.transformer.transformRecord<R>(record));
+            subscriber.next(this.transformer<R>(record));
           }
         },
         onError: async (error) => {
