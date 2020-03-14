@@ -103,7 +103,7 @@
     "@babel/core": "^7.5.0",
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.16",
-    "@types/chai": "^4.0.4",
+    "@types/chai": "^4.2.11",
     "@types/chai-as-promised": "^7.1.0",
     "@types/mocha": "^5.2.5",
     "@types/sinon": "^7.0.13",
