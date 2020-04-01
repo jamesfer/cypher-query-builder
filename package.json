@@ -106,7 +106,7 @@
     "@types/chai": "^4.0.4",
     "@types/chai-as-promised": "^7.1.0",
     "@types/mocha": "^5.2.5",
-    "@types/sinon": "^7.0.13",
+    "@types/sinon": "^9.0.0",
     "babel-plugin-lodash": "^3.3.4",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
