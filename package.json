@@ -111,7 +111,7 @@
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "commitizen": "^4.0.3",
-    "coveralls": "^3.0.4",
+    "coveralls": "^3.0.12",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "rollup": "^1.19.3",
