@@ -112,7 +112,7 @@
     "chai-as-promised": "^7.0.0",
     "commitizen": "^4.0.3",
     "coveralls": "^3.0.4",
-    "mocha": "^6.1.4",
+    "mocha": "^7.2.0",
     "nyc": "^14.1.1",
     "rollup": "^1.19.3",
     "rollup-plugin-babel": "^4.3.3",
