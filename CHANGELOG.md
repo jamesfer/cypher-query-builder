@@ -1,3 +1,21 @@
+# [6.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.4...v6.0.0) (2020-09-17)
+
+
+### Bug Fixes
+
+* remove any-observable ([8328434](https://github.com/jamesfer/cypher-query-builder/commit/8328434717f392372292369539484d318b36dbd8))
+* remove any-promise ([f624574](https://github.com/jamesfer/cypher-query-builder/commit/f624574c94552d16b4f55ee17a01a1acd1cf7185))
+* update neo4j driver to 4.0 ([cb0bf1e](https://github.com/jamesfer/cypher-query-builder/commit/cb0bf1e32134adee467aaa09fa02810c9e7e3617))
+
+
+### BREAKING CHANGES
+
+* Removes the any-observable package
+* Removes the any-promise package
+* Connection.close() now returns a promise instead of acting immediately.
+The new neo4j driver changed the behaviour of Driver.close() and this change is consistent
+with that.
+
 ## [5.0.4](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.3...v5.0.4) (2019-12-23)
 
 
