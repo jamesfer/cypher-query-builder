@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+yarn --silent lint && yarn --silent build && yarn --silent test

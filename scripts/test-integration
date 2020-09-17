@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+start-neo4j() {
+  docker run \
+  -d \
+  -p 7474:7474 \
+  -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/admin \
+  "neo4j:${NEO4J_VERSION-latest}"
+}
+
+run-tests() {
+  yarn --silent nyc \
+    --reporter=html \
+    --reporter=text-summary \
+    mocha \
+    src/*.spec.ts \
+    src/**/*.spec.ts \
+    tests/*.test.ts \
+    tests/**/*.test.ts "$@"
+}
+
+# Start the neo4j docker container
+echo "Starting neo4j..."
+id=$(start-neo4j) || exit 1
+
+# Run the tests
+echo "Running tests..."
+NEO4J_URL=bolt://localhost NEO4J_USER=neo4j NEO4J_PASS=admin run-tests "$@"
+code="$?"
+
+# Stop the container
+echo "Stopping neo4j..."
+docker container stop "$id" > /dev/null
+
+# Exit with the same code as the tests
+exit "$code"

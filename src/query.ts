@@ -1,8 +1,4 @@
-// tslint:disable-next-line import-name
-import AnyPromise from 'any-promise';
-// tslint:disable-next-line import-name
-import Observable from 'any-observable';
-import { Observable as RxObservable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Dictionary } from 'lodash';
 import { Connection, Observer } from './connection';
 import { Builder } from './builder';
@@ -75,11 +71,9 @@ export class Query extends Builder<Query> {
    *
    * @returns {Promise<Dictionary<R>[]>}
    */
-  run<R = any>(): Promise<Dictionary<R>[]> {
+  async run<R = any>(): Promise<Dictionary<R>[]> {
     if (!this.connection) {
-      return AnyPromise.reject(
-        new Error('Cannot run query; no connection object available.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query; no connection object available.');
     }
 
     return this.connection.run<R>(this);
@@ -90,7 +84,7 @@ export class Query extends Builder<Query> {
    * chainable method of a connection, then its connection was automatically
    * set.
    *
-   * Returns an observable that emits each record as it is received from the
+   * Returns an RxJS observable that emits each record as it is received from the
    * database. This is the most efficient way of working with very large
    * datasets. Each record is an object where each key is the name of a variable
    * that you specified in your return clause.
@@ -131,7 +125,7 @@ export class Query extends Builder<Query> {
    * Throws an exception if this query does not have a connection or has no
    * clauses.
    */
-  stream<R = any>(): RxObservable<Dictionary<R>> {
+  stream<R = any>(): Observable<Dictionary<R>> {
     if (!this.connection) {
       return new Observable((subscriber: Observer<Dictionary<R>>): void => {
         subscriber.error(new Error('Cannot run query; no connection object available.'));

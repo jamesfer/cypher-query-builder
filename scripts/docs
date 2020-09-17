@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+yarn typedoc \
+  src/builder.ts \
+  src/query.ts \
+  src/connection.ts \
+  src/clauses/index.ts \
+  src/clauses/where-comparators.ts \
+  src/clauses/where-operators.ts \
+  --mode file \
+  --theme minimal \
+  --out ./docs \
+  --excludeExternals \
+  --excludeProtected \
+  --excludePrivate \
+  --ignoreCompilerErrors

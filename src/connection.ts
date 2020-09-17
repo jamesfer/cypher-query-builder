@@ -1,15 +1,12 @@
-// tslint:disable-next-line import-name
-import AnyPromise from 'any-promise';
-// tslint:disable-next-line import-name
-import Observable from 'any-observable';
-import nodeCleanup from 'node-cleanup';
 import { Dictionary, isFunction } from 'lodash';
-import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types/v1';
+import nodeCleanup from 'node-cleanup';
+import { AuthToken, Config, Driver, Session } from 'neo4j-driver/types';
+import * as neo4j from 'neo4j-driver';
 import { Transformer } from './transformer';
 import { Query } from './query';
-import { v1 as neo4j } from 'neo4j-driver';
 import { Builder } from './builder';
 import { Clause } from './clause';
+import { Observable } from 'rxjs';
 
 let connections: Connection[] = [];
 
@@ -144,9 +141,9 @@ export class Connection extends Builder<Query> {
    * Closes this connection if it is open. Closed connections cannot be
    * reopened.
    */
-  close() {
+  async close(): Promise<void> {
     if (this.open) {
-      this.driver.close();
+      await this.driver.close();
       this.open = false;
     }
   }
@@ -226,44 +223,40 @@ export class Connection extends Builder<Query> {
    * @param {Query} query
    * @returns {Promise<Dictionary<R>[]>}
    */
-  run<R = any>(query: Query): Promise<Dictionary<R>[]> {
+  async run<R = any>(query: Query): Promise<Dictionary<R>[]> {
     if (!this.open) {
-      return AnyPromise.reject(
-        new Error('Cannot run query; connection is not open.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query; connection is not open.');
     }
 
     if (query.getClauses().length === 0) {
-      return AnyPromise.reject(
-        new Error('Cannot run query: no clauses attached to the query.'),
-      ) as Promise<Dictionary<R>[]>;
+      throw new Error('Cannot run query: no clauses attached to the query.');
     }
 
     const session = this.session();
     if (!session) {
-      throw Error('Cannot run query: connection is not open.');
+      throw new Error('Cannot run query: connection is not open.');
     }
 
     const queryObj = query.buildQueryObject();
-    const result = session.run(queryObj.query, queryObj.params);
 
-    // Need to wrap promise in an any-promise
-    return AnyPromise.resolve(result)
-      .then((result) => {
-        session.close();
-        return this.transformer.transformRecords<R>(result.records);
-      })
-      .catch((error) => {
-        session.close();
-        return Promise.reject(error);
-      }) as Promise<Dictionary<R>[]>;
+    return session.run(queryObj.query, queryObj.params)
+      .then(
+        async ({ records }) => {
+          await session.close();
+          return this.transformer.transformRecords<R>(records);
+        },
+        async (error) => {
+          await session.close();
+          throw error;
+        },
+      );
   }
 
   /**
    * Runs the provided query on this connection, regardless of which connection
    * the query was created from. Each query is run on it's own session.
    *
-   * Returns an observable that emits each record as it is received from the
+   * Returns an RxJS observable that emits each record as it is received from the
    * database. This is the most efficient way of working with very large
    * datasets. Each record is an object where each key is the name of a variable
    * that you specified in your return clause.
@@ -298,11 +291,6 @@ export class Connection extends Builder<Query> {
    * const friends$ = results$.map(row => row.friends);
    * ```
    *
-   * The observable class that is used is imported from
-   * [any-observable](https://github.com/sindresorhus/any-observable) by default
-   * it uses rxjs for the observables, but you can pick a different implementation
-   * by registering it with any-observable before importing this module.
-   *
    * If you use typescript you can use the type parameter to hint at the type of
    * the return value which is `Dictionary<R>`.
    *
@@ -329,18 +317,19 @@ export class Connection extends Builder<Query> {
   stream<R = any>(query: Query): Observable<Dictionary<R>> {
     return new Observable((subscriber: Observer<Dictionary<R>>): void => {
       if (!this.open) {
-        subscriber.error(new Error('Cannot run query; connection is not open.'));
+        subscriber.error(new Error('Cannot run query: connection is not open.'));
         return;
       }
 
       if (query.getClauses().length === 0) {
-        subscriber.error(Error('Cannot run query: no clauses attached to the query.'));
+        subscriber.error(new Error('Cannot run query: no clauses attached to the query.'));
         return;
       }
 
       const session = this.session();
       if (!session) {
-        throw Error('Cannot run query: connection is not open.');
+        subscriber.error(new Error('Cannot run query: connection is not open.'));
+        return;
       }
 
       // Run the query
@@ -355,14 +344,14 @@ export class Connection extends Builder<Query> {
             subscriber.next(this.transformer.transformRecord<R>(record));
           }
         },
-        onError: (error) => {
-          session.close();
+        onError: async (error) => {
+          await session.close();
           if (!subscriber.closed) {
             subscriber.error(error);
           }
         },
-        onCompleted: () => {
-          session.close();
+        onCompleted: async () => {
+          await session.close();
           if (!subscriber.closed) {
             subscriber.complete();
           }
