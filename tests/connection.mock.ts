@@ -23,6 +23,7 @@ export function mockConnection(
     rxSession: stub(),
     verifyConnectivity: stub(),
     supportsMultiDb: stub(),
+    supportsTransactionConfig: stub(),
   };
   const connection = new Connection(url, credentials, () => driver);
   return { session, driver, connection };

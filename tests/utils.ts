@@ -25,5 +25,5 @@ export async function waitForNeo(this: IHookCallbackContext) {
       break;
     } catch {}
   }
-  connection.close();
+  await connection.close();
 }
