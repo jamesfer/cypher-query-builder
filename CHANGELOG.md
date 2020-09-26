@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.0...v6.0.1) (2020-09-26)
+
+
+### Bug Fixes
+
+* **skip,limit:** use int object for parameter ([2b18c97](https://github.com/jamesfer/cypher-query-builder/commit/2b18c973163df6ec9c221e9a092d5f66378ed651)), closes [#159](https://github.com/jamesfer/cypher-query-builder/issues/159)
+
 # [6.0.0](https://github.com/jamesfer/cypher-query-builder/compare/v5.0.4...v6.0.0) (2020-09-17)
 
 
