@@ -1,8 +1,8 @@
-import { neo4jCredentials, neo4jUrl, waitForNeo } from './utils';
-import { Connection } from '../src';
-import { expect } from '../test-setup';
 import { Dictionary, isNil } from 'lodash';
+import { Connection } from '../src';
 import { node, relation } from '../src/clauses';
+import { expect } from '../test-setup';
+import { neo4jCredentials, neo4jUrl, waitForNeo } from './utils';
 
 function expectResults(
   results: any[],
@@ -106,6 +106,16 @@ describe('scenarios', () => {
         expectNode(row.person, ['Person']);
         expect(row.person.properties).to.have.keys(['name', 'age']);
       });
+    });
+
+    it('should fetch a single node using limit', async () => {
+      const results = await db.matchNode('person', 'Person')
+        .return('person')
+        .skip(1)
+        .limit(1)
+        .run();
+
+      expectResults(results, 1, ['person']);
     });
 
     it('should fetch a property of a set of nodes', async () => {
