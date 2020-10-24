@@ -24,6 +24,7 @@ export interface Observer<T> {
 }
 
 export type DriverConstructor = typeof neo4j.driver;
+export type SessionParameters = Parameters<Driver['session']>[0]
 
 export interface FullConnectionOptions {
   driverConstructor: DriverConstructor;
@@ -120,6 +121,7 @@ export class Connection extends Builder<Query> {
     protected url: string,
     auth: Credentials | AuthToken,
     options: DriverConstructor | ConnectionOptions = neo4j.driver,
+    protected sessionParameters: SessionParameters = {}
   ) {
     super();
 
@@ -154,7 +156,7 @@ export class Connection extends Builder<Query> {
    */
   session(): Session | null {
     if (this.open) {
-      return this.driver.session();
+      return this.driver.session(this.sessionParameters);
     }
     return null;
   }
