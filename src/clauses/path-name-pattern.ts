@@ -11,6 +11,6 @@ export class PathNamePattern extends Pattern {
   build() {
     let query = this.getNameString();
     query += '=';
-    return `(${trim(query)})`;
+    return `${trim(query)}`;
   }
 }
