@@ -189,7 +189,7 @@ export function relation(
 }
 
 /**
- * Creates a named path pattern like `p=` for use in a MATCH clause.
+ * Creates a named path pattern like `p=` for creating named paths.
  *
  * For more details on node patterns see the cypher
  * [docs]{@link
