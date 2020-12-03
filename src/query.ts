@@ -238,4 +238,27 @@ export class Query extends Builder<Query> {
     this.clauses.addClause(clause);
     return this;
   }
+
+  /**
+   * Adds a new parameter to the query
+   *
+   * @param {any} Value
+   * @param {string} Name of the parameter
+   * @returns {this}
+   */
+  addParam(value: any, name: string): this {
+    this.clauses.addParam(value, name);
+    return this;
+  }
+
+  /**
+   * Adds several parameters to the query
+   *
+   * @param params 
+   * @returns {this}
+   */
+  addParams(params: Dictionary<any>): this {
+    this.clauses.addParams(params);
+    return this;
+  }
 }

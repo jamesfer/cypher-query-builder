@@ -52,6 +52,28 @@ describe('Query', () => {
     });
   });
 
+  describe('parameters', () => {
+    
+    it(`should add one parameter to the parameterBag`, () => {
+      const query = new Query();
+      query.addParam('value', 'name');
+      const { params } = query.buildQueryObject();
+      expect(params).to.have.property('name', 'value');
+    });
+    
+    it(`should add several parameters to the parameterBag`, () => {
+      const query = new Query();
+      query.addParams({
+        name: 'value',
+        foo: 'bar',
+      });
+      const { params } = query.buildQueryObject();
+      expect(params).to.have.property('name', 'value');
+      expect(params).to.have.property('foo', 'bar');
+    });
+
+  });
+
   describe('proxied methods', () => {
     class TestQuery extends Query {
       getClauseCollection() {
@@ -67,6 +89,8 @@ describe('Query', () => {
       'buildQueryObject',
       'interpolate',
       'getClauses',
+      'addParam',
+      'addParams',
     ];
 
     methods.forEach((method) => {
