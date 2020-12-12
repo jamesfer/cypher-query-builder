@@ -13,9 +13,6 @@
   "engines": {
     "node": ">=6"
   },
-  "files": [
-    "/dist"
-  ],
   "keywords": [
     "cypher",
     "query",
@@ -91,6 +88,8 @@
     ]
   },
   "dependencies": {
+    "@types/lodash": "^4.14.136",
+    "@types/node": "^12.6.1",
     "lodash": "^4.17.15",
     "neo4j-driver": "^4.1.2",
     "node-cleanup": "^2.1.2",
@@ -103,9 +102,7 @@
     "@semantic-release/git": "^7.0.16",
     "@types/chai": "^4.0.4",
     "@types/chai-as-promised": "^7.1.0",
-    "@types/lodash": "^4.14.165",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^14.14.10",
     "@types/sinon": "^7.0.13",
     "babel-plugin-lodash": "^3.3.4",
     "chai": "^4.0.2",
