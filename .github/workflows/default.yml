@@ -1,0 +1,56 @@
+name: CI
+on: push
+
+jobs:
+  test:
+    name: Tests (neo4j ${{ matrix.neo4j }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        neo4j:
+          - '3.5'
+          - '4.0'
+          - '4.1'
+          - '4.2'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install --frozen-lockfile
+      - run: yarn validate
+        env:
+          NEO4J_VERSION: ${{ matrix.neo4j }}
+      - uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: neo4j-${{ matrix.neo4j }}
+          parallel: true
+
+  finialize-coverage:
+    name: Finalize coverage
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
+
+  deploy:
+    name: Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn semantic-release
+      - run: yarn docs
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/ui
