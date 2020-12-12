@@ -27,6 +27,12 @@ describe('TermListClause', () => {
       expect(termList.getParams()).to.be.empty;
     });
 
+    it('should rename a single nested object property', () => {
+      const termList = new TermListClause({ node: { name: 'otherName', timestamp: 'created_at' } });
+      expect(termList.build()).to.equal('node.name AS otherName, node.timestamp AS created_at');
+      expect(termList.getParams()).to.be.empty;
+    });
+
     it('should be able to apply functions to properties', () => {
       const termList = new TermListClause('avg(node.count)');
       expect(termList.build()).to.equal('avg(node.count)');
