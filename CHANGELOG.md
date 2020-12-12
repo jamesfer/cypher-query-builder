@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.1...v6.0.2) (2020-12-12)
+
+
+### Bug Fixes
+
+* **termlist:** fix handling of nested dictionaries ([93a5cd4](https://github.com/jamesfer/cypher-query-builder/commit/93a5cd42b63812905de8a953574cee147f4de390)), closes [#137](https://github.com/jamesfer/cypher-query-builder/issues/137)
+
 ## [6.0.1](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.0...v6.0.1) (2020-09-26)
 
 
