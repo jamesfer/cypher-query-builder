@@ -1,5 +1,4 @@
 import { Connection, Credentials } from '../src';
-import IHookCallbackContext = Mocha.IHookCallbackContext;
 
 export const neo4jUrl: string = process.env.NEO4J_URL as string;
 export const neo4jCredentials: Credentials = {
@@ -7,7 +6,7 @@ export const neo4jCredentials: Credentials = {
   password: process.env.NEO4J_PASS as string,
 };
 
-export async function waitForNeo(this: IHookCallbackContext) {
+export async function waitForNeo(this: Mocha.Context) {
   if (this && 'timeout' in this) {
     this.timeout(40000);
   }

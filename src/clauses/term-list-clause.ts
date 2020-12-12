@@ -11,10 +11,9 @@ import {
 } from 'lodash';
 import { Clause } from '../clause';
 
-export type Properties = (string | Dictionary<string>)[];
+export type Properties = Many<string | Dictionary<string>>;
 export type Term
   = string
-  | Dictionary<string>
   | Dictionary<Properties>;
 
 export class TermListClause extends Clause {
@@ -34,19 +33,18 @@ export class TermListClause extends Clause {
     this.terms = castArray(terms);
   }
 
+  build() {
+    return this.toString();
+  }
+
   toString() {
     return flatMapDeep(this.terms, term => this.stringifyTerm(term)).join(', ');
   }
 
-  private stringifyTerm(term: Term): Many<string> {
+  private stringifyTerm(term: Term): string[] {
     // Just a node
     if (isString(term)) {
-      return this.stringifyProperty(term);
-    }
-
-    // List of nodes
-    if (isArray(term)) {
-      return this.stringifyProperties(term);
+      return [this.stringifyProperty(term)];
     }
 
     // Node properties or aliases
@@ -54,15 +52,13 @@ export class TermListClause extends Clause {
       return this.stringifyDictionary(term);
     }
 
-    return '';
+    return [];
   }
 
   private stringifyProperty(prop: string, alias?: string, node?: string): string {
-    let prefix = node ? `${node}.` : '';
-    if (alias) {
-      prefix += `${alias} AS `;
-    }
-    return prefix + prop;
+    const prefixString = node ? `${node}.` : '';
+    const aliasString = alias ? `${alias} AS ` : '';
+    return prefixString + aliasString + prop;
   }
 
   private stringifyProperties(props: Properties, alias?: string, node?: string): string[] {
@@ -76,10 +72,10 @@ export class TermListClause extends Clause {
       }
       return list;
     };
-    return reduce(props, convertToString, []);
+    return reduce(castArray(props), convertToString, []);
   }
 
-  private stringifyDictionary(node: Dictionary<string | Properties>): string[] {
+  private stringifyDictionary(node: Dictionary<Properties>): string[] {
     return reduce(
       node,
       (list, prop, key) => {
@@ -94,9 +90,5 @@ export class TermListClause extends Clause {
       },
       [] as string[],
     );
-  }
-
-  build() {
-    return this.toString();
   }
 }

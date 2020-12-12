@@ -626,7 +626,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * query.return({
    *   people: [{ name: 'personName' }, 'age' ],
    * })
-   * // RETURN people.name as personName, people.age
+   * // RETURN people.name AS personName, people.age
    * ```
    * or
    * ```javascript
@@ -636,7 +636,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *     age: 'personAge',
    *   },
    * })
-   * // RETURN people.name as personName, people.age as personAge
+   * // RETURN people.name AS personName, people.age AS personAge
    * ```
    *
    * You can also pass an array of any of the above methods.
@@ -895,7 +895,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * query.with({
    *   people: [{ name: 'personName' }, 'age' ],
    * })
-   * // WITH people.name as personName, people.age
+   * // WITH people.name AS personName, people.age
    * ```
    * or
    * ```javascript
@@ -905,7 +905,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *     age: 'personAge',
    *   },
    * })
-   * // WITH people.name as personName, people.age as personAge
+   * // WITH people.name AS personName, people.age AS personAge
    * ```
    *
    * You can also pass an array of any of the above methods.
