@@ -48,9 +48,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: yarn install --frozen-lockfile
       - run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
       - run: yarn docs
       - uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
           publish_dir: build/ui
