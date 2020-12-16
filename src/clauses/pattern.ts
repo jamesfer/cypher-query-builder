@@ -6,49 +6,49 @@ import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export abstract class Pattern extends Clause {
+export abstract class Pattern<
+    MatchType extends string = string,
+    Condition extends Dictionary<any> = Dictionary<any>
+    > extends Clause {
   protected useExpandedConditions: boolean | undefined;
   protected conditionParams: Dictionary<Parameter> | Parameter = {};
-  protected name: string;
+  protected name: MatchType;
   protected labels: string[];
-  protected conditions: Dictionary<any>;
+  protected conditions: Condition;
 
   constructor(
-    name?: Many<string> | Dictionary<any>,
+    name?: Many<MatchType> | Dictionary<MatchType>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Condition,
     protected options = { expanded: true },
   ) {
     super();
-    const isConditions = (a: any): a is Dictionary<any> => isObjectLike(a) && !isArray(a);
-    let tempName = name;
-    let tempLabels = labels;
-    let tempConditions = conditions;
-
-    if (isNil(tempConditions)) {
-      if (isConditions(tempLabels)) {
-        tempConditions = tempLabels;
-        tempLabels = undefined;
-      } else if (isNil(tempLabels) && isConditions(tempName)) {
-        tempConditions = tempName;
-        tempName = undefined;
-      } else {
-        tempConditions = {};
-      }
-    }
-
-    if (isNil(tempLabels)) {
-      if (isArray(tempName)) {
-        tempLabels = tempName;
-        tempName = undefined;
-      } else {
-        tempLabels = [];
-      }
-    }
-
-    if (isNil(tempName)) {
-      tempName = '';
-    }
+    // tslint:disable-next-line:max-line-length
+    const isConditions = <T = any>(a: unknown): a is Dictionary<T> => isObjectLike(a) && !isArray(a);
+    const tempName = name;
+    const tempLabels = labels;
+    const tempConditions = conditions;
+    //
+    // if (isNil(tempConditions)) {
+    //   if (isConditions<any>(tempLabels)) {
+    //     tempConditions = tempLabels;
+    //     tempLabels = undefined;
+    //   } else if (isNil(tempLabels) && isConditions(tempName)) {
+    //     tempConditions = tempName;
+    //     tempName = undefined;
+    //   } else {
+    //     tempConditions = {};
+    //   }
+    // }
+    //
+    // if (isNil(tempLabels)) {
+    //   if (isArray(tempName)) {
+    //     tempLabels = tempName;
+    //     tempName = undefined;
+    //   } else {
+    //     tempLabels = [];
+    //   }
+    // }
 
     if (!isString(tempName)) {
       throw new TypeError('Name must be a string.');

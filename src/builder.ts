@@ -165,12 +165,18 @@ export class SetBlock<Q> {
   }
 }
 
+type ValueOf<T = string> = T[keyof T];
+type StringKeys<T extends {
+  [key: string]: any,
+} = { [key: string]: any }> = Extract<keyof T, string>;
+
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
  * @internal
  */
-export abstract class Builder<Q> extends SetBlock<Q> {
+export abstract class Builder
+<Q, T extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
   protected constructor() {
     super(c => this.continueChainClause(c));
   }
@@ -328,6 +334,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
     return this.continueChainClause(new Limit(amount));
   }
 
+  // @ts-ignore
   /**
    * Adds a [match]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/match}
    * clause to the query.
@@ -357,7 +364,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * to allow matching of multiple distinct patterns. Note: matching many
    * distinct patterns will produce a cross product of the results as noted in
    * the [cypher docs]{@link
-   * https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
+      * https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
    *
    * You can also provide `optional: true` in the options to create and
    * `OPTIONAL MATCH` clause.
@@ -366,7 +373,8 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {MatchOptions} options
    * @returns {Q}
    */
-  match(patterns: PatternCollection, options?: MatchOptions) {
+  match<Condition extends ValueOf<T> = ValueOf<T>>
+  (patterns: PatternCollection<StringKeys<T>, Condition>, options?: MatchOptions) {
     return this.continueChainClause(new Match(patterns, options));
   }
 

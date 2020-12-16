@@ -5,7 +5,7 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query extends Builder<Query> {
+export class Query<ActionItemType = any> extends Builder<Query, ActionItemType> {
   protected clauses = new ClauseCollection();
 
   /**
@@ -13,8 +13,9 @@ export class Query extends Builder<Query> {
    *
    * @param {Connection} connection
    */
-  constructor(protected connection: Connection | null = null) {
+  constructor(protected connection: Connection | null = null, clauses? : ClauseCollection) {
     super();
+    this.clauses = clauses ?? new ClauseCollection();
   }
 
   protected continueChainClause(clause: Clause) {
