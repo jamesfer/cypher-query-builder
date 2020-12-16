@@ -6,3 +6,5 @@ export * from './clause-collection';
 export * from './clauses';
 export * from './query';
 export * from './transformer';
+export { StringKeyOf } from './types';
+export { ValueOf } from './types';

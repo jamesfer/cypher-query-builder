@@ -16,6 +16,7 @@ import { Clause } from './clause';
 import { RemoveProperties } from './clauses/remove';
 import { Union } from './clauses/union';
 import { ReturnOptions } from './clauses/return';
+import { StringKeyOf, ValueOf } from './types';
 
 /**
  * @internal
@@ -166,14 +167,6 @@ export class SetBlock<Q> {
 }
 
 /**
- * Todo move to somewhere more global
- */
-export type ValueOf<T> = T[keyof T];
-export type StringKeys<T extends {
-  [key: string]: any,
-} = { [key: string]: any }> = Extract<keyof T, string>;
-
-/**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
  * @internal
@@ -186,6 +179,13 @@ export abstract class Builder
   protected constructor() {
     super(c => this.continueChainClause(c));
   }
+
+  /**
+   * @todo docs
+   * @protected
+   */
+  protected abstract changeType<T extends Dictionary<any> = Dictionary<any>>
+  () : Builder<Q, T>;
 
   /**
    * Used to add an `ON CREATE` clause to the query. Any following query will be prefixed with
@@ -379,9 +379,11 @@ export abstract class Builder
    * @param {MatchOptions} options
    * @returns {Q}
    */
-  match<Condition extends ValueOf<T> = ValueOf<T>>
-  (patterns: PatternCollection<StringKeys<T>, Partial<Condition>>, options?: MatchOptions) {
-    return this.continueChainClause(new Match(patterns, options));
+  match<NewType = any, Condition extends ValueOf<T> = ValueOf<T>>(
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
+      options?: MatchOptions) : Q {
+    const newBuilder = this.changeType<NewType>();
+    return newBuilder.continueChainClause(new Match(patterns, options));
   }
 
   /**
@@ -394,11 +396,11 @@ export abstract class Builder
    * @returns {Q}
    */
   matchNode<Condition extends ValueOf<T> = ValueOf<T>>(
-    name?: Many<StringKeys<T>> | Dictionary<StringKeys<T>>,
+    name?: Many<StringKeyOf<T>> | Dictionary<StringKeyOf<T>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Condition,
   ) {
-    const clause = new Match(new NodePattern<StringKeys<T>, Condition>(name, labels, conditions));
+    const clause = new Match(new NodePattern<StringKeyOf<T>, Condition>(name, labels, conditions));
     return this.continueChainClause(clause);
   }
 

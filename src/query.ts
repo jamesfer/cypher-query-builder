@@ -6,11 +6,16 @@ import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
 export class Query<ActionItemType = any> extends Builder<Query, ActionItemType> {
+
+  protected changeType<T extends Dictionary<any> = Dictionary<any>>
+  (): Builder<Query<T>, T> {
+    return new Query<T>(this.connection, this.clauses);
+  }
   protected clauses = new ClauseCollection();
 
   /**
    * Creates a new query with a given connection.
-   *
+   * @todo clause docs
    * @param {Connection} connection
    */
   constructor(protected connection: Connection | null = null, clauses? : ClauseCollection) {
