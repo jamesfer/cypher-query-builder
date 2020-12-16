@@ -6,7 +6,10 @@ export interface PatternOptions {
   useExpandedConditions?: boolean;
 }
 
-export type PatternCollection = Pattern | Pattern[] | Pattern[][];
+export type PatternCollection<T extends string = string, C = any>
+    = Pattern<T, C>
+    | Pattern<T, C>[]
+    | Pattern<T, C>[][];
 
 export class PatternClause extends Clause {
   protected patterns: Pattern[][];
