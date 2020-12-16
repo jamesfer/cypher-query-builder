@@ -165,8 +165,11 @@ export class SetBlock<Q> {
   }
 }
 
-type ValueOf<T = string> = T[keyof T];
-type StringKeys<T extends {
+/**
+ * Todo move to somewhere more global
+ */
+export type ValueOf<T> = T[keyof T];
+export type StringKeys<T extends {
   [key: string]: any,
 } = { [key: string]: any }> = Extract<keyof T, string>;
 
@@ -174,6 +177,9 @@ type StringKeys<T extends {
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
  * @internal
+ * @todo: Change T after match/with/return
+ * @todo: generic for labels (enums)
+ * @todo: generics relation() functions
  */
 export abstract class Builder
 <Q, T extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
@@ -374,7 +380,7 @@ export abstract class Builder
    * @returns {Q}
    */
   match<Condition extends ValueOf<T> = ValueOf<T>>
-  (patterns: PatternCollection<StringKeys<T>, Condition>, options?: MatchOptions) {
+  (patterns: PatternCollection<StringKeys<T>, Partial<Condition>>, options?: MatchOptions) {
     return this.continueChainClause(new Match(patterns, options));
   }
 
@@ -387,12 +393,12 @@ export abstract class Builder
    * @param {_.Dictionary<any>} conditions
    * @returns {Q}
    */
-  matchNode(
-    name?: Many<string> | Dictionary<any>,
+  matchNode<Condition extends ValueOf<T> = ValueOf<T>>(
+    name?: Many<StringKeys<T>> | Dictionary<StringKeys<T>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Condition,
   ) {
-    const clause = new Match(new NodePattern(name, labels, conditions));
+    const clause = new Match(new NodePattern<StringKeys<T>, Condition>(name, labels, conditions));
     return this.continueChainClause(clause);
   }
 

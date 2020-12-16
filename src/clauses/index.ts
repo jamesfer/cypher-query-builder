@@ -2,6 +2,7 @@ import { Dictionary, Many } from 'lodash';
 import { NodePattern } from './node-pattern';
 import { RelationDirection, RelationPattern } from './relation-pattern';
 import { PathLength } from '../utils';
+import { StringKeys, ValueOf } from '../builder';
 
 export { Create } from './create';
 export { NodePattern } from './node-pattern';
@@ -100,12 +101,12 @@ export {
  * about escaping.
  * @returns {NodePattern} An object representing the node pattern.
  */
-export function node(
-  name?: Many<string> | Dictionary<any>,
+export function node<T = any, C extends ValueOf<T> = ValueOf<T>>(
+  name?: Many<StringKeys<T>> | Dictionary<StringKeys<T>>,
   labels?: Many<string> | Dictionary<any>,
-  conditions?: Dictionary<any>,
+  conditions?: Partial<C>,
 ) {
-  return new NodePattern(name, labels, conditions);
+  return new NodePattern<StringKeys<T>, Partial<C>>(name, labels, conditions);
 }
 
 // Need to disable line length because there is a long link in the documentation

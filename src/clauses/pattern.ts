@@ -7,17 +7,17 @@ import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
 export abstract class Pattern<
-    MatchType extends string = string,
+    Names extends string = string,
     Condition extends Dictionary<any> = Dictionary<any>
     > extends Clause {
   protected useExpandedConditions: boolean | undefined;
   protected conditionParams: Dictionary<Parameter> | Parameter = {};
-  protected name: MatchType;
+  protected name: Names;
   protected labels: string[];
   protected conditions: Condition;
 
   constructor(
-    name?: Many<MatchType> | Dictionary<MatchType>,
+    name?: Many<Names> | Dictionary<Names>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Condition,
     protected options = { expanded: true },
