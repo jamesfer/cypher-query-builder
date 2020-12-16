@@ -1,5 +1,7 @@
 name: CI
-on: push
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -42,7 +44,7 @@ jobs:
     name: Deploy
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && github.head_ref == null
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
