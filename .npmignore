@@ -3,3 +3,4 @@ npm_debug.log
 .idea/
 .nyc_output/
 coverage/
+docs/
