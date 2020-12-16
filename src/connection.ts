@@ -89,8 +89,7 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  * The library will attempt to clean up all connections when the process exits, but it is better to
  * be explicit.
  */
-// tslint:enable max-line-length
-export class Connection extends Builder<Query> {
+export class Connection<GraphModel extends any = any> extends Builder<Query, GraphModel> {
   protected auth: AuthToken;
   protected driver: Driver;
   protected options: FullConnectionOptions;
@@ -137,6 +136,10 @@ export class Connection extends Builder<Query> {
     connections.push(this);
   }
 
+  protected changeType<T extends Dictionary<any>>(): Builder<Query<T>, T> {
+    return new Connection<T>(this.url, this.auth, this.options);
+  }
+
   /**
    * Closes this connection if it is open. Closed connections cannot be
    * reopened.
@@ -165,8 +168,8 @@ export class Connection extends Builder<Query> {
    * new chainable query for you.
    * @return {Query}
    */
-  query(): Query {
-    return new Query(this);
+  query<NewType = GraphModel>(): Query {
+    return new Query<NewType>(this);
   }
 
   protected continueChainClause(clause: Clause) {

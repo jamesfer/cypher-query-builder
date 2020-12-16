@@ -45,7 +45,7 @@ describe('Query', () => {
     each(methods, (fn, name) => {
       it(`${name} should return a chainable query object`, () => {
         const query = new Query();
-        expect(fn(query)).to.equal(query);
+        expect(fn(query)).to.be.instanceof(Query);
         expect(query.getClauses().length === 1);
         expect(query.build()).to.equal(`${query.getClauses()[0].build()};`);
       });
