@@ -14,7 +14,7 @@ export abstract class Pattern<
   protected conditionParams: Dictionary<Parameter> | Parameter = {};
   protected name: Names;
   protected labels: string[];
-  protected conditions: Condition;
+  protected conditions: Dictionary<any>;
 
   constructor(
     name?: Many<Names> | Dictionary<Names>,
@@ -25,30 +25,29 @@ export abstract class Pattern<
     super();
     // tslint:disable-next-line:max-line-length
     const isConditions = <T = any>(a: unknown): a is Dictionary<T> => isObjectLike(a) && !isArray(a);
-    const tempName = name;
-    const tempLabels = labels;
-    const tempConditions = conditions;
-    //
-    // if (isNil(tempConditions)) {
-    //   if (isConditions<any>(tempLabels)) {
-    //     tempConditions = tempLabels;
-    //     tempLabels = undefined;
-    //   } else if (isNil(tempLabels) && isConditions(tempName)) {
-    //     tempConditions = tempName;
-    //     tempName = undefined;
-    //   } else {
-    //     tempConditions = {};
-    //   }
-    // }
-    //
-    // if (isNil(tempLabels)) {
-    //   if (isArray(tempName)) {
-    //     tempLabels = tempName;
-    //     tempName = undefined;
-    //   } else {
-    //     tempLabels = [];
-    //   }
-    // }
+    let tempName = name;
+    let tempLabels = labels;
+    let tempConditions:object|undefined = conditions;
+    if (isNil(tempConditions)) {
+      if (isConditions<any>(tempLabels)) {
+        tempConditions = tempLabels;
+        tempLabels = undefined;
+      } else if (isNil(tempLabels) && isConditions(tempName)) {
+        tempConditions = tempName;
+        tempName = undefined;
+      } else {
+        tempConditions = {};
+      }
+    }
+
+    if (isNil(tempLabels)) {
+      if (isArray(tempName)) {
+        tempLabels = tempName;
+        tempName = undefined;
+      } else {
+        tempLabels = [];
+      }
+    }
 
     if (!isString(tempName)) {
       throw new TypeError('Name must be a string.');

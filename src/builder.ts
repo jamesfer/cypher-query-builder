@@ -184,7 +184,7 @@ export abstract class Builder
    * @todo docs
    * @protected
    */
-  protected abstract changeType<T extends Dictionary<any> = Dictionary<any>>
+  protected abstract changeType<T extends Dictionary<any>>
   () : Builder<Q, T>;
 
   /**
@@ -379,7 +379,7 @@ export abstract class Builder
    * @param {MatchOptions} options
    * @returns {Q}
    */
-  match<NewType = any, Condition extends ValueOf<T> = ValueOf<T>>(
+  match<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
       options?: MatchOptions) : Q {
     const newBuilder = this.changeType<NewType>();
