@@ -260,40 +260,51 @@ export abstract class Builder
    * // CREATE UNIQUE (people:Person { age: 30 })
    * ```
    */
-  create(patterns: PatternCollection, options?: CreateOptions) {
-    return this.continueChainClause(new Create(patterns, options));
+  create<NewType = T>(
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>,
+      options?: CreateOptions,
+  ) : Builder<Q, NewType> {
+    this.continueChainClause(new Create(patterns, options));
+    return this.changeType<NewType>();
   }
 
   /**
    * Shorthand for `create(patterns, { unique: true })`
    */
-  createUnique(patterns: PatternCollection) {
-    return this.create(patterns, { unique: true });
+  createUnique<NewType = T>(
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>,
+  ) : Builder<Q, NewType> {
+    return this.create<NewType>(patterns, { unique: true });
   }
 
   /**
    * Shorthand for `create(node(name, labels, conditions), options)`. For more details
    * the arguments see @{link node}.
    */
-  createNode(
-    name: Many<string> | Dictionary<any>,
+  createNode<NewType = T>(
+    name: Many<StringKeyOf<NewType>> | Dictionary<StringKeyOf<NewType>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Partial<ValueOf<NewType>>,
     options?: CreateOptions,
   ) {
-    const clause = new Create(new NodePattern(name, labels, conditions), options);
-    return this.continueChainClause(clause);
+    const clause = new Create(
+        new NodePattern<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>(name, labels, conditions),
+        options,
+    );
+    this.continueChainClause(clause);
+    return this.changeType<NewType & T>();
   }
 
   /**
    * Shorthand for `createNode(name, labels, conditions, { unique: true })`
+   * @todo: docs
    */
-  createUniqueNode(
-    name: Many<string> | Dictionary<any>,
+  createUniqueNode<NewType = T>(
+    name: Many<StringKeyOf<NewType>> | Dictionary<StringKeyOf<NewType>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Partial<ValueOf<NewType>>,
   ) {
-    return this.createNode(name, labels, conditions, { unique: true });
+    return this.createNode<NewType>(name, labels, conditions, { unique: true });
   }
 
   /**
@@ -312,8 +323,10 @@ export abstract class Builder
    * @param {DeleteOptions} options
    * @returns {Q}
    */
-  delete(terms: Many<string>, options?: DeleteOptions) {
-    return this.continueChainClause(new Delete(terms, options));
+  delete<NewType = T>
+  (terms: Many<StringKeyOf<T>>, options?: DeleteOptions) {
+    this.continueChainClause(new Delete(terms, options));
+    return this.changeType<NewType>();
   }
 
   /**
@@ -323,10 +336,11 @@ export abstract class Builder
    * @param {DeleteOptions} options
    * @returns {Q}
    */
-  detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
-    return this.continueChainClause(new Delete(terms, assign(options, {
+  detachDelete<NewType = T>
+  (terms: Many<StringKeyOf<T>>, options: DeleteOptions = {}) : Builder<Q, NewType> {
+    return this.delete(terms, assign(options, {
       detach: true,
-    })));
+    }));
   }
 
   /**
@@ -381,9 +395,9 @@ export abstract class Builder
    */
   match<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
-      options?: MatchOptions) : Q {
-    const newBuilder = this.changeType<NewType>();
-    return newBuilder.continueChainClause(new Match(patterns, options));
+      options?: MatchOptions) : Builder<Q, NewType> {
+    this.continueChainClause(new Match(patterns, options));
+    return this.changeType<NewType>();
   }
 
   /**
@@ -411,10 +425,12 @@ export abstract class Builder
    * @param {MatchOptions} options
    * @returns {Q}
    */
-  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
-    return this.continueChainClause(new Match(patterns, assign(options, {
+  optionalMatch<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
+      options?: MatchOptions) : Builder<Q, NewType> {
+    return this.match<NewType, Condition>(patterns, assign(options, {
       optional: true,
-    })));
+    }));
   }
 
   /**
@@ -433,8 +449,10 @@ export abstract class Builder
    * // ON MATCH SET rel.updatedAt = timestamp()
    * ```
    */
-  merge(patterns: PatternCollection) {
-    return this.continueChainClause(new Merge(patterns));
+  merge<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>) : Builder<Q, NewType> {
+    this.continueChainClause(new Merge(patterns));
+    return this.changeType<NewType>();
   }
 
   /**
@@ -492,7 +510,9 @@ export abstract class Builder
    * @param {Direction} dir
    * @returns {Q}
    */
-  orderBy(fields: string | (string | OrderConstraint)[] | OrderConstraints, dir?: Direction) {
+  orderBy(
+      fields: StringKeyOf<T> | (StringKeyOf<T> | OrderConstraint)[] | OrderConstraints,
+      dir?: Direction) {
     return this.continueChainClause(new OrderBy(fields, dir));
   }
 
@@ -559,8 +579,9 @@ export abstract class Builder
    *
    * If you only need to remove labels *or* properties, you may find `removeProperties` or
    * `removeLabels` more convenient.
+   * @todo: maybe sth else than dictionary to also type the keys
    */
-  remove(properties: RemoveProperties) {
+  remove<Target = any>(properties: RemoveProperties<string, StringKeyOf<Target>>) {
     return this.continueChainClause(new Remove(properties));
   }
 
