@@ -2,9 +2,9 @@ import { Clause } from '../clause';
 import { Dictionary, Many, map, mapValues, flatMap, castArray } from 'lodash';
 import { stringifyLabels } from '../utils';
 
-export type RemoveProperties = {
-  labels?: Dictionary<Many<string>>;
-  properties?: Dictionary<Many<string>>;
+export type RemoveProperties<L extends string = string, P extends string = string> = {
+  labels?: Dictionary<Many<L>>;
+  properties?: Dictionary<Many<P>>;
 };
 
 export class Remove extends Clause {
