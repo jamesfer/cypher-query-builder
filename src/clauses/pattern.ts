@@ -12,7 +12,7 @@ export abstract class Pattern<
     > extends Clause {
   protected useExpandedConditions: boolean | undefined;
   protected conditionParams: Dictionary<Parameter> | Parameter = {};
-  protected name: Names;
+  protected name: string;
   protected labels: string[];
   protected conditions: Dictionary<any>;
 
@@ -25,7 +25,7 @@ export abstract class Pattern<
     super();
     // tslint:disable-next-line:max-line-length
     const isConditions = <T = any>(a: unknown): a is Dictionary<T> => isObjectLike(a) && !isArray(a);
-    let tempName = name;
+    let tempName : string|readonly string[]|Dictionary<string>|undefined = name;
     let tempLabels = labels;
     let tempConditions:object|undefined = conditions;
     if (isNil(tempConditions)) {
@@ -47,6 +47,10 @@ export abstract class Pattern<
       } else {
         tempLabels = [];
       }
+    }
+
+    if (isNil(tempName)) {
+      tempName = '';
     }
 
     if (!isString(tempName)) {
