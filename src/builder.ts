@@ -354,7 +354,6 @@ export abstract class Builder
     return this.continueChainClause(new Limit(amount));
   }
 
-  // @ts-ignore
   /**
    * Adds a [match]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/match}
    * clause to the query.
@@ -384,7 +383,7 @@ export abstract class Builder
    * to allow matching of multiple distinct patterns. Note: matching many
    * distinct patterns will produce a cross product of the results as noted in
    * the [cypher docs]{@link
-      * https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
+   * https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/}.
    *
    * You can also provide `optional: true` in the options to create and
    * `OPTIONAL MATCH` clause.
