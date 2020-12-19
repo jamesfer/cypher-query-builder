@@ -5,7 +5,7 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query<GraphModel = any> extends Builder<Query, GraphModel> {
+export class Query<G = any> extends Builder<Query, G> {
 
   protected changeType<T extends Dictionary<any>>
   (): Query<T> {
