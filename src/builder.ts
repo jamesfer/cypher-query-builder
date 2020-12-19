@@ -410,13 +410,14 @@ export abstract class Builder
    * @param {_.Dictionary<any>} conditions
    * @returns {Q}
    */
-  matchNode<Condition extends ValueOf<G> = ValueOf<G>>(
+  matchNode<N = G, Condition extends ValueOf<G> = ValueOf<G>>(
     name?: Many<StringKeyOf<G>> | Dictionary<StringKeyOf<G>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Condition,
   ) {
     const clause = new Match(new NodePattern<StringKeyOf<G>, Condition>(name, labels, conditions));
-    return this.continueChainClause(clause);
+    const query = this.continueChainClause(clause);
+    return query.changeType<N>();
   }
 
   /**
