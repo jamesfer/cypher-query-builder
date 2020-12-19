@@ -16,7 +16,8 @@ import { Clause } from './clause';
 import { RemoveProperties } from './clauses/remove';
 import { Union } from './clauses/union';
 import { ReturnOptions } from './clauses/return';
-import { StringKeyOf, ValueOf } from './types';
+import { StringKeyOf, TypedDictionary, ValueOf } from './types';
+import { Query } from './query';
 
 /**
  * @internal
@@ -170,9 +171,6 @@ export class SetBlock<Q> {
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
  * @internal
- * @todo: Change T after match/with/return
- * @todo: generic for labels (enums)
- * @todo: generics relation() functions
  */
 export abstract class Builder
 <Q, T extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
@@ -181,11 +179,14 @@ export abstract class Builder
   }
 
   /**
-   * @todo docs
+   * Use this to change the type of the current workpiece (the T generic).
+   * This might be useful when the type of the currently processable
+   * nodes and relations changed (e.g. after match, unwind or return)
+   *
    * @protected
    */
   protected abstract changeType<T extends Dictionary<any>>
-  () : Builder<Q, T>;
+  () : Q;
 
   /**
    * Used to add an `ON CREATE` clause to the query. Any following query will be prefixed with
@@ -263,7 +264,7 @@ export abstract class Builder
   create<NewType = T>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>,
       options?: CreateOptions,
-  ) : Builder<Q, NewType> {
+  ) : Q {
     this.continueChainClause(new Create(patterns, options));
     return this.changeType<NewType>();
   }
@@ -273,7 +274,7 @@ export abstract class Builder
    */
   createUnique<NewType = T>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>,
-  ) : Builder<Q, NewType> {
+  ) : Q {
     return this.create<NewType>(patterns, { unique: true });
   }
 
@@ -297,7 +298,6 @@ export abstract class Builder
 
   /**
    * Shorthand for `createNode(name, labels, conditions, { unique: true })`
-   * @todo: docs
    */
   createUniqueNode<NewType = T>(
     name: Many<StringKeyOf<NewType>> | Dictionary<StringKeyOf<NewType>>,
@@ -337,7 +337,7 @@ export abstract class Builder
    * @returns {Q}
    */
   detachDelete<NewType = T>
-  (terms: Many<StringKeyOf<T>>, options: DeleteOptions = {}) : Builder<Q, NewType> {
+  (terms: Many<StringKeyOf<T>>, options: DeleteOptions = {}) : Q {
     return this.delete(terms, assign(options, {
       detach: true,
     }));
@@ -395,8 +395,10 @@ export abstract class Builder
    */
   match<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
-      options?: MatchOptions) : Builder<Q, NewType> {
-    this.continueChainClause(new Match(patterns, options));
+      options?: MatchOptions) : Q {
+    this.continueChainClause(
+        new Match<StringKeyOf<NewType>, Partial<Condition>>(patterns, options),
+    );
     return this.changeType<NewType>();
   }
 
@@ -427,7 +429,7 @@ export abstract class Builder
    */
   optionalMatch<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
-      options?: MatchOptions) : Builder<Q, NewType> {
+      options?: MatchOptions) : Q {
     return this.match<NewType, Condition>(patterns, assign(options, {
       optional: true,
     }));
@@ -450,7 +452,7 @@ export abstract class Builder
    * ```
    */
   merge<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
-      patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>) : Builder<Q, NewType> {
+      patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>) : Q {
     this.continueChainClause(new Merge(patterns));
     return this.changeType<NewType>();
   }
@@ -579,9 +581,8 @@ export abstract class Builder
    *
    * If you only need to remove labels *or* properties, you may find `removeProperties` or
    * `removeLabels` more convenient.
-   * @todo: maybe sth else than dictionary to also type the keys
    */
-  remove<Target = any>(properties: RemoveProperties<string, StringKeyOf<Target>>) {
+  remove<Target = any>(properties: RemoveProperties<string, StringKeyOf<T>, StringKeyOf<Target>>) {
     return this.continueChainClause(new Remove(properties));
   }
 
@@ -593,14 +594,16 @@ export abstract class Builder
    * object is the name of a node and the values are the names of the properties to remove. The
    * values can be either a single string, or an array of strings.
    * ```javascript
-   * query.remove({
+   * query.removeProperties({
    *   customer: ['inactive', 'new'],
    *   coupon: 'available',
    * });
    * // REMOVE customer.inactive, customer.new, coupon.available
    * ```
    */
-  removeProperties(properties: Dictionary<Many<string>>) {
+  removeProperties<Target = any>(
+      properties: TypedDictionary<StringKeyOf<T>, Many<StringKeyOf<Target>>>,
+  ) {
     return this.continueChainClause(new Remove({ properties }));
   }
 
@@ -685,14 +688,17 @@ export abstract class Builder
    * // RETURN DISTINCT people
    * ```
    */
-  return(terms: Many<Term>, options?: ReturnOptions) {
+  return(
+      terms: Many<Term<StringKeyOf<T>>>,
+      options?: ReturnOptions,
+  ) {
     return this.continueChainClause(new Return(terms, options));
   }
 
   /**
    * Shorthand for `return(terms, { distinct: true });
    */
-  returnDistinct(terms: Many<Term>) {
+  returnDistinct(terms: Many<Term<StringKeyOf<T>>>) {
     return this.return(terms, { distinct: true });
   }
 
@@ -757,8 +763,9 @@ export abstract class Builder
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
-  unwind(list: any[], name: string) {
-    return this.continueChainClause(new Unwind(list, name));
+  unwind<NewType = T>(list: ValueOf<T>|StringKeyOf<ValueOf<T>>[], name: string) : Q {
+    this.continueChainClause(new Unwind(list, name));
+    return this.changeType<NewType>();
   }
 
   /**
@@ -950,7 +957,8 @@ export abstract class Builder
    * @param {_.Many<Term>} terms
    * @returns {Q}
    */
-  with(terms: Many<Term>) {
-    return this.continueChainClause(new With(terms));
+  with<NewType = T>(terms: Many<Term>) : Q {
+    this.continueChainClause(new With(terms));
+    return this.changeType<NewType>();
   }
 }

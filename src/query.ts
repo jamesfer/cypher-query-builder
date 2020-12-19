@@ -7,16 +7,17 @@ import { Clause, QueryObject } from './clause';
 
 export class Query<GraphModel = any> extends Builder<Query, GraphModel> {
 
-  protected changeType<T extends Dictionary<any> = Dictionary<any>>
-  (): Builder<Query<T>, T> {
+  protected changeType<T extends Dictionary<any>>
+  (): Query<T> {
     return new Query<T>(this.connection, this.clauses);
   }
   protected clauses = new ClauseCollection();
 
   /**
    * Creates a new query with a given connection.
-   * @todo clause docs
+   *
    * @param {Connection} connection
+   * @param {clauses} clauses e.g. to clone the state of an query
    */
   constructor(protected connection: Connection | null = null, clauses? : ClauseCollection) {
     super();

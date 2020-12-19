@@ -136,8 +136,8 @@ export class Connection<GraphModel extends any = any> extends Builder<Query, Gra
     connections.push(this);
   }
 
-  protected changeType<T extends Dictionary<any>>(): Builder<Query<T>, T> {
-    return new Connection<T>(this.url, this.auth, this.options);
+  protected changeType<T extends Dictionary<any>>(): Query<T> {
+    return new Query<T>(this);
   }
 
   /**
