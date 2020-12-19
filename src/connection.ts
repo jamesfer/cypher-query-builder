@@ -89,7 +89,7 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  * The library will attempt to clean up all connections when the process exits, but it is better to
  * be explicit.
  */
-export class Connection<GraphModel extends any = any> extends Builder<Query, GraphModel> {
+export class Connection<G extends any = any> extends Builder<Query, G> {
   protected auth: AuthToken;
   protected driver: Driver;
   protected options: FullConnectionOptions;
@@ -168,8 +168,8 @@ export class Connection<GraphModel extends any = any> extends Builder<Query, Gra
    * new chainable query for you.
    * @return {Query}
    */
-  query<NewType = GraphModel>(): Query {
-    return new Query<NewType>(this);
+  query<N = G>(): Query {
+    return new Query<N>(this);
   }
 
   protected continueChainClause(clause: Clause) {
