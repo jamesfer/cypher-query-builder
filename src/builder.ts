@@ -261,7 +261,7 @@ export abstract class Builder
    * // CREATE UNIQUE (people:Person { age: 30 })
    * ```
    */
-  create<N = G>(
+  create<N extends G = G>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
       options?: CreateOptions,
   ) : Q {
@@ -272,7 +272,7 @@ export abstract class Builder
   /**
    * Shorthand for `create(patterns, { unique: true })`
    */
-  createUnique<N = G>(
+  createUnique<N extends G = G>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
   ) : Q {
     return this.create<N>(patterns, { unique: true });
@@ -282,7 +282,7 @@ export abstract class Builder
    * Shorthand for `create(node(name, labels, conditions), options)`. For more details
    * the arguments see @{link node}.
    */
-  createNode<N = G>(
+  createNode<N extends G = G>(
     name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Partial<ValueOf<N>>,
@@ -299,7 +299,7 @@ export abstract class Builder
   /**
    * Shorthand for `createNode(name, labels, conditions, { unique: true })`
    */
-  createUniqueNode<N = G>(
+  createUniqueNode<N extends G = G>(
     name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Partial<ValueOf<N>>,
