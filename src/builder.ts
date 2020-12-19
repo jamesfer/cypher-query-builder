@@ -173,7 +173,7 @@ export class SetBlock<Q> {
  * @internal
  */
 export abstract class Builder
-<Q, T extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
+<Q extends Builder<any>, T extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
   protected constructor() {
     super(c => this.continueChainClause(c));
   }
@@ -265,8 +265,8 @@ export abstract class Builder
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>,
       options?: CreateOptions,
   ) : Q {
-    this.continueChainClause(new Create(patterns, options));
-    return this.changeType<NewType>();
+    const query = this.continueChainClause(new Create(patterns, options));
+    return query.changeType<NewType>();
   }
 
   /**
@@ -292,8 +292,8 @@ export abstract class Builder
         new NodePattern<StringKeyOf<NewType>, Partial<ValueOf<NewType>>>(name, labels, conditions),
         options,
     );
-    this.continueChainClause(clause);
-    return this.changeType<NewType & T>();
+    const query = this.continueChainClause(clause);
+    return query.changeType<NewType & T>();
   }
 
   /**
@@ -325,8 +325,8 @@ export abstract class Builder
    */
   delete<NewType = T>
   (terms: Many<StringKeyOf<T>>, options?: DeleteOptions) {
-    this.continueChainClause(new Delete(terms, options));
-    return this.changeType<NewType>();
+    const query = this.continueChainClause(new Delete(terms, options));
+    return query.changeType<NewType>();
   }
 
   /**
@@ -396,10 +396,10 @@ export abstract class Builder
   match<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>,
       options?: MatchOptions) : Q {
-    this.continueChainClause(
+    const query = this.continueChainClause(
         new Match<StringKeyOf<NewType>, Partial<Condition>>(patterns, options),
     );
-    return this.changeType<NewType>();
+    return query.changeType<NewType>();
   }
 
   /**
@@ -453,8 +453,8 @@ export abstract class Builder
    */
   merge<NewType = T, Condition extends ValueOf<NewType> = ValueOf<NewType>>(
       patterns: PatternCollection<StringKeyOf<NewType>, Partial<Condition>>) : Q {
-    this.continueChainClause(new Merge(patterns));
-    return this.changeType<NewType>();
+    const query = this.continueChainClause(new Merge(patterns));
+    return query.changeType<NewType>();
   }
 
   /**
@@ -764,8 +764,8 @@ export abstract class Builder
    * @returns {Q}
    */
   unwind<NewType = T>(list: ValueOf<T>|StringKeyOf<ValueOf<T>>[], name: string) : Q {
-    this.continueChainClause(new Unwind(list, name));
-    return this.changeType<NewType>();
+    const query = this.continueChainClause(new Unwind(list, name));
+    return query.changeType<NewType>();
   }
 
   /**
@@ -955,10 +955,11 @@ export abstract class Builder
    * You can also pass an array of any of the above methods.
    *
    * @param {_.Many<Term>} terms
+   * @template {NewType} Sets the new type of the graph model
    * @returns {Q}
    */
   with<NewType = T>(terms: Many<Term>) : Q {
-    this.continueChainClause(new With(terms));
-    return this.changeType<NewType>();
+    const query = this.continueChainClause(new With(terms));
+    return query.changeType<NewType>();
   }
 }
