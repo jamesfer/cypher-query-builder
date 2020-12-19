@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.2...v6.0.3) (2020-12-16)
+
+
+### Bug Fixes
+
+* **Package:** Reduce package size ([b8238ac](https://github.com/jamesfer/cypher-query-builder/commit/b8238ac6cdde73d6a28c2bd65be0fe72387df123))
+
 ## [6.0.2](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.1...v6.0.2) (2020-12-12)
 
 

@@ -3,5 +3,6 @@
 yarn --silent nyc \
   --reporter=html \
   --reporter=text-summary \
+  --reporter=lcov \
   mocha \
   src/**/*.spec.ts
