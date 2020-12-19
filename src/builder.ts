@@ -293,7 +293,7 @@ export abstract class Builder
         options,
     );
     const query = this.continueChainClause(clause);
-    return query.changeType<N & G>();
+    return query.changeType<N>();
   }
 
   /**
