@@ -177,12 +177,12 @@ export function node<T = any, C extends ValueOf<T> = ValueOf<T>>(
  * @returns {RelationPattern} An object representing the relation pattern.
  */
 /* tslint:disable:max-line-length */
-export function relation(
+export function relation<T = any, C extends ValueOf<T> = ValueOf<T>>(
   dir: RelationDirection,
-  name?: Many<string> | Dictionary<any> | PathLength,
+  name?: Many<StringKeyOf<T>> | Dictionary<StringKeyOf<T>> | PathLength,
   labels?: Many<string> | Dictionary<any> | PathLength,
-  conditions?: Dictionary<any> | PathLength,
+  conditions?: Partial<C> | PathLength,
   length?: PathLength,
 ) {
-  return new RelationPattern(dir, name, labels, conditions, length);
+  return new RelationPattern<StringKeyOf<T>, Partial<C>>(dir, name, labels, conditions, length);
 }

@@ -11,15 +11,18 @@ const isPathLength = (value: any): value is PathLength => (
 
 export type RelationDirection = 'in' | 'out' | 'either';
 
-export class RelationPattern extends Pattern {
+export class RelationPattern<
+    Names extends string = string,
+    Condition extends Dictionary<any> = Dictionary<any>
+    > extends Pattern<Names, Condition> {
   dir: RelationDirection;
   length: PathLength | undefined;
 
   constructor(
     dir: RelationDirection,
-    name?: Many<string> | Dictionary<any> | PathLength,
+    name?: Many<Names> | Dictionary<Names> | Condition | PathLength,
     labels?: Many<string> | Dictionary<any> | PathLength,
-    conditions?: Dictionary<any> | PathLength,
+    conditions?: Condition | PathLength,
     length?: PathLength,
   ) {
     let tempName = name;
