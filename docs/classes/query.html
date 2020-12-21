@@ -3203,7 +3203,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="match" class="tsd-anchor"></a>
 				<h3>match</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">match&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">match&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3247,7 +3247,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								<div class="tsd-comment tsd-typography">
 									<p>(optional) Interface for conditions</p>
 								</div>
@@ -3256,7 +3256,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>PatternCollection patterns List of patterns to be matched.</p>
 								</div>
@@ -3276,7 +3276,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="matchnode" class="tsd-anchor"></a>
 				<h3>match<wbr>Node</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">match<wbr>Node&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, conditions<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">Condition</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">match<wbr>Node&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, conditions<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">C</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3301,7 +3301,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								<div class="tsd-comment tsd-typography">
 									<p>(optional) Interface for conditions</p>
 								</div>
@@ -3316,7 +3316,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> labels: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <a href="" class="tsd-signature-type">Condition</a></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <a href="" class="tsd-signature-type">C</a></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="query.html" class="tsd-signature-type">Query</a></h4>
@@ -3327,7 +3327,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="merge" class="tsd-anchor"></a>
 				<h3>merge</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">merge&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">merge&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3361,7 +3361,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								<div class="tsd-comment tsd-typography">
 									<p>(optional) Interface for conditions</p>
 								</div>
@@ -3370,7 +3370,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="query.html" class="tsd-signature-type">Query</a></h4>
@@ -3381,7 +3381,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="optionalmatch" class="tsd-anchor"></a>
 				<h3>optional<wbr>Match</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">optional<wbr>Match&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">optional<wbr>Match&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
@@ -3405,7 +3405,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								<div class="tsd-comment tsd-typography">
 									<p>(optional) Interface for conditions</p>
 								</div>
@@ -3414,7 +3414,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">MatchOptions</span></h5>

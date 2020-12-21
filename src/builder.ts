@@ -418,7 +418,7 @@ export abstract class Builder
    * `OPTIONAL MATCH` clause.
    *
    * @typeParam N - (optional) type of GraphModel after this call
-   * @typeParam Condition - (optional) Interface for conditions
+   * @typeParam C - (optional) Interface for conditions
    * @param {PatternCollection} patterns List of patterns to be matched.
    * @param {MatchOptions} options
    *
@@ -441,15 +441,15 @@ export abstract class Builder
    * @param {_.Many<string> | _.Dictionary<any>} labels
    * @param {_.Dictionary<any>} conditions
    * @typeParam N - (optional) type of GraphModel after this call (G -> N).
-   * @typeParam Condition - (optional) Interface for conditions
+   * @typeParam C - (optional) Interface for conditions
    * @returns {Q}
    */
-  matchNode<N = G, Condition extends ValueOf<G> = ValueOf<G>>(
+  matchNode<N = G, C extends ValueOf<G> = ValueOf<G>>(
     name?: Many<StringKeyOf<G>> | Dictionary<StringKeyOf<G>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Condition,
+    conditions?: Partial<C>,
   ): Q {
-    const clause = new Match(new NodePattern<StringKeyOf<G>, Condition>(name, labels, conditions));
+    const clause = new Match(new NodePattern<StringKeyOf<G>, Partial<C>>(name, labels, conditions));
     const query = this.continueChainClause(clause);
     return query.changeType<N>();
   }
@@ -460,7 +460,7 @@ export abstract class Builder
    * @param {PatternCollection} patterns
    * @param {MatchOptions} options
    * @typeParam N - (optional) type of GraphModel after this call (G -> N).
-   * @typeParam Condition - (optional) Interface for conditions
+   * @typeParam C - (optional) Interface for conditions
    * @returns {Q}
    */
   optionalMatch<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
@@ -488,7 +488,7 @@ export abstract class Builder
    * ```
    * @param {PatternCollection} patterns
    * @typeParam N - (optional) type of GraphModel after this call (G -> N).
-   * @typeParam Condition - (optional) Interface for conditions
+   * @typeParam C - (optional) Interface for conditions
    */
   merge<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<Condition>>) : Q {
