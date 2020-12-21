@@ -419,8 +419,8 @@ export abstract class Builder
    *
    * @typeParam N - (optional) type of GraphModel after this call
    * @typeParam Condition - (optional) Interface for conditions
-   * @param patterns PatternCollection patterns List of patterns to be matched.
-   * @param options MatchOptions} options
+   * @param {PatternCollection} patterns List of patterns to be matched.
+   * @param {MatchOptions} options
    *
    * @returns {Q}
    */
