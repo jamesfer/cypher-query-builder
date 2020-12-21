@@ -6,6 +6,10 @@ import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
+/**
+ * @typeParam Names - (optional) subset of allowed String values
+ * @typeParam Condition - (optional) stricter Dictionary
+ */
 export abstract class Pattern<
     Names extends string = string,
     Condition extends Dictionary<any> = Dictionary<any>

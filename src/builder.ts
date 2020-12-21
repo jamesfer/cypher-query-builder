@@ -170,7 +170,11 @@ export class SetBlock<Q> {
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
+ *
  * @internal
+ * @typeParam {Builder} Q - Type of the builder (Query, Connection, ...)
+ * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to Dictionary<any>
+ *     but can be something more specific like a model of your graph with all its properties
  */
 export abstract class Builder
 <Q extends Builder<any>, G extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
@@ -184,6 +188,8 @@ export abstract class Builder
    * nodes and relations changed (e.g. after match, unwind or return)
    *
    * @protected
+   * @typeParam N (optional)- New type to cast this builder to. This changes the graphModel
+   *    G and thus available properties for every subsequent method call
    */
   protected abstract changeType<N extends Dictionary<any>>
   () : Q;
@@ -260,6 +266,11 @@ export abstract class Builder
    * query.create([node('people', 'Person', { age: 30 })], { unique: true });
    * // CREATE UNIQUE (people:Person { age: 30 })
    * ```
+   *
+   * @typeParam N (optional)- New GraphModel G after this call. Defaults to G.
+   * (@see {@link Builder})
+   * @param patterns - Collection of patterns that are compatible to <N>
+   * @param options - options for CREATE
    */
   create<N extends G = G>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
@@ -271,6 +282,10 @@ export abstract class Builder
 
   /**
    * Shorthand for `create(patterns, { unique: true })`
+   *
+   * @typeParam N (optional)- New GraphModel G after this call. Defaults to G.
+   * (@see {@link Builder})
+   * @param patterns - Collection of patterns that are compatible to <N>
    */
   createUnique<N extends G = G>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
@@ -281,6 +296,13 @@ export abstract class Builder
   /**
    * Shorthand for `create(node(name, labels, conditions), options)`. For more details
    * the arguments see @{link node}.
+   *
+   * @typeParam N - (optional) New GraphModel G after this call. (@see {@link Builder})
+   * @param name - single name, list of names or dictionary of nodes that must be compatible to
+   * the given new GraphModel <N>
+   * @param labels - labels to attach
+   * @param conditions - properties of node that must be compatible to new GraphModel <N>
+   * @param options - options for CREATE
    */
   createNode<N extends G = G>(
     name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
@@ -298,6 +320,11 @@ export abstract class Builder
 
   /**
    * Shorthand for `createNode(name, labels, conditions, { unique: true })`
+   *
+   * @typeParam N - (optional) New GraphModel <G> after this call. (@see {@link Builder})
+   * @param name - single name, list of names or dictionary of nodes (keys of <N>)
+   * @param labels - labels to attach
+   * @param conditions - properties of node that must be compatible to new GraphModel <N>
    */
   createUniqueNode<N extends G = G>(
     name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
@@ -319,7 +346,8 @@ export abstract class Builder
    * You can set `detach: true` in the options to make it a `DETACH DELETE`
    * clause.
    *
-   * @param {_.Many<string>} terms
+   * @typeParam N (optional) Type of GraphModel <G> after this call
+   * @param {_.Many<string>} terms (keys of <G>)
    * @param {DeleteOptions} options
    * @returns {Q}
    */
@@ -332,7 +360,8 @@ export abstract class Builder
   /**
    * Shorthand for `delete(terms, { detach: true })`.
    *
-   * @param {_.Many<string>} terms
+   * @typeParam N (optional) Type of GraphModel <G> after this call
+   * @param {_.Many<string>} terms (keys of <G>)
    * @param {DeleteOptions} options
    * @returns {Q}
    */
@@ -388,8 +417,11 @@ export abstract class Builder
    * You can also provide `optional: true` in the options to create and
    * `OPTIONAL MATCH` clause.
    *
-   * @param {PatternCollection} patterns List of patterns to be matched.
-   * @param {MatchOptions} options
+   * @typeParam N - (optional) type of GraphModel after this call
+   * @typeParam Condition - (optional) Interface for conditions
+   * @param patterns PatternCollection patterns List of patterns to be matched.
+   * @param options MatchOptions} options
+   *
    * @returns {Q}
    */
   match<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
@@ -408,13 +440,15 @@ export abstract class Builder
    * @param {_.Many<string> | _.Dictionary<any>} name
    * @param {_.Many<string> | _.Dictionary<any>} labels
    * @param {_.Dictionary<any>} conditions
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam Condition - (optional) Interface for conditions
    * @returns {Q}
    */
   matchNode<N = G, Condition extends ValueOf<G> = ValueOf<G>>(
     name?: Many<StringKeyOf<G>> | Dictionary<StringKeyOf<G>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Condition,
-  ) {
+  ): Q {
     const clause = new Match(new NodePattern<StringKeyOf<G>, Condition>(name, labels, conditions));
     const query = this.continueChainClause(clause);
     return query.changeType<N>();
@@ -425,6 +459,8 @@ export abstract class Builder
    *
    * @param {PatternCollection} patterns
    * @param {MatchOptions} options
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam Condition - (optional) Interface for conditions
    * @returns {Q}
    */
   optionalMatch<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
@@ -450,6 +486,9 @@ export abstract class Builder
    * // MERGE (user:User { id: 1 })-[rel:OwnsProject]->(project:Project { id: 20 })
    * // ON MATCH SET rel.updatedAt = timestamp()
    * ```
+   * @param {PatternCollection} patterns
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam Condition - (optional) Interface for conditions
    */
   merge<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
       patterns: PatternCollection<StringKeyOf<N>, Partial<Condition>>) : Q {
@@ -581,8 +620,13 @@ export abstract class Builder
    *
    * If you only need to remove labels *or* properties, you may find `removeProperties` or
    * `removeLabels` more convenient.
+   *
+   * @typeParam T - (optional) any ot Type of target in GraphModel whose properties shall be removed
+   * @param {RemoveProperties} properties - properties to remove from target
+   * properties might be constrained to values of graphModel <G> and keys of target <T>
    */
-  remove<T = any>(properties: RemoveProperties<string, StringKeyOf<G>, StringKeyOf<T>>) {
+  remove<T extends ValueOf<G> = any>
+  (properties: RemoveProperties<string, StringKeyOf<G>, StringKeyOf<T>>) {
     return this.continueChainClause(new Remove(properties));
   }
 
@@ -600,8 +644,13 @@ export abstract class Builder
    * });
    * // REMOVE customer.inactive, customer.new, coupon.available
    * ```
+   *
+   *
+   * @typeParam T - (optional) any ot Type of target in GraphModel whose properties shall be removed
+   * @param {RemoveProperties} properties - properties to remove from target
+   * properties might be constrained to values of graphModel <G> and keys of target <T>
    */
-  removeProperties<T = any>(
+  removeProperties<T extends ValueOf<G> = any>(
       properties: TypedDictionary<StringKeyOf<G>, Many<StringKeyOf<T>>>,
   ) {
     return this.continueChainClause(new Remove({ properties }));
@@ -759,7 +808,9 @@ export abstract class Builder
    * Adds an [unwind]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/unwind}
    * clause to the query.
    *
-   * @param {any[]} list Any kind of array to unwind in the query
+   * @typeParam N - (optional) type of graphModel after this call
+   * @param {any[]} list Any kind of array to unwind in the query. If graphModel exists properties
+   * must exist
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
@@ -954,6 +1005,7 @@ export abstract class Builder
    *
    * You can also pass an array of any of the above methods.
    *
+   * @typeParam N - (optional) type of graphModel after this call
    * @param {_.Many<Term>} terms
    * @returns {Q}
    */

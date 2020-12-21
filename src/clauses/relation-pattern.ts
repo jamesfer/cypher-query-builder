@@ -11,6 +11,10 @@ const isPathLength = (value: any): value is PathLength => (
 
 export type RelationDirection = 'in' | 'out' | 'either';
 
+/**
+ * @typeParam Names - (optional) subset of allowed String values
+ * @typeParam Condition - (optional) stricter Dictionary
+ */
 export class RelationPattern<
     Names extends string = string,
     Condition extends Dictionary<any> = Dictionary<any>
