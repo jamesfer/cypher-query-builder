@@ -18,6 +18,7 @@ import { Union } from './clauses/union';
 import { ReturnOptions } from './clauses/return';
 import { StringKeyOf, TypedDictionary, ValueOf } from './types';
 import { Query } from './query';
+import { Selector } from './selector';
 
 /**
  * @internal
@@ -167,6 +168,7 @@ export class SetBlock<Q> {
   }
 }
 
+type ModelPropertiesOf<G> = StringKeyOf<ValueOf<G>>;
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
@@ -752,6 +754,18 @@ export abstract class Builder
   }
 
   /**
+   * Return as object
+   *
+   * @param terms
+   */
+  returnObject<T extends keyof G, A extends keyof G[T]>(
+      terms: Many<Record<string, string|Selector<G>>>,
+  ) {
+    console.log(terms);
+    return this.continueChainClause(new Return(terms));
+  }
+
+  /**
    * Adds a [skip]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/skip}
    * clause to the query.
    *
@@ -814,7 +828,7 @@ export abstract class Builder
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
-  unwind<N = G>(list: ValueOf<G>|StringKeyOf<ValueOf<G>>[], name: string) : Q {
+  unwind<N = G>(list: ValueOf<G>|ModelPropertiesOf<G>[], name: string) : Q {
     const query = this.continueChainClause(new Unwind(list, name));
     return query.changeType<N>();
   }

@@ -92,7 +92,7 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to Dictionary<any>
  *     but can be something more specific like a model of your graph with all its properties
  */
-export class Connection<G extends Dictionary<any> = Dictionary<any>> extends Builder<Query, G> {
+export class Connection<G = any> extends Builder<Query, G> {
   protected auth: AuthToken;
   protected driver: Driver;
   protected options: FullConnectionOptions;
