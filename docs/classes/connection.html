@@ -2442,6 +2442,9 @@ img {
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a href="connection.html#returndistinct" class="tsd-kind-icon">return<wbr>Distinct</a>
 				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a href="connection.html#returnobject" class="tsd-kind-icon">return<wbr>Object</a>
+				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a href="connection.html#run" class="tsd-kind-icon">run</a>
 				</li>
@@ -2524,7 +2527,13 @@ img {
 			<h3>Type parameters</h3>
 			<ul class="tsd-type-parameters">
 				<li>
-					<h4>G<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h4>
+					<h4>G</h4>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>GraphModel that is currently processable. Defaults to Dictionary<any>
+							but can be something more specific like a model of your graph with all its properties</p>
+						</div>
+					</div>
 				</li>
 			</ul>
 		</section>
@@ -2581,6 +2590,7 @@ img {
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited"><a href="connection.html#removeproperties" class="tsd-kind-icon">remove<wbr>Properties</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#return" class="tsd-kind-icon">return</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#returndistinct" class="tsd-kind-icon">return<wbr>Distinct</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#returnobject" class="tsd-kind-icon">return<wbr>Object</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="connection.html#run" class="tsd-kind-icon">run</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="connection.html#session" class="tsd-kind-icon">session</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="connection.html#set" class="tsd-kind-icon">set</a></li>
@@ -2612,7 +2622,7 @@ img {
 						<aside class="tsd-sources">
 							<p>Overrides <a href="setblock.html">SetBlock</a>.<a href="setblock.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L97">connection.ts:97</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L100">connection.ts:100</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2667,7 +2677,7 @@ img {
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#oncreate">onCreate</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L212">builder.ts:212</a></li>
+						<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L215">builder.ts:215</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2691,7 +2701,7 @@ query.onCreate.setVariables({ <span class="hljs-string">'node.createdAt'</span>:
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#onmatch">onMatch</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L229">builder.ts:229</a></li>
+						<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L232">builder.ts:232</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2721,7 +2731,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L147">connection.ts:147</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L150">connection.ts:150</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2745,7 +2755,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#create">create</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L275">builder.ts:275</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L278">builder.ts:278</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2810,7 +2820,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#createnode">createNode</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L307">builder.ts:307</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L310">builder.ts:310</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2871,7 +2881,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#createunique">createUnique</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L290">builder.ts:290</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L293">builder.ts:293</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2913,7 +2923,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#createuniquenode">createUniqueNode</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L329">builder.ts:329</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L332">builder.ts:332</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2966,7 +2976,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#delete">delete</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L354">builder.ts:354</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L357">builder.ts:357</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3017,7 +3027,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#detachdelete">detachDelete</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L368">builder.ts:368</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L371">builder.ts:371</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3061,7 +3071,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#limit">limit</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L382">builder.ts:382</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L385">builder.ts:385</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3084,14 +3094,14 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="match" class="tsd-anchor"></a>
 				<h3>match</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">match&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">match&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#match">match</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L427">builder.ts:427</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L430">builder.ts:430</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3118,6 +3128,11 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 							the <a href="https://neo4j.com/developer/kb/cross-product-cypher-queries-will-not-perform-well/" class="external">cypher docs</a>.</p>
 							<p>You can also provide <code>optional: true</code> in the options to create and
 							<code>OPTIONAL MATCH</code> clause.</p>
+							<dl class="tsd-comment-tags">
+								<dt>typeparam</dt>
+								<dd><p>(optional) Interface for conditions</p>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3128,24 +3143,20 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
-								<div class="tsd-comment tsd-typography">
-									<p>(optional) Interface for conditions</p>
-								</div>
+								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>PatternCollection patterns List of patterns to be matched.</p>
+									<p>List of patterns to be matched.</p>
 								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">MatchOptions</span></h5>
 								<div class="tsd-comment tsd-typography">
-									<p>MatchOptions} options</p>
 								</div>
 							</li>
 						</ul>
@@ -3157,14 +3168,14 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="matchnode" class="tsd-anchor"></a>
 				<h3>match<wbr>Node</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">match<wbr>Node&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, conditions<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">C</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">match<wbr>Node&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, labels<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, conditions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#matchnode">matchNode</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L447">builder.ts:447</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L450">builder.ts:450</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3197,7 +3208,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> labels: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Dictionary</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <a href="" class="tsd-signature-type">C</a></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> conditions: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="query.html" class="tsd-signature-type">Query</a></h4>
@@ -3208,14 +3219,14 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="merge" class="tsd-anchor"></a>
 				<h3>merge</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">merge&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">merge&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#merge">merge</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L493">builder.ts:493</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L496">builder.ts:496</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3232,6 +3243,11 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 .onMatch.setVariables({ <span class="hljs-string">'rel.updatedAt'</span>: <span class="hljs-string">`timestamp`</span> });
 <span class="hljs-comment">// MERGE (user:User { id: 1 })-[rel:OwnsProject]-&gt;(project:Project { id: 20 })</span>
 <span class="hljs-comment">// ON MATCH SET rel.updatedAt = timestamp()</span></code></pre>
+							<dl class="tsd-comment-tags">
+								<dt>typeparam</dt>
+								<dd><p>(optional) Interface for conditions</p>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3242,16 +3258,13 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
-								<div class="tsd-comment tsd-typography">
-									<p>(optional) Interface for conditions</p>
-								</div>
+								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="query.html" class="tsd-signature-type">Query</a></h4>
@@ -3262,20 +3275,25 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="optionalmatch" class="tsd-anchor"></a>
 				<h3>optional<wbr>Match</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">optional<wbr>Match&lt;N, C&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">optional<wbr>Match&lt;N, Condition&gt;<span class="tsd-signature-symbol">(</span>patterns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MatchOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#optionalmatch">optionalMatch</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L466">builder.ts:466</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L469">builder.ts:469</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Shorthand for <code>match(patterns, { optional: true })</code>.</p>
 							</div>
+							<dl class="tsd-comment-tags">
+								<dt>typeparam</dt>
+								<dd><p>(optional) Interface for conditions</p>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3286,16 +3304,13 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 								</div>
 							</li>
 							<li>
-								<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
-								<div class="tsd-comment tsd-typography">
-									<p>(optional) Interface for conditions</p>
-								</div>
+								<h4>Condition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							</li>
 						</ul>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5>patterns: <span class="tsd-signature-type">PatternCollection</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">N</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Condition</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">MatchOptions</span></h5>
@@ -3316,7 +3331,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#orderby">orderBy</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L554">builder.ts:554</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L557">builder.ts:557</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3381,7 +3396,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L171">connection.ts:171</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L174">connection.ts:174</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3412,7 +3427,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#raw">raw</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L588">builder.ts:588</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L591">builder.ts:591</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3454,7 +3469,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#remove">remove</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L628">builder.ts:628</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L631">builder.ts:631</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3517,7 +3532,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#removelabels">removeLabels</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L674">builder.ts:674</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L677">builder.ts:677</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3555,7 +3570,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#removeproperties">removeProperties</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L653">builder.ts:653</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L656">builder.ts:656</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3606,7 +3621,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#return">return</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L740">builder.ts:740</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L743">builder.ts:743</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3676,7 +3691,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#returndistinct">returnDistinct</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L750">builder.ts:750</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L753">builder.ts:753</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3694,6 +3709,55 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<a name="returnobject" class="tsd-anchor"></a>
+				<h3>return<wbr>Object</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<li class="tsd-signature tsd-kind-icon">return<wbr>Object<span class="tsd-signature-symbol">(</span>definition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Selector</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Q</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#returnobject">returnObject</a></p>
+							<ul>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L785">builder.ts:785</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Return as object</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code class="language-typescript"><span class="hljs-comment">// Selector Object:</span>
+q.returnObject({
+    person: <span class="hljs-keyword">new</span> Selector&lt;GraphModel&gt;().set(<span class="hljs-string">'user'</span>, <span class="hljs-string">'name'</span>),
+    inventory: <span class="hljs-keyword">new</span> Selector&lt;GraphModel&gt;().set(<span class="hljs-string">'item'</span>, <span class="hljs-string">'price'</span>),
+})</code></pre>
+									<pre><code class="language-typescript"><span class="hljs-comment">//String selector</span>
+q.returnObject({ user: <span class="hljs-string">'person.name'</span> });</code></pre>
+									<pre><code class="language-typescript"><span class="hljs-comment">//Multiple Objects</span>
+q.returnObject([
+   { person: <span class="hljs-keyword">new</span> Selector&lt;GraphModel&gt;().set(<span class="hljs-string">'user'</span>, <span class="hljs-string">'name'</span>) },
+   { inventory: <span class="hljs-string">'item.name'</span> },
+])</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>definition: <span class="tsd-signature-type">Many</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Selector</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>definition of return object as key value pair whereas value can be
+									string selector or @see Selector</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Q</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 				<a name="run" class="tsd-anchor"></a>
 				<h3>run</h3>
@@ -3704,7 +3768,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L229">connection.ts:229</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L232">connection.ts:232</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3772,7 +3836,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L158">connection.ts:158</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L161">connection.ts:161</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3799,7 +3863,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#set">set</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L82">builder.ts:82</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L84">builder.ts:84</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3864,7 +3928,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setlabels">setLabels</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L104">builder.ts:104</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L106">builder.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3899,7 +3963,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setvalues">setValues</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L133">builder.ts:133</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L135">builder.ts:135</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3944,7 +4008,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="setblock.html">SetBlock</a>.<a href="setblock.html#setvariables">setVariables</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L161">builder.ts:161</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L163">builder.ts:163</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3990,7 +4054,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#skip">skip</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L761">builder.ts:761</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L798">builder.ts:798</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4019,7 +4083,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/connection.ts#L320">connection.ts:320</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/connection.ts#L323">connection.ts:323</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4099,7 +4163,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#union">union</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L782">builder.ts:782</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L819">builder.ts:819</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4139,7 +4203,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#unionall">unionAll</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L803">builder.ts:803</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L840">builder.ts:840</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4166,14 +4230,14 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 				<a name="unwind" class="tsd-anchor"></a>
 				<h3>unwind</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-					<li class="tsd-signature tsd-kind-icon">unwind&lt;N&gt;<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span>, name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
+					<li class="tsd-signature tsd-kind-icon">unwind&lt;N&gt;<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#modelpropertiesof" class="tsd-signature-type">ModelPropertiesOf</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span>, name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="query.html" class="tsd-signature-type">Query</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#unwind">unwind</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L817">builder.ts:817</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L854">builder.ts:854</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4194,7 +4258,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>list: <span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StringKeyOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+								<h5>list: <span class="tsd-signature-type">ValueOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../globals.html#modelpropertiesof" class="tsd-signature-type">ModelPropertiesOf</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<p>Any kind of array to unwind in the query. If graphModel exists properties
 									must exist</p>
@@ -4222,7 +4286,7 @@ query.onMatch.setVariables({ <span class="hljs-string">'node.updatedAt'</span>: 
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#where">where</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L949">builder.ts:949</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L986">builder.ts:986</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4344,7 +4408,7 @@ query.where([
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="builder.html">Builder</a>.<a href="builder.html#with">with</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/454d61c/src/builder.ts#L1012">builder.ts:1012</a></li>
+								<li>Defined in <a href="https://github.com/Bastianowicz/cypher-query-builder/blob/ebd14fb/src/builder.ts#L1049">builder.ts:1049</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

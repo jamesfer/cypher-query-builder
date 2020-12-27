@@ -757,12 +757,35 @@ export abstract class Builder
   /**
    * Return as object
    *
-   * @param terms
+   * @param definition - definition of return object as key value pair whereas value can be
+   * string selector or @see Selector
+   *
+   * @example
+   * ```typescript
+   * // Selector Object:
+   * q.returnObject({
+   *     person: new Selector<GraphModel>().set('user', 'name'),
+   *     inventory: new Selector<GraphModel>().set('item', 'price'),
+   * })
+   * ```
+   *
+   * ```typescript
+   * // String selector
+   * q.returnObject({ user: 'person.name' });
+   * ```
+   *
+   * ```typescript
+   * // Multiple Objects
+   * q.returnObject([
+   *    { person: new Selector<GraphModel>().set('user', 'name') },
+   *    { inventory: 'item.name' },
+   * ])
+   * ```
    */
-  returnObject<T extends keyof G, A extends keyof G[T]>(
-      terms: Many<Record<string, string|Selector<G>>>,
+  returnObject(
+      definition: Many<Record<string, string|Selector<G>>>,
   ) {
-    return this.continueChainClause(new ReturnObject(terms));
+    return this.continueChainClause(new ReturnObject(definition));
   }
 
   /**
