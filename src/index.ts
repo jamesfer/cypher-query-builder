@@ -5,5 +5,6 @@ export * from './clause';
 export * from './clause-collection';
 export * from './clauses';
 export * from './query';
+export * from './selector';
 export * from './transformer';
 export * from './types';

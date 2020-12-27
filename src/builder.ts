@@ -18,6 +18,8 @@ import { Union } from './clauses/union';
 import { ReturnOptions } from './clauses/return';
 import { StringKeyOf, TypedDictionary, ValueOf } from './types';
 import { Query } from './query';
+import { Selector } from './selector';
+import { ReturnObject } from './clauses/returnObject';
 
 /**
  * @internal
@@ -167,6 +169,7 @@ export class SetBlock<Q> {
   }
 }
 
+type ModelPropertiesOf<G> = StringKeyOf<ValueOf<G>>;
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
@@ -752,6 +755,40 @@ export abstract class Builder
   }
 
   /**
+   * Return as object
+   *
+   * @param definition - definition of return object as key value pair whereas value can be
+   * string selector or @see Selector
+   *
+   * @example
+   * ```typescript
+   * // Selector Object:
+   * q.returnObject({
+   *     person: new Selector<GraphModel>().set('user', 'name'),
+   *     inventory: new Selector<GraphModel>().set('item', 'price'),
+   * })
+   * ```
+   *
+   * ```typescript
+   * // String selector
+   * q.returnObject({ user: 'person.name' });
+   * ```
+   *
+   * ```typescript
+   * // Multiple Objects
+   * q.returnObject([
+   *    { person: new Selector<GraphModel>().set('user', 'name') },
+   *    { inventory: 'item.name' },
+   * ])
+   * ```
+   */
+  returnObject(
+      definition: Many<Record<string, string|Selector<G>>>,
+  ) {
+    return this.continueChainClause(new ReturnObject(definition));
+  }
+
+  /**
    * Adds a [skip]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/skip}
    * clause to the query.
    *
@@ -814,7 +851,7 @@ export abstract class Builder
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
-  unwind<N = G>(list: ValueOf<G>|StringKeyOf<ValueOf<G>>[], name: string) : Q {
+  unwind<N = G>(list: ValueOf<G>|ModelPropertiesOf<G>[], name: string) : Q {
     const query = this.continueChainClause(new Unwind(list, name));
     return query.changeType<N>();
   }
