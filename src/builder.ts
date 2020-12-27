@@ -19,6 +19,7 @@ import { ReturnOptions } from './clauses/return';
 import { StringKeyOf, TypedDictionary, ValueOf } from './types';
 import { Query } from './query';
 import { Selector } from './selector';
+import { ReturnObject } from './clauses/returnObject';
 
 /**
  * @internal
@@ -761,8 +762,7 @@ export abstract class Builder
   returnObject<T extends keyof G, A extends keyof G[T]>(
       terms: Many<Record<string, string|Selector<G>>>,
   ) {
-    console.log(terms);
-    return this.continueChainClause(new Return(terms));
+    return this.continueChainClause(new ReturnObject(terms));
   }
 
   /**

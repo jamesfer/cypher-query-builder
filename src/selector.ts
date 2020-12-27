@@ -1,3 +1,12 @@
+/**
+ * Selectors can be used to query nested fields in the GraphModel
+ *
+ * @example
+ * ```typescript
+ * interface gm = { user: { name: string } };
+ * new Selector<gm>().set('user', 'name') };
+ * ```
+ */
 export class Selector<G> {
   get tuple(): [keyof G, any] {
     if (this._tuple === undefined) {
@@ -12,4 +21,8 @@ export class Selector<G> {
 
   // tslint:disable-next-line:variable-name
   private _tuple: [keyof G, any]|undefined;
+
+  toString() {
+    return `${this.tuple[0]}.${this.tuple[1]}`;
+  }
 }

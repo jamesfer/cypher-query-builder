@@ -172,17 +172,17 @@ describe('Query', () => {
       returnObject: [(q: Query) => q.returnObject({
         user: 'person.name'}), 'RETURN { user: person.name };'],
       returnObjectTyped: [(q: Query<GraphModel>) => q.returnObject(
-  { name: 'person.name' }), 'RETURN { user: person.name };'],
+  { user: 'person.name' }), 'RETURN { user: person.name };'],
       'return object w/ selector': [(q: Query<GraphModel>) => q.returnObject(
   { person: new Selector<GraphModel>().set('user', 'name') }), 'RETURN { person: user.name };'],
       'return object w/ multiple selectors': [(q: Query<GraphModel>) => q.returnObject({
         person: new Selector<GraphModel>().set('user', 'name'),
         inventory: new Selector<GraphModel>().set('item', 'price'),
-      }), 'RETURN { person: user.name };'],
+      }), 'RETURN { person: user.name, inventory: item.price };'],
       'return many typed objects': [(q: Query<GraphModel>) => q.returnObject([
         { person: new Selector<GraphModel>().set('user', 'name') },
         { inventory: 'item.name' },
-      ]), 'RETURN { person: user.name }, {inventory : item.name };'],
+      ]), 'RETURN { person: user.name }, { inventory: item.name };'],
     };
 
     Object.entries(expectations).forEach(
