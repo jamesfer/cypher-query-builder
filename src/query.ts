@@ -5,10 +5,9 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query<G = any> extends Builder<Query, G> {
+export class Query<G = any> extends Builder<Query<G>, G> {
 
-  protected changeType<T extends Dictionary<any>>
-  (): Query<T> {
+  protected changeType<T>(): Query<T> {
     return new Query<T>(this.connection, this.clauses);
   }
   protected clauses = new ClauseCollection();

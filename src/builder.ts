@@ -169,18 +169,17 @@ export class SetBlock<Q> {
   }
 }
 
-type ModelPropertiesOf<G> = StringKeyOf<ValueOf<G>>;
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
  *
  * @internal
  * @typeParam {Builder} Q - Type of the builder (Query, Connection, ...)
- * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to Dictionary<any>
+ * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to any
  *     but can be something more specific like a model of your graph with all its properties
  */
 export abstract class Builder
-<Q extends Builder<any>, G extends Dictionary<any> = Dictionary<any>> extends SetBlock<Q> {
+<Q extends Builder<Q>, G = any> extends SetBlock<Q> {
   protected constructor() {
     super(c => this.continueChainClause(c));
   }
@@ -312,7 +311,7 @@ export abstract class Builder
     labels?: Many<string> | Dictionary<any>,
     conditions?: Partial<ValueOf<N>>,
     options?: CreateOptions,
-  ) {
+  ) : Q {
     const clause = new Create(
         new NodePattern<StringKeyOf<N>, Partial<ValueOf<N>>>(name, labels, conditions),
         options,
@@ -333,7 +332,7 @@ export abstract class Builder
     name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Partial<ValueOf<N>>,
-  ) {
+  ) : Q {
     return this.createNode<N>(name, labels, conditions, { unique: true });
   }
 
@@ -355,7 +354,7 @@ export abstract class Builder
    * @returns {Q}
    */
   delete<N = G>
-  (terms: Many<StringKeyOf<G>>, options?: DeleteOptions) {
+  (terms: Many<StringKeyOf<G>>, options?: DeleteOptions) : Q {
     const query = this.continueChainClause(new Delete(terms, options));
     return query.changeType<N>();
   }
@@ -382,7 +381,7 @@ export abstract class Builder
    * @param {string | number} amount
    * @returns {Q}
    */
-  limit(amount: number) {
+  limit(amount: number) : Q {
     return this.continueChainClause(new Limit(amount));
   }
 
@@ -851,7 +850,7 @@ export abstract class Builder
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
-  unwind<N = G>(list: ValueOf<G>|ModelPropertiesOf<G>[], name: string) : Q {
+  unwind<N = G>(list: ValueOf<G>[], name: StringKeyOf<N>) : Q {
     const query = this.continueChainClause(new Unwind(list, name));
     return query.changeType<N>();
   }
@@ -1046,7 +1045,7 @@ export abstract class Builder
    * @param {_.Many<Term>} terms
    * @returns {Q}
    */
-  with<N = G>(terms: Many<Term>) : Q {
+  with<N = G>(terms: Many<StringKeyOf<N>|Dictionary<StringKeyOf<N>>>) : Q {
     const query = this.continueChainClause(new With(terms));
     return query.changeType<N>();
   }
