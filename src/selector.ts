@@ -7,22 +7,23 @@
  * new Selector<gm>().set('user', 'name') };
  * ```
  */
-export class Selector<G> {
-  get tuple(): [keyof G, any] {
+export class Selector<G extends any> {
+  get tuple(): [keyof G, any?] {
     if (this._tuple === undefined) {
       throw new Error('Uninitialized selector');
     }
     return this._tuple;
   }
-  set<T extends keyof G, A extends keyof G[T]>(key: T, prop : A) {
+  set<T extends keyof G, A extends keyof G[T]>(key: T, prop? : A) {
     this._tuple = [key, prop];
     return this;
   }
 
   // tslint:disable-next-line:variable-name
-  private _tuple: [keyof G, any]|undefined;
+  private _tuple: [keyof G, any?]|undefined;
 
   toString() {
-    return `${this.tuple[0]}.${this.tuple[1]}`;
+    const prop : string = (this.tuple[1] !== undefined) ? `.${this.tuple[1]}` : '';
+    return `${this.tuple[0]}${prop}`;
   }
 }
