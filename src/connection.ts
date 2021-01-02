@@ -139,10 +139,6 @@ export class Connection<G = any> extends Builder<Query, G> {
     connections.push(this);
   }
 
-  protected changeType<T extends Dictionary<any>>(): Query<T> {
-    return new Query<T>(this);
-  }
-
   /**
    * Closes this connection if it is open. Closed connections cannot be
    * reopened.

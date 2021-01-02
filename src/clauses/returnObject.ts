@@ -1,8 +1,8 @@
 import { Clause } from '../clause';
-import { Many, isArray, isString } from 'lodash';
+import { Many, isArray, isString, isObject } from 'lodash';
 import { Selector } from '../selector';
 
-type Selectable<G extends any> = Record<string, string | Selector<G>>;
+export type Selectable<G> = Record<string, string | Selector<G> | Record<string, Selector<G>>>;
 
 /**
  * Clause to create an object formed RETURN
@@ -10,13 +10,13 @@ type Selectable<G extends any> = Record<string, string | Selector<G>>;
  * @typeParam G - (optional) type of graph model that is being queried
  */
 export class ReturnObject<G extends any = any> extends Clause {
-  constructor(private readonly specs : Many<Selectable<G>>) {
+  constructor(private readonly specs: Many<Selectable<G>>) {
     super();
   }
 
   build(): string {
     const definitions: string[] = [];
-    const records : Selectable<G>[] = isArray(this.specs) ? this.specs : [this.specs];
+    const records: Selectable<G>[] = isArray(this.specs) ? this.specs : [this.specs];
     for (const record of records) {
       definitions.push(this.stringifyRecord(record));
     }
@@ -24,11 +24,14 @@ export class ReturnObject<G extends any = any> extends Clause {
     return `RETURN ${definitions.join(', ')}`;
   }
 
-  private stringifyRecord(record : Selectable<G>) {
+  private stringifyRecord(record: Selectable<any>) {
     let definition = '';
     const properties = [];
     for (const key in record) {
-      properties.push({ key, selector: record[key] });
+      const selector = (record[key].toString() === '[object Object]')
+        ? this.stringifyRecord(<Selectable<G>>record[key])
+        : record[key];
+      properties.push({ key, selector });
     }
     if (properties.length) {
       definition += '{ ';

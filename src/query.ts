@@ -6,10 +6,6 @@ import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
 export class Query<G = any> extends Builder<Query<G>, G> {
-
-  protected changeType<T>(): Query<T> {
-    return new Query<T>(this.connection, this.clauses);
-  }
   protected clauses = new ClauseCollection();
 
   /**
@@ -23,7 +19,7 @@ export class Query<G = any> extends Builder<Query<G>, G> {
     this.clauses = clauses ?? new ClauseCollection();
   }
 
-  protected continueChainClause(clause: Clause) {
+  protected continueChainClause(clause: Clause) : Query {
     return this.addClause(clause);
   }
 
