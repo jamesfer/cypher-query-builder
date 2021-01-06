@@ -5,19 +5,21 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query extends Builder<Query> {
+export class Query<G = any> extends Builder<Query<G>, G> {
   protected clauses = new ClauseCollection();
 
   /**
    * Creates a new query with a given connection.
    *
    * @param {Connection} connection
+   * @param {clauses} clauses e.g. to clone the state of an query
    */
-  constructor(protected connection: Connection | null = null) {
+  constructor(protected connection: Connection | null = null, clauses? : ClauseCollection) {
     super();
+    this.clauses = clauses ?? new ClauseCollection();
   }
 
-  protected continueChainClause(clause: Clause) {
+  protected continueChainClause(clause: Clause) : Query {
     return this.addClause(clause);
   }
 
