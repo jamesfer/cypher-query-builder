@@ -1,3 +1,10 @@
+## [6.0.4](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.3...v6.0.4) (2020-12-21)
+
+
+### Bug Fixes
+
+* **build:** add missing build step before releasing ([cd68ec3](https://github.com/jamesfer/cypher-query-builder/commit/cd68ec3e3a970d2c7e274700ae45e3d07fb91b40)), closes [#173](https://github.com/jamesfer/cypher-query-builder/issues/173)
+
 ## [6.0.3](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.2...v6.0.3) (2020-12-16)
 
 
