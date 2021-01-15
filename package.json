@@ -28,7 +28,7 @@
     "build:rollup": "scripts/build rollup",
     "docs": "scripts/docs",
     "lint": "scripts/lint",
-    "postinstall": "yarn build",
+    "postinstall": "yarn && yarn build",
     "report": "scripts/report",
     "test": "scripts/test-integration",
     "test:unit": "scripts/test",
