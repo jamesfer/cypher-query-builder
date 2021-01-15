@@ -28,7 +28,7 @@
     "build:rollup": "scripts/build rollup",
     "docs": "scripts/docs",
     "lint": "scripts/lint",
-    "prepare": "yarn && yarn build",
+    "prepare": "yarn build",
     "report": "scripts/report",
     "test": "scripts/test-integration",
     "test:unit": "scripts/test",
