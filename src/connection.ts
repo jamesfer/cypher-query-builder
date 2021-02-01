@@ -42,7 +42,7 @@ function isCredentials(credentials: any): credentials is Credentials {
 // union types such as the options parameter passed to the connection constructor.
 const isTrueFunction: (value: any) => value is Function = isFunction;
 
-// tslint:disable max-line-length
+// eslint-disable  max-len
 /**
  * The Connection class lets you access the Neo4j server and run queries against it. Under the hood,
  * the Connection class uses the official Neo4j Nodejs driver which manages connection pooling on a
@@ -89,7 +89,7 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  * The library will attempt to clean up all connections when the process exits, but it is better to
  * be explicit.
  */
-// tslint:enable max-line-length
+// eslint-enable  max-len
 export class Connection extends Builder<Query> {
   protected auth: AuthToken;
   protected driver: Driver;

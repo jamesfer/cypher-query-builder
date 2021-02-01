@@ -111,7 +111,7 @@ export function node(
 }
 
 // Need to disable line length because there is a long link in the documentation
-/* tslint:disable:max-line-length */
+/* eslint-disable max-len */
 /**
  * Creates a relation pattern like `-[rel:FriendsWith { active: true }]->`.
  *
@@ -177,7 +177,7 @@ export function node(
  * number is optional, see the examples above.
  * @returns {RelationPattern} An object representing the relation pattern.
  */
-/* tslint:disable:max-line-length */
+/* eslint-disable max-len */
 export function relation(
   dir: RelationDirection,
   name?: Many<string> | Dictionary<any> | PathLength,
