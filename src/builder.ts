@@ -768,7 +768,7 @@ export abstract class Builder
    */
   returnObject<N = unknown>(
     definition: Many<Selectable<G, StringKeyOf<N>>>,
-  ) {
+  ) : Query<N> {
     return this.continueChainClause(new ReturnObject(definition)) as any as Query<N>;
   }
 
