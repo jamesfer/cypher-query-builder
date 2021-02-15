@@ -766,10 +766,10 @@ export abstract class Builder
    * ])
    * ```
    */
-  returnObject<N = unknown>(
-    definition: Many<Selectable<G, StringKeyOf<N>>>,
-  ) : Query<N> {
-    return this.continueChainClause(new ReturnObject(definition)) as any as Query<N>;
+  returnObject<R = unknown>(
+    definition: Many<Selectable<G, StringKeyOf<R>>>,
+  ) : Query<G, R> {
+    return this.continueChainClause(new ReturnObject(definition)) as any as Query<G, R>;
   }
 
   /**

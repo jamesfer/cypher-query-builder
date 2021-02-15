@@ -5,7 +5,14 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query<G = any> extends Builder<Query<G>, G> {
+/**
+ * @typeParam G - (optional) Graph Model type. Defines the schema and available data in this cypher
+ * You typically provide this during match definitions when you define what is being queried
+ *
+ * @typeParam R - (optional) Return Type of this cypher. You typically provide this during
+ * @see returnObject()
+ */
+export class Query<G = any, R = unknown> extends Builder<Query<G, R>, G> {
   protected clauses = new ClauseCollection();
 
   /**
