@@ -741,6 +741,9 @@ export abstract class Builder
    * @param definition - definition of return object as key value pair whereas value can be
    * string selector or @see Selector
    *
+   * @typeParam N - (optional) new target type of this cypher to hint the keys that you want
+   * to be sure of
+   *
    * @example
    * ```typescript
    * // Selector Object:
@@ -752,7 +755,7 @@ export abstract class Builder
    *
    * ```typescript
    * // String selector
-   * q.returnObject({ user: 'person.name' });
+   * q.returnObject<{user: any}>({ user: 'person.name' });
    * ```
    *
    * ```typescript
@@ -763,10 +766,10 @@ export abstract class Builder
    * ])
    * ```
    */
-  returnObject(
-    definition: Many<Selectable<G>>,
-  ) {
-    return this.continueChainClause(new ReturnObject(definition));
+  returnObject<R = unknown>(
+    definition: Many<Selectable<G, StringKeyOf<R>>>,
+  ) : Query<G, R> {
+    return this.continueChainClause(new ReturnObject(definition)) as any as Query<G, R>;
   }
 
   /**

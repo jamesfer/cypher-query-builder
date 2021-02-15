@@ -2,7 +2,12 @@ import { Clause } from '../clause';
 import { Many, isArray } from 'lodash';
 import { Selector } from '../selector';
 
-export type Selectable<G> = Record<string, string | Selector<G> | Record<string, Selector<G>>>;
+/**
+ * @typeParam G - (optional) current graph model to gather data drom
+ * @typeParam T - (optional) Target type that defines the output
+ */
+export type Selectable<G, T extends string = string>
+    = Record<T, string | Selector<G> | Record<T, Selector<G>>>;
 
 /**
  * Clause to create an object formed RETURN
