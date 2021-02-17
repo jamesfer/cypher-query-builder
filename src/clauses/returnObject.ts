@@ -7,7 +7,7 @@ import { Selector } from '../selector';
  * @typeParam T - (optional) Target type that defines the output
  */
 export type Selectable<G, T extends string = string>
-    = Record<T, string | Selector<G> | Record<T, Selector<G>>>;
+    = Record<T, string | Selector<G> | Record<string, Selector<G>>>;
 
 /**
  * Clause to create an object formed RETURN
