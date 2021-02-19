@@ -1,3 +1,21 @@
+# [6.1.0](https://github.com/bastianowicz/cypher-query-builder/compare/v6.0.2...v6.1.0) (2021-02-19)
+
+
+### Bug Fixes
+
+* **build:** add missing build step before releasing ([cd68ec3](https://github.com/bastianowicz/cypher-query-builder/commit/cd68ec3e3a970d2c7e274700ae45e3d07fb91b40)), closes [#173](https://github.com/bastianowicz/cypher-query-builder/issues/173)
+* **builder.ts:** Selectable should allow any string key in nested selectors ([92b3a96](https://github.com/bastianowicz/cypher-query-builder/commit/92b3a9634ccb68aa302a2c8746dfde1720fe262e))
+* **Package:** Reduce package size ([b8238ac](https://github.com/bastianowicz/cypher-query-builder/commit/b8238ac6cdde73d6a28c2bd65be0fe72387df123))
+* **version:** fixed version number ([d5c1cb8](https://github.com/bastianowicz/cypher-query-builder/commit/d5c1cb851142a95cef3375013dfad2ac8cc1d606))
+
+
+### Features
+
+* **builder:** Return type hint for Query ([2098e70](https://github.com/bastianowicz/cypher-query-builder/commit/2098e70d7209d01b2af0dc238b91430c59feec7e))
+* **builder:** Return type hint for return object ([db679be](https://github.com/bastianowicz/cypher-query-builder/commit/db679bef39f9d5081d8a2a1922ba0a2e23dd8115))
+* **builder:** Return type hint for return object ([5acead1](https://github.com/bastianowicz/cypher-query-builder/commit/5acead1492adb75f1a40834a9be136b05611125d))
+* **builder.ts:** builder.returnObject() ([dd2d084](https://github.com/bastianowicz/cypher-query-builder/commit/dd2d08477e34890389c5947ae9c150507f94e4ae))
+
 ## [6.0.4](https://github.com/jamesfer/cypher-query-builder/compare/v6.0.3...v6.0.4) (2020-12-21)
 
 

@@ -1,9 +1,11 @@
 {
   "name": "cypher-query-builder",
-  "version": "6.0.4",
+  "version": "6.1.0",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "author": "James Ferguson",
-  "contributors": ["Bastian Charlet"],
+  "contributors": [
+    "Bastian Charlet"
+  ],
   "license": "MIT",
   "repository": "github:bastianowicz/cypher-query-builder",
   "main": "dist/cjs5.js",
