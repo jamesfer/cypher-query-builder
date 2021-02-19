@@ -6,7 +6,14 @@ import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export abstract class Pattern extends Clause {
+/**
+ * @typeParam Names - (optional) subset of allowed String values
+ * @typeParam Condition - (optional) stricter Dictionary
+ */
+export abstract class Pattern<
+    Names extends string = string,
+    Condition extends Dictionary<any> = Dictionary<any>
+    > extends Clause {
   protected useExpandedConditions: boolean | undefined;
   protected conditionParams: Dictionary<Parameter> | Parameter = {};
   protected name: string;
@@ -14,19 +21,19 @@ export abstract class Pattern extends Clause {
   protected conditions: Dictionary<any>;
 
   constructor(
-    name?: Many<string> | Dictionary<any>,
+    name?: Many<Names> | Dictionary<Names>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Condition,
     protected options = { expanded: true },
   ) {
     super();
-    const isConditions = (a: any): a is Dictionary<any> => isObjectLike(a) && !isArray(a);
-    let tempName = name;
+    // tslint:disable-next-line:max-line-length
+    const isConditions = <T = any>(a: unknown): a is Dictionary<T> => isObjectLike(a) && !isArray(a);
+    let tempName : string|readonly string[]|Dictionary<string>|undefined = name;
     let tempLabels = labels;
-    let tempConditions = conditions;
-
+    let tempConditions:object|undefined = conditions;
     if (isNil(tempConditions)) {
-      if (isConditions(tempLabels)) {
+      if (isConditions<any>(tempLabels)) {
         tempConditions = tempLabels;
         tempLabels = undefined;
       } else if (isNil(tempLabels) && isConditions(tempName)) {

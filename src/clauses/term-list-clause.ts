@@ -3,18 +3,18 @@ import {
   map,
   isPlainObject,
   isString,
-  isArray,
   castArray,
   reduce,
   Dictionary,
   Many,
 } from 'lodash';
 import { Clause } from '../clause';
+import { TypedDictionary } from '../types';
 
 export type Properties = Many<string | Dictionary<string>>;
-export type Term
-  = string
-  | Dictionary<Properties>;
+export type Term<T extends string = string>
+  = T
+  | TypedDictionary<T>;
 
 export class TermListClause extends Clause {
   protected terms: Term[];
@@ -44,7 +44,7 @@ export class TermListClause extends Clause {
   private stringifyTerm(term: Term): string[] {
     // Just a node
     if (isString(term)) {
-      return [this.stringifyProperty(term)];
+      return [TermListClause.stringifyProperty(term)];
     }
 
     // Node properties or aliases
@@ -55,7 +55,7 @@ export class TermListClause extends Clause {
     return [];
   }
 
-  private stringifyProperty(prop: string, alias?: string, node?: string): string {
+  private static stringifyProperty(prop: string, alias?: string, node?: string): string {
     const prefixString = node ? `${node}.` : '';
     const aliasString = alias ? `${alias} AS ` : '';
     return prefixString + aliasString + prop;
@@ -65,10 +65,12 @@ export class TermListClause extends Clause {
     const convertToString = (list: string[], prop: string | Dictionary<string>) => {
       if (isString(prop)) {
         // Single node property
-        list.push(this.stringifyProperty(prop, alias, node));
+        list.push(TermListClause.stringifyProperty(prop, alias, node));
       } else {
         // Node properties with aliases
-        list.push(...map(prop, (name, alias) => this.stringifyProperty(name, alias, node)));
+        list.push(
+            ...map(prop, (name, alias) => TermListClause.stringifyProperty(name, alias, node)),
+        );
       }
       return list;
     };
@@ -81,7 +83,7 @@ export class TermListClause extends Clause {
       (list, prop, key) => {
         if (isString(prop)) {
           // Alias
-          list.push(this.stringifyProperty(prop, key));
+          list.push(TermListClause.stringifyProperty(prop, key));
         } else {
           // Node with properties
           list.push(...this.stringifyProperties(prop, undefined, key));

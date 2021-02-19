@@ -88,9 +88,11 @@ const isTrueFunction: (value: any) => value is Function = isFunction;
  *
  * The library will attempt to clean up all connections when the process exits, but it is better to
  * be explicit.
+ *
+ * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to Dictionary<any>
+ *     but can be something more specific like a model of your graph with all its properties
  */
-// tslint:enable max-line-length
-export class Connection extends Builder<Query> {
+export class Connection<G = any> extends Builder<Query, G> {
   protected auth: AuthToken;
   protected driver: Driver;
   protected options: FullConnectionOptions;
@@ -165,8 +167,8 @@ export class Connection extends Builder<Query> {
    * new chainable query for you.
    * @return {Query}
    */
-  query(): Query {
-    return new Query(this);
+  query<N = G>(): Query {
+    return new Query<N>(this);
   }
 
   protected continueChainClause(clause: Clause) {

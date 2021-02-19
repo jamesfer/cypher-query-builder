@@ -4,9 +4,9 @@ export interface MatchOptions {
   optional?: boolean;
 }
 
-export class Match extends PatternClause {
+export class Match<T extends string = string, C = any> extends PatternClause {
   constructor(
-    patterns: PatternCollection,
+    patterns: PatternCollection<T, C>,
     protected options: MatchOptions = { optional: false },
   ) {
     super(patterns, { useExpandedConditions: true });

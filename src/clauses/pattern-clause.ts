@@ -6,7 +6,14 @@ export interface PatternOptions {
   useExpandedConditions?: boolean;
 }
 
-export type PatternCollection = Pattern | Pattern[] | Pattern[][];
+/**
+ * @typeParam T - (optional) subset of allowed String values
+ * @typeParam C - (optional) stricter Dictionary for Conditions
+ */
+export type PatternCollection<T extends string = string, C = any>
+    = Pattern<T, C>
+    | Pattern<T, C>[]
+    | Pattern<T, C>[][];
 
 export class PatternClause extends Clause {
   protected patterns: Pattern[][];

@@ -2,6 +2,7 @@ import { Dictionary, Many } from 'lodash';
 import { NodePattern } from './node-pattern';
 import { RelationDirection, RelationPattern } from './relation-pattern';
 import { PathLength } from '../utils';
+import { StringKeyOf, ValueOf } from '../types';
 
 export { Create } from './create';
 export { NodePattern } from './node-pattern';
@@ -100,12 +101,12 @@ export {
  * about escaping.
  * @returns {NodePattern} An object representing the node pattern.
  */
-export function node(
-  name?: Many<string> | Dictionary<any>,
+export function node<T = any, C extends ValueOf<T> = ValueOf<T>>(
+  name?: Many<StringKeyOf<T>> | Dictionary<StringKeyOf<T>>,
   labels?: Many<string> | Dictionary<any>,
-  conditions?: Dictionary<any>,
+  conditions?: Partial<C>,
 ) {
-  return new NodePattern(name, labels, conditions);
+  return new NodePattern<StringKeyOf<T>, Partial<C>>(name, labels, conditions);
 }
 
 // Need to disable line length because there is a long link in the documentation
@@ -176,12 +177,12 @@ export function node(
  * @returns {RelationPattern} An object representing the relation pattern.
  */
 /* tslint:disable:max-line-length */
-export function relation(
+export function relation<T = any, C extends ValueOf<T> = ValueOf<T>>(
   dir: RelationDirection,
-  name?: Many<string> | Dictionary<any> | PathLength,
+  name?: Many<StringKeyOf<T>> | Dictionary<StringKeyOf<T>> | PathLength,
   labels?: Many<string> | Dictionary<any> | PathLength,
-  conditions?: Dictionary<any> | PathLength,
+  conditions?: Partial<C> | PathLength,
   length?: PathLength,
 ) {
-  return new RelationPattern(dir, name, labels, conditions, length);
+  return new RelationPattern<StringKeyOf<T>, Partial<C>>(dir, name, labels, conditions, length);
 }

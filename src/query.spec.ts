@@ -6,7 +6,9 @@ import { ClauseCollection } from './clause-collection';
 import { node, NodePattern } from './clauses';
 import { Query } from './query';
 import { Observable } from 'rxjs';
+import { Selector } from './selector';
 
+interface GraphModel { user: { name: string }; item : { price : number }; }
 describe('Query', () => {
   describe('query methods', () => {
     const methods: Dictionary<(q: Query) => Query> = {
@@ -45,7 +47,7 @@ describe('Query', () => {
     each(methods, (fn, name) => {
       it(`${name} should return a chainable query object`, () => {
         const query = new Query();
-        expect(fn(query)).to.equal(query);
+        expect(fn(query)).to.be.instanceof(Query);
         expect(query.getClauses().length === 1);
         expect(query.build()).to.equal(`${query.getClauses()[0].build()};`);
       });
@@ -149,5 +151,46 @@ describe('Query', () => {
         expect(result).to.equal(undefined);
       });
     });
+  });
+
+  type expectation = [(q: Query) => Query, string];
+  describe('method functionality', () => {
+    const expectations : Record<string, expectation> = {
+      returnSingleString: [(q: Query) => q.return('people'), 'RETURN people;'],
+      returnArrayOfStrings: [(q: Query) => q.return(['people', 'pets']), 'RETURN people, pets;'],
+      returnSingleObject: [(q: Query) => q.return({ people: 'employees' }),
+        'RETURN people AS employees;'],
+      returnSingleObjectWithArrayValues: [(q: Query) => q.return({
+        people: ['name', 'age'],
+        pets: ['name', 'breed'],
+      }), 'RETURN people.name, people.age, pets.name, pets.breed;'],
+      returnPropsAliased: [(q: Query) => q.return(
+        { people: [{ name: 'personName' }, 'age'] },
+      ), 'RETURN people.name AS personName, people.age;'],
+      returnDistinct: [(q: Query) => q.return('people', { distinct: true }),
+        'RETURN DISTINCT people;'],
+      returnObject: [(q: Query) => q.returnObject({
+        user: 'person.name'}), 'RETURN { user: person.name };'],
+      returnObjectTyped: [(q: Query<GraphModel>) => q.returnObject(
+  { user: 'person.name' }), 'RETURN { user: person.name };'],
+      'return object w/ selector': [(q: Query<GraphModel>) => q.returnObject(
+  { person: new Selector<GraphModel>().set('user', 'name') }), 'RETURN { person: user.name };'],
+      'return object w/ multiple selectors': [(q: Query<GraphModel>) => q.returnObject({
+        person: new Selector<GraphModel>().set('user', 'name'),
+        inventory: new Selector<GraphModel>().set('item', 'price'),
+      }), 'RETURN { person: user.name, inventory: item.price };'],
+      'return many typed objects': [(q: Query<GraphModel>) => q.returnObject([
+        { person: new Selector<GraphModel>().set('user', 'name') },
+        { inventory: 'item.name' },
+      ]), 'RETURN { person: user.name }, { inventory: item.name };'],
+    };
+
+    Object.entries(expectations).forEach(
+        ([name, [fn, exp]] : [string, expectation]) => {
+          it(`"${name}" should build`,  () => {
+            const q = new Query();
+            expect(fn(q).build()).to.equal(exp);
+          });
+        });
   });
 });
