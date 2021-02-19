@@ -1,3 +1,10 @@
+## [6.1.1](https://github.com/bastianowicz/cypher-query-builder/compare/v6.1.0...v6.1.1) (2021-02-19)
+
+
+### Bug Fixes
+
+* **version:** package name ([2611d4c](https://github.com/bastianowicz/cypher-query-builder/commit/2611d4c068cb52dced8feaab50cbae7733bf5c71))
+
 # [6.1.0](https://github.com/bastianowicz/cypher-query-builder/compare/v6.0.2...v6.1.0) (2021-02-19)
 
 
