@@ -8,9 +8,9 @@ import { greaterEqualTo, node } from './index';
 type Testcase = {subQuery: Query, exp: string};
 describe('call', () => {
   const expectations  : Record<string, Testcase> = {
-    'wraps a subquery in brackets' : {
+    'wraps a subQuery in brackets' : {
       subQuery: (new Query<never, unknown>()).with('node').return('node'),
-      exp: '{ WITH node\nRETURN node }',
+      exp: 'CALL {\n WITH node\nRETURN node\n}',
     },
   };
 

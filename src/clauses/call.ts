@@ -10,6 +10,6 @@ export class Call extends Clause {
     for (const param in params) {
       this.addParam(params[param], param);
     }
-    return `{ ${query.replace(';', '') } }`;
+    return `CALL {\n ${query.replace(';', '') }\n}`;
   }
 }

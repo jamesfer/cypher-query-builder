@@ -20,6 +20,7 @@ import { StringKeyOf, TypedDictionary, ValueOf } from './types';
 import { Query } from './query';
 import { Selector } from './selector';
 import { ReturnObject, Selectable } from './clauses/returnObject';
+import { Call } from './clauses/call';
 
 /**
  * @internal
@@ -236,7 +237,7 @@ export abstract class Builder
    * @param subQuery
    */
   call<SubQueryResult>(subQuery: Query<never, SubQueryResult>) : Query<SubQueryResult & G> {
-    return this as never as Query<SubQueryResult & G>;
+    return this.continueChainClause(new Call(subQuery)) as never as Query<SubQueryResult & G>;
   }
 
   /**
