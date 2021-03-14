@@ -12,6 +12,7 @@ interface GraphModel { user: { name: string }; item : { price : number }; }
 describe('Query', () => {
   describe('query methods', () => {
     const methods: Dictionary<(q: Query) => Query> = {
+      call: q => q.call(new Query<never, {}>()),
       create: q => q.create(new NodePattern('Node')),
       createNode: q => q.createNode('Node'),
       delete: q => q.delete('node'),
