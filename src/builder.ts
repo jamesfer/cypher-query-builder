@@ -755,6 +755,8 @@ export abstract class Builder
    * @param definition - definition of return object as key value pair whereas value can be
    * string selector or @see Selector
    *
+   * @param alias - set an alias for one or more of the returnObjects
+   *
    * @typeParam N - (optional) new target type of this cypher to hint the keys that you want
    * to be sure of
    *
@@ -773,17 +775,34 @@ export abstract class Builder
    * ```
    *
    * ```typescript
+   * // single object with alias
+   * q.returnObject<{user: any}>({ user: 'person.name' }, 'alias');
+   * // RETURN { user: 'person.name' } AS `alias`
+   * ```
+   *
+   * ```typescript
    * // Multiple Objects
    * q.returnObject([
    *    { person: new Selector<GraphModel>().set('user', 'name') },
    *    { inventory: 'item.name' },
    * ])
    * ```
+   *
+   * ```typescript
+   * // Multiple Objects with alias
+   * q.returnObject([
+   *    { person: new Selector<GraphModel>().set('user', 'name') },
+   *    { inventory: 'item.name' },
+   *    { anything: 'item.name' },
+   * ], ['Person', undefined, 'Another Item'])
+   * // RETURN {...} AS `person`, {...}, {...} AS `Another Item`
+   * ```
    */
   returnObject<R = unknown>(
     definition: Many<Selectable<G, StringKeyOf<R>>>,
+    alias?: Many<string|undefined>,
   ) : Query<G, R> {
-    return this.continueChainClause(new ReturnObject(definition)) as any as Query<G, R>;
+    return this.continueChainClause(new ReturnObject(definition, alias)) as any as Query<G, R>;
   }
 
   /**

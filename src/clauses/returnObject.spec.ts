@@ -35,6 +35,50 @@ describe('returnObject', () => {
       }),
       exp: 'RETURN { nested: { name: user.name } }',
     },
+    'single object with alias': {
+      obj: new ReturnObject<G>(
+        {
+          nested: { name: new Selector<G>().set('user', 'name') },
+        },
+        'alias'),
+      exp: 'RETURN { nested: { name: user.name } } AS `alias`',
+    },
+    'multiple objects with alias list': {
+      obj: new ReturnObject<G>(
+        [
+          { person: new Selector<G>().set('user', 'name') },
+          { secureInventory: new Selector<G>().set('item', 'price') },
+        ],
+        ['person', 'inventory']),
+      exp: 'RETURN { person: user.name } AS `person`, { secureInventory: item.price } AS `inventory`',
+    },
+    'multiple objects with alias list with one undefined': {
+      obj: new ReturnObject<G>(
+        [
+          { person: new Selector<G>().set('user', 'name') },
+          { secureInventory: new Selector<G>().set('item', 'price') },
+          { anything: new Selector<G>().set('item', 'price') },
+        ],
+        ['person', undefined, 'inventory']),
+      exp: 'RETURN { person: user.name } AS `person`, { secureInventory: item.price }, { anything: item.price } AS `inventory`',
+    },
+    'multiple objects with single alias': {
+      obj: new ReturnObject<G>(
+        [
+          { person: new Selector<G>().set('user', 'name') },
+          { secureInventory: new Selector<G>().set('item', 'price') },
+        ],
+        'alias'),
+      exp: 'RETURN { person: user.name } AS `alias`, { secureInventory: item.price }',
+    },
+    'single object with alias list': {
+      obj: new ReturnObject<G>(
+        {
+          nested: { name: new Selector<G>().set('user', 'name') },
+        },
+        ['person', 'unknown']),
+      exp: 'RETURN { nested: { name: user.name } } AS `person`',
+    },
   };
 
   for (const name in expectations) {
