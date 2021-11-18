@@ -1,6 +1,7 @@
 import { Dictionary, Many } from 'lodash';
 import { NodePattern } from './node-pattern';
 import { RelationDirection, RelationPattern } from './relation-pattern';
+import { PathNamePattern } from './path-name-pattern';
 import { PathLength } from '../utils';
 
 export { Create } from './create';
@@ -10,6 +11,7 @@ export { Unwind } from './unwind';
 export { Delete } from './delete';
 export { Set } from './set';
 export { RelationPattern } from './relation-pattern';
+export { PathNamePattern } from './path-name-pattern';
 export { Match } from './match';
 export { Remove } from './remove';
 export { Return } from './return';
@@ -184,4 +186,19 @@ export function relation(
   length?: PathLength,
 ) {
   return new RelationPattern(dir, name, labels, conditions, length);
+}
+
+/**
+ * Creates a named path pattern like `p=` for creating named paths.
+ *
+ * For more details on node patterns see the cypher
+ * [docs]{@link
+ *   https://neo4j.com/docs/cypher-manual/current/clauses/match/#named-paths}
+ *
+ * @param {string} name
+ */
+export function pathName(
+    name: string,
+) {
+  return new PathNamePattern(name);
 }
