@@ -63,7 +63,7 @@ npm install --save cypher-query-builder
 or
 
 ```
-yarn install cypher-query-builder
+yarn add cypher-query-builder
 ```
 
 ### Importing
