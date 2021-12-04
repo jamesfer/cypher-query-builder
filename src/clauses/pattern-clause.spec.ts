@@ -1,5 +1,5 @@
 import { PatternClause } from './pattern-clause';
-import { NodePattern } from './node-pattern';
+import { NodePattern } from '../patterns/node-pattern';
 import { expect } from 'chai';
 
 describe('PatternClauses', () => {

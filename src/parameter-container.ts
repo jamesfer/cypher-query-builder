@@ -2,7 +2,7 @@ import { Parameter, ParameterBag } from './parameter-bag';
 import { Dictionary } from 'lodash';
 
 export class ParameterContainer {
-  protected parameterBag = new ParameterBag();
+  constructor(protected parameterBag: ParameterBag = new ParameterBag()) {}
 
   useParameterBag(newBag: ParameterBag) {
     newBag.importParams(this.parameterBag);

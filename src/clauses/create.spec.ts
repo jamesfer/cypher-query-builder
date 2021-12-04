@@ -1,6 +1,6 @@
 import { Create } from './create';
 import { expect } from 'chai';
-import { NodePattern } from './node-pattern';
+import { NodePattern } from '../patterns/node-pattern';
 
 describe('Create', () => {
   describe('#build', () => {

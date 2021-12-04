@@ -1,5 +1,5 @@
 import { Match } from './match';
-import { NodePattern } from './node-pattern';
+import { NodePattern } from '../patterns/node-pattern';
 import { expect } from 'chai';
 
 describe('Match', () => {

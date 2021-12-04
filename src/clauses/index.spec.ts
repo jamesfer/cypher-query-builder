@@ -1,7 +1,7 @@
 import { node, relation } from './index';
 import { expect } from 'chai';
-import { NodePattern } from './node-pattern';
-import { RelationPattern } from './relation-pattern';
+import { NodePattern } from '../patterns/node-pattern';
+import { RelationPattern } from '../patterns/relation-pattern';
 
 describe('node', () => {
   it('should create a node pattern', () => {

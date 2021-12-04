@@ -6,30 +6,25 @@ import { Clause } from '../clause';
 import { Parameter } from '../parameter-bag';
 import { stringifyLabels } from '../utils';
 
-export abstract class Pattern extends Clause {
-  protected useExpandedConditions: boolean | undefined;
-  protected conditionParams: Dictionary<Parameter> | Parameter = {};
+export abstract class Pattern {
   protected name: string;
   protected labels: string[];
-  protected conditions: Dictionary<any>;
+  protected rawConditions: Dictionary<any>;
 
   constructor(
     name?: Many<string> | Dictionary<any>,
     labels?: Many<string> | Dictionary<any>,
     conditions?: Dictionary<any>,
-    protected options = { expanded: true },
   ) {
-    super();
-    const isConditions = (a: any): a is Dictionary<any> => isObjectLike(a) && !isArray(a);
     let tempName = name;
     let tempLabels = labels;
     let tempConditions = conditions;
 
     if (isNil(tempConditions)) {
-      if (isConditions(tempLabels)) {
+      if (this.isConditions(tempLabels)) {
         tempConditions = tempLabels;
         tempLabels = undefined;
-      } else if (isNil(tempLabels) && isConditions(tempName)) {
+      } else if (isNil(tempLabels) && this.isConditions(tempName)) {
         tempConditions = tempName;
         tempName = undefined;
       } else {
@@ -56,56 +51,34 @@ export abstract class Pattern extends Clause {
     if (!isString(tempLabels) && !isArray(tempLabels)) {
       throw new TypeError('Labels must be a string or an array');
     }
-    if (!isConditions(tempConditions)) {
+    if (!this.isConditions(tempConditions)) {
       throw new TypeError('Conditions must be an object.');
     }
 
     this.labels = castArray(tempLabels);
     this.name = tempName;
-    this.conditions = tempConditions;
-    this.setExpandedConditions(options.expanded);
+    this.rawConditions = tempConditions;
   }
 
-  setExpandedConditions(expanded: boolean) {
-    if (this.useExpandedConditions !== expanded) {
-      this.useExpandedConditions = expanded;
-      this.rebindConditionParams();
-    }
+  get conditions(): Dictionary<any> {
+    return this.rawConditions;
   }
 
-  rebindConditionParams() {
-    // Delete old bindings
-    if (this.conditionParams instanceof Parameter) {
-      this.parameterBag.deleteParam(this.conditionParams.name);
-    } else {
-      for (const key in this.conditionParams) {
-        this.parameterBag.deleteParam(this.conditionParams[key].name);
-      }
-    }
+  abstract toString(conditions: Dictionary<Parameter>): string;
 
-    // Rebind params
-    if (!isEmpty(this.conditions)) {
-      if (this.useExpandedConditions) {
-        this.conditionParams = mapValues(this.conditions, (value, name) => {
-          return this.parameterBag.addParam(value, name);
-        });
-      } else {
-        this.conditionParams = this.parameterBag.addParam(this.conditions, 'conditions');
-      }
-    } else {
-      this.conditionParams = {};
-    }
-  }
-
-  getNameString() {
+  protected getNameString() {
     return this.name ? this.name : '';
   }
 
-  getLabelsString(relation = false) {
+  protected getLabelsString(relation = false) {
     return stringifyLabels(this.labels, relation);
   }
 
-  getConditionsParamString() {
+  protected isConditions(a: unknown): a is Dictionary<any> {
+    return isObjectLike(a) && !isArray(a);
+  }
+
+  protected getConditionsParamString(conditions: Dictionary<Parameter> | Parameter) {
     if (isEmpty(this.conditions)) {
       return '';
     }
@@ -117,5 +90,4 @@ export abstract class Pattern extends Clause {
       return `{ ${strings.join(', ')} }`;
     }
     return this.conditionParams.toString();
-  }
 }

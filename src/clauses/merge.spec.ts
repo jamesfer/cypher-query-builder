@@ -1,5 +1,5 @@
 import { Merge } from './merge';
-import { NodePattern } from './node-pattern';
+import { NodePattern } from '../patterns/node-pattern';
 import { expect } from 'chai';
 
 describe('Merge', () => {

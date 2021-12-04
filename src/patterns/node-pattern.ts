@@ -1,4 +1,5 @@
 import { Dictionary, Many, trim } from 'lodash';
+import { Parameter } from '../parameter-bag';
 import { Pattern } from './pattern';
 
 export class NodePattern extends Pattern {
@@ -10,7 +11,7 @@ export class NodePattern extends Pattern {
     super(name, labels, conditions);
   }
 
-  build() {
+  toString(conditions: Dictionary<Parameter> | Parameter) {
     let query = this.getNameString();
     query += this.getLabelsString();
     query += ` ${this.getConditionsParamString()}`;
