@@ -16,12 +16,16 @@ import { Clause } from './clause';
 import { RemoveProperties } from './clauses/remove';
 import { Union } from './clauses/union';
 import { ReturnOptions } from './clauses/return';
+import { StringKeyOf, TypedDictionary, ValueOf } from './types';
+import { Query } from './query';
+import { Selector } from './selector';
+import { ReturnObject, Selectable } from './clauses/returnObject';
 
 /**
  * @internal
  */
 export interface WrapperClause {
-  new (clause: Set): Clause;
+  new(clause: Set): Clause;
 }
 
 /**
@@ -168,9 +172,14 @@ export class SetBlock<Q> {
 /**
  * Root class for all query chains, namely the {@link Connection} and
  * {@link Query} classes.
+ *
  * @internal
+ * @typeParam {Builder} Q - Type of the builder (Query, Connection, ...)
+ * @typeParam {Builder} G - GraphModel that is currently processable. Defaults to any
+ *     but can be something more specific like a model of your graph with all its properties
  */
-export abstract class Builder<Q> extends SetBlock<Q> {
+export abstract class Builder
+  <Q extends Builder<Q>, G = any> extends SetBlock<Q> {
   protected constructor() {
     super(c => this.continueChainClause(c));
   }
@@ -247,41 +256,70 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * query.create([node('people', 'Person', { age: 30 })], { unique: true });
    * // CREATE UNIQUE (people:Person { age: 30 })
    * ```
+   *
+   * @typeParam N (optional)- New GraphModel G after this call. Defaults to G.
+   * (@see {@link Builder})
+   * @param patterns - Collection of patterns that are compatible to <N>
+   * @param options - options for CREATE
    */
-  create(patterns: PatternCollection, options?: CreateOptions) {
-    return this.continueChainClause(new Create(patterns, options));
+  create<N extends G = G>(
+    patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
+    options?: CreateOptions,
+  ): Query<N & G> {
+    return this.continueChainClause(new Create(patterns, options)) as any as Query<N & G>;
   }
 
   /**
    * Shorthand for `create(patterns, { unique: true })`
+   *
+   * @typeParam N (optional)- New GraphModel G after this call. Defaults to G.
+   * (@see {@link Builder})
+   * @param patterns - Collection of patterns that are compatible to <N>
    */
-  createUnique(patterns: PatternCollection) {
-    return this.create(patterns, { unique: true });
+  createUnique<N extends G = G>(
+    patterns: PatternCollection<StringKeyOf<N>, Partial<ValueOf<N>>>,
+  ): Query<N & G> {
+    return this.create<N>(patterns, { unique: true }) as any as Query<N & G>;
   }
 
   /**
    * Shorthand for `create(node(name, labels, conditions), options)`. For more details
    * the arguments see @{link node}.
+   *
+   * @typeParam N - (optional) New GraphModel G after this call. (@see {@link Builder})
+   * @param name - single name, list of names or dictionary of nodes that must be compatible to
+   * the given new GraphModel <N>
+   * @param labels - labels to attach
+   * @param conditions - properties of node that must be compatible to new GraphModel <N>
+   * @param options - options for CREATE
    */
-  createNode(
-    name: Many<string> | Dictionary<any>,
+  createNode<N extends G = G>(
+    name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Partial<ValueOf<N>>,
     options?: CreateOptions,
-  ) {
-    const clause = new Create(new NodePattern(name, labels, conditions), options);
-    return this.continueChainClause(clause);
+  ): Query<N & G> {
+    const clause = new Create(
+      new NodePattern<StringKeyOf<N>, Partial<ValueOf<N>>>(name, labels, conditions),
+      options,
+    );
+    return this.continueChainClause(clause) as any as Query<N & G>;
   }
 
   /**
    * Shorthand for `createNode(name, labels, conditions, { unique: true })`
+   *
+   * @typeParam N - (optional) New GraphModel <G> after this call. (@see {@link Builder})
+   * @param name - single name, list of names or dictionary of nodes (keys of <N>)
+   * @param labels - labels to attach
+   * @param conditions - properties of node that must be compatible to new GraphModel <N>
    */
-  createUniqueNode(
-    name: Many<string> | Dictionary<any>,
+  createUniqueNode<N extends G = G>(
+    name: Many<StringKeyOf<N>> | Dictionary<StringKeyOf<N>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
-  ) {
-    return this.createNode(name, labels, conditions, { unique: true });
+    conditions?: Partial<ValueOf<N>>,
+  ): Query<N & G> {
+    return this.createNode<N>(name, labels, conditions, { unique: true }) as any as Query<N & G>;
   }
 
   /**
@@ -296,25 +334,29 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * You can set `detach: true` in the options to make it a `DETACH DELETE`
    * clause.
    *
-   * @param {_.Many<string>} terms
+   * @typeParam T (optional) Keys of Graph model that are deleted
+   * @param {_.Many<string>} terms (keys of <G>)
    * @param {DeleteOptions} options
-   * @returns {Q}
+   * @returns {Query} Query with graph model excluding the deleted parts
    */
-  delete(terms: Many<string>, options?: DeleteOptions) {
-    return this.continueChainClause(new Delete(terms, options));
+  delete<T extends StringKeyOf<G> = StringKeyOf<G>>
+    (terms: Many<T>, options?: DeleteOptions): Query<Exclude<G, T>> {
+    return this.continueChainClause(new Delete(terms, options)) as any as Query<Exclude<G, T>>;
   }
 
   /**
    * Shorthand for `delete(terms, { detach: true })`.
    *
-   * @param {_.Many<string>} terms
+   * @typeParam T (optional) Keys of Graph model that are deleted
+   * @param {_.Many<string>} terms (keys of <G>)
    * @param {DeleteOptions} options
    * @returns {Q}
    */
-  detachDelete(terms: Many<string>, options: DeleteOptions = {}) {
-    return this.continueChainClause(new Delete(terms, assign(options, {
+  detachDelete<T extends StringKeyOf<G> = StringKeyOf<G>>
+    (terms: Many<T>, options: DeleteOptions = {}): Query<Exclude<G, T>> {
+    return this.delete<T>(terms, assign(options, {
       detach: true,
-    })));
+    })) as any as Query<Exclude<G, T>>;
   }
 
   /**
@@ -324,7 +366,7 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {string | number} amount
    * @returns {Q}
    */
-  limit(amount: number) {
+  limit(amount: number): Q {
     return this.continueChainClause(new Limit(amount));
   }
 
@@ -362,12 +404,19 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * You can also provide `optional: true` in the options to create and
    * `OPTIONAL MATCH` clause.
    *
+   * @typeParam N - (optional) type of GraphModel after this call
+   * @typeParam C - (optional) Interface for conditions
    * @param {PatternCollection} patterns List of patterns to be matched.
    * @param {MatchOptions} options
+   *
    * @returns {Q}
    */
-  match(patterns: PatternCollection, options?: MatchOptions) {
-    return this.continueChainClause(new Match(patterns, options));
+  match<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
+    patterns: PatternCollection<StringKeyOf<N>, Partial<Condition>>,
+    options?: MatchOptions): Query<N & G> {
+    return this.continueChainClause(
+      new Match<StringKeyOf<N>, Partial<Condition>>(patterns, options),
+    ) as any as Query<N & G>;
   }
 
   /**
@@ -377,15 +426,17 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {_.Many<string> | _.Dictionary<any>} name
    * @param {_.Many<string> | _.Dictionary<any>} labels
    * @param {_.Dictionary<any>} conditions
-   * @returns {Q}
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam C - (optional) Interface for conditions
+   * @returns {Query<N>}
    */
-  matchNode(
-    name?: Many<string> | Dictionary<any>,
+  matchNode<N = G, C extends ValueOf<G> = ValueOf<G>>(
+    name?: Many<StringKeyOf<G>> | Dictionary<StringKeyOf<G>>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
-  ) {
-    const clause = new Match(new NodePattern(name, labels, conditions));
-    return this.continueChainClause(clause);
+    conditions?: Partial<C>,
+  ): Query<N & G> {
+    const clause = new Match(new NodePattern<StringKeyOf<G>, Partial<C>>(name, labels, conditions));
+    return this.continueChainClause(clause) as any as Query<N & G>;
   }
 
   /**
@@ -393,12 +444,16 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *
    * @param {PatternCollection} patterns
    * @param {MatchOptions} options
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam C - (optional) Interface for conditions
    * @returns {Q}
    */
-  optionalMatch(patterns: PatternCollection, options: MatchOptions = {}) {
-    return this.continueChainClause(new Match(patterns, assign(options, {
+  optionalMatch<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
+    patterns: PatternCollection<StringKeyOf<N>, Partial<Condition>>,
+    options?: MatchOptions): Query<N & G> {
+    return this.match<N, Condition>(patterns, assign(options, {
       optional: true,
-    })));
+    })) as any as Query<N & G>;
   }
 
   /**
@@ -416,9 +471,13 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // MERGE (user:User { id: 1 })-[rel:OwnsProject]->(project:Project { id: 20 })
    * // ON MATCH SET rel.updatedAt = timestamp()
    * ```
+   * @param {PatternCollection} patterns
+   * @typeParam N - (optional) type of GraphModel after this call (G -> N).
+   * @typeParam C - (optional) Interface for conditions
    */
-  merge(patterns: PatternCollection) {
-    return this.continueChainClause(new Merge(patterns));
+  merge<N = G, Condition extends ValueOf<N> = ValueOf<N>>(
+    patterns: PatternCollection<StringKeyOf<N>, Partial<Condition>>): Query<N & G> {
+    return this.continueChainClause(new Merge(patterns)) as any as Query<N & G>;
   }
 
   /**
@@ -476,7 +535,9 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * @param {Direction} dir
    * @returns {Q}
    */
-  orderBy(fields: string | (string | OrderConstraint)[] | OrderConstraints, dir?: Direction) {
+  orderBy(
+    fields: StringKeyOf<G> | (StringKeyOf<G> | OrderConstraint)[] | OrderConstraints,
+    dir?: Direction) {
     return this.continueChainClause(new OrderBy(fields, dir));
   }
 
@@ -543,8 +604,13 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *
    * If you only need to remove labels *or* properties, you may find `removeProperties` or
    * `removeLabels` more convenient.
+   *
+   * @typeParam T - (optional) any ot Type of target in GraphModel whose properties shall be removed
+   * @param {RemoveProperties} properties - properties to remove from target
+   * properties might be constrained to values of graphModel <G> and keys of target <T>
    */
-  remove(properties: RemoveProperties) {
+  remove<T extends ValueOf<G> = any>
+    (properties: RemoveProperties<string, StringKeyOf<G>, StringKeyOf<T>>) {
     return this.continueChainClause(new Remove(properties));
   }
 
@@ -556,14 +622,21 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * object is the name of a node and the values are the names of the properties to remove. The
    * values can be either a single string, or an array of strings.
    * ```javascript
-   * query.remove({
+   * query.removeProperties({
    *   customer: ['inactive', 'new'],
    *   coupon: 'available',
    * });
    * // REMOVE customer.inactive, customer.new, coupon.available
    * ```
+   *
+   *
+   * @typeParam T - (optional) any Type of target in GraphModel whose properties shall be removed
+   * @param {RemoveProperties} properties - properties to remove from target
+   * properties might be constrained to values of graphModel <G> and keys of target <T>
    */
-  removeProperties(properties: Dictionary<Many<string>>) {
+  removeProperties<T extends ValueOf<G> = any>(
+    properties: TypedDictionary<StringKeyOf<G>, Many<StringKeyOf<T>>>,
+  ) {
     return this.continueChainClause(new Remove({ properties }));
   }
 
@@ -648,15 +721,55 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * // RETURN DISTINCT people
    * ```
    */
-  return(terms: Many<Term>, options?: ReturnOptions) {
+  return(
+    terms: Many<Term<StringKeyOf<G>>>,
+    options?: ReturnOptions,
+  ) {
     return this.continueChainClause(new Return(terms, options));
   }
 
   /**
    * Shorthand for `return(terms, { distinct: true });
    */
-  returnDistinct(terms: Many<Term>) {
+  returnDistinct(terms: Many<Term<StringKeyOf<G>>>) {
     return this.return(terms, { distinct: true });
+  }
+
+  /**
+   * Return as object
+   *
+   * @param definition - definition of return object as key value pair whereas value can be
+   * string selector or @see Selector
+   *
+   * @typeParam N - (optional) new target type of this cypher to hint the keys that you want
+   * to be sure of
+   *
+   * @example
+   * ```typescript
+   * // Selector Object:
+   * q.returnObject({
+   *     person: new Selector<GraphModel>().set('user', 'name'),
+   *     inventory: new Selector<GraphModel>().set('item', 'price'),
+   * })
+   * ```
+   *
+   * ```typescript
+   * // String selector
+   * q.returnObject<{user: any}>({ user: 'person.name' });
+   * ```
+   *
+   * ```typescript
+   * // Multiple Objects
+   * q.returnObject([
+   *    { person: new Selector<GraphModel>().set('user', 'name') },
+   *    { inventory: 'item.name' },
+   * ])
+   * ```
+   */
+  returnObject<R = unknown>(
+    definition: Many<Selectable<G, StringKeyOf<R>>>,
+  ) : Query<G, R> {
+    return this.continueChainClause(new ReturnObject(definition)) as any as Query<G, R>;
   }
 
   /**
@@ -716,12 +829,14 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    * Adds an [unwind]{@link https://neo4j.com/docs/developer-manual/current/cypher/clauses/unwind}
    * clause to the query.
    *
-   * @param {any[]} list Any kind of array to unwind in the query
+   * @typeParam N - (optional) type of graphModel after this call
+   * @param {any[]|} list Any kind of array to unwind in the query. If graphModel exists properties
+   * must exist
    * @param {string} name Name of the variable to use in the unwinding
    * @returns {Q}
    */
-  unwind(list: any[], name: string) {
-    return this.continueChainClause(new Unwind(list, name));
+  unwind<N>(list: Selector<G> | any[], name: StringKeyOf<N>): Query<N & G> {
+    return this.continueChainClause(new Unwind(list, name)) as any as Query<N & G>;
   }
 
   /**
@@ -910,10 +1025,11 @@ export abstract class Builder<Q> extends SetBlock<Q> {
    *
    * You can also pass an array of any of the above methods.
    *
+   * @typeParam N - (optional) type of graphModel after this call
    * @param {_.Many<Term>} terms
    * @returns {Q}
    */
-  with(terms: Many<Term>) {
-    return this.continueChainClause(new With(terms));
+  with<N = G>(terms: Many<StringKeyOf<N> | Dictionary<StringKeyOf<N>>>): Query<N> {
+    return this.continueChainClause(new With(terms)) as any as Query<N>;
   }
 }

@@ -5,19 +5,28 @@ import { Builder } from './builder';
 import { ClauseCollection } from './clause-collection';
 import { Clause, QueryObject } from './clause';
 
-export class Query extends Builder<Query> {
+/**
+ * @typeParam G - (optional) Graph Model type. Defines the schema and available data in this cypher
+ * You typically provide this during match definitions when you define what is being queried
+ *
+ * @typeParam R - (optional) Return Type of this cypher. You typically provide this during
+ * @see returnObject()
+ */
+export class Query<G = any, R = unknown> extends Builder<Query<G, R>, G> {
   protected clauses = new ClauseCollection();
 
   /**
    * Creates a new query with a given connection.
    *
    * @param {Connection} connection
+   * @param {clauses} clauses e.g. to clone the state of an query
    */
-  constructor(protected connection: Connection | null = null) {
+  constructor(protected connection: Connection | null = null, clauses? : ClauseCollection) {
     super();
+    this.clauses = clauses ?? new ClauseCollection();
   }
 
-  protected continueChainClause(clause: Clause) {
+  protected continueChainClause(clause: Clause) : Query {
     return this.addClause(clause);
   }
 

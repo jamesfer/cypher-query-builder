@@ -1,11 +1,14 @@
 import { Dictionary, Many, trim } from 'lodash';
 import { Pattern } from './pattern';
 
-export class NodePattern extends Pattern {
+export class NodePattern<
+    Names extends string = string,
+    Condition extends Dictionary<any> = Dictionary<any>
+    > extends Pattern<Names, Condition> {
   constructor(
-    name?: Many<string> | Dictionary<any>,
+    name?: Many<Names> | Dictionary<Names>,
     labels?: Many<string> | Dictionary<any>,
-    conditions?: Dictionary<any>,
+    conditions?: Condition,
   ) {
     super(name, labels, conditions);
   }

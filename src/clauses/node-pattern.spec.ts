@@ -35,7 +35,7 @@ describe('Node', () => {
     });
 
     it('should build a node pattern with just conditions', () => {
-      const node = new NodePattern(conditions);
+      const node = new NodePattern(undefined, undefined, conditions);
       const queryObj = node.buildQueryObject();
 
       expect(queryObj.query).to.equal('({ name: $name, active: $active })');
