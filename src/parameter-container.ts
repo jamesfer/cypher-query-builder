@@ -1,5 +1,5 @@
 import { Parameter, ParameterBag } from './parameter-bag';
-import { Dictionary } from 'lodash';
+import { Dictionary, map } from 'lodash';
 
 export class ParameterContainer {
   protected parameterBag = new ParameterBag();
@@ -21,6 +21,15 @@ export class ParameterContainer {
    */
   addParam(value: any, name?: string): Parameter {
     return this.parameterBag.addParam(value, name);
+  }
+  
+  /**
+   * Adds a new parameter to the bag.
+   */
+  addParams(params: Dictionary<any>): Parameter[] {
+    return map(params, (value, name) => {
+      return this.parameterBag.addParam(value, name);
+    });
   }
 
   getParameterBag() {
