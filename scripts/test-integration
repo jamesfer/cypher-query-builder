@@ -2,12 +2,12 @@
 
 start-neo4j() {
   docker run \
-  -d \
-  --rm \
-  -p 7474:7474 \
-  -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/admin \
-  "neo4j:${NEO4J_VERSION-latest}"
+    --rm \
+    -d \
+    -p 7474:7474 \
+    -p 7687:7687 \
+    -e NEO4J_AUTH=neo4j/adminadmin \
+    neo4j:$NEO4J_VERSION_LATEST
 }
 
 run-tests() {
@@ -28,12 +28,12 @@ id=$(start-neo4j) || exit 1
 
 # Run the tests
 echo "Running tests..."
-NEO4J_URL=bolt://localhost NEO4J_USER=neo4j NEO4J_PASS=admin run-tests "$@"
+NEO4J_URL=bolt://localhost NEO4J_USER=neo4j NEO4J_PASS=adminadmin run-tests "$@"
 code="$?"
 
 # Stop the container
 echo "Stopping neo4j..."
-docker container stop "$id" > /dev/null
+docker container stop "$id" >/dev/null
 
 # Exit with the same code as the tests
 exit "$code"
