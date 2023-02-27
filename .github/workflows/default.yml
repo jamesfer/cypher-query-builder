@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 on: push
 
 jobs:
@@ -8,35 +8,16 @@ jobs:
     strategy:
       matrix:
         neo4j:
-          - '3.5'
-          - '4.0'
-          - '4.1'
-          - '4.2'
+          - "5.5"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - run: yarn install --frozen-lockfile
       - run: yarn validate
         env:
           NEO4J_VERSION: ${{ matrix.neo4j }}
-      - uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: neo4j-${{ matrix.neo4j }}
-          parallel: true
-
-  finialize-coverage:
-    name: Finalize coverage
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.github_token }}
-          parallel-finished: true
 
   deploy:
     name: Deploy
@@ -47,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn semantic-release

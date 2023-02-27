@@ -1,5 +1,5 @@
 {
-  "name": "cypher-query-builder",
+  "name": "@partnerhero/cypher-query-builder",
   "version": "6.0.4",
   "description": "An intuitive, easy to use query builder for Neo4j and Cypher",
   "author": "James Ferguson",
@@ -28,7 +28,6 @@
     "build:rollup": "scripts/build rollup",
     "docs": "scripts/docs",
     "lint": "scripts/lint",
-    "report": "scripts/report",
     "test": "NEO4J_VERSION_LATEST=5.5.0 scripts/test-integration",
     "test:unit": "scripts/test",
     "validate": "scripts/validate"
@@ -108,7 +107,6 @@
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "commitizen": "^4.0.3",
-    "coveralls": "^3.0.4",
     "mocha": "10.2.0",
     "nyc": "^14.1.1",
     "rollup": "^3.17.2",
@@ -117,12 +115,12 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript": "^1.0.0",
     "semantic-release": "19.0.5",
-    "sinon": "^7.3.2",
+    "sinon": "^15.0.1",
     "source-map-support": "^0.5.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "typedoc": "^0.21.10",
-    "typescript": "^3.5.3"
+    "typescript": "^4.9.5"
   }
 }

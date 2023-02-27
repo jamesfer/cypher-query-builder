@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-yarn --silent nyc report --reporter=text-lcov \
-  | sed "s|/app|$(pwd)|" \
-  | ./node_modules/.bin/coveralls
