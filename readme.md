@@ -1,7 +1,7 @@
 # Cypher Query Builder
+
 [![Build Status](https://github.com/jamesfer/cypher-query-builder/workflows/CI/badge.svg)](https://github.com/jamesfer/cypher-query-builder/actions)
-[![Coverage Status](https://coveralls.io/repos/github/jamesfer/cypher-query-builder/badge.svg?branch=master)](https://coveralls.io/github/jamesfer/cypher-query-builder?branch=master)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 <a href="https://www.patreon.com/jamesfer" title="Become a patreon"> 
   <img alt="Become a patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="200">
@@ -15,15 +15,16 @@ Write queries in Javascript just as you would write them in Cypher.
 - Full Typescript declarations included in package
 
 ```javascript
-let results = await db.matchNode('user', 'User', { active: true })
-  .where({ 'user.age': greaterThan(18) })
-  .with('user')
+let results = await db
+  .matchNode("user", "User", { active: true })
+  .where({ "user.age": greaterThan(18) })
+  .with("user")
   .create([
-    cypher.node('user', ''),
-    cypher.relation('out', '', 'HasVehicle'),
-    cypher.node('vehicle', 'Vehicle', { colour: 'red' })
+    cypher.node("user", ""),
+    cypher.relation("out", "", "HasVehicle"),
+    cypher.node("vehicle", "Vehicle", { colour: "red" }),
   ])
-  .ret(['user', 'vehicle'])
+  .ret(["user", "vehicle"])
   .run();
 
 // Results:
@@ -60,6 +61,7 @@ let results = await db.matchNode('user', 'User', { active: true })
 ```
 npm install --save cypher-query-builder
 ```
+
 or
 
 ```
@@ -71,7 +73,7 @@ yarn add cypher-query-builder
 CommonJS/Node
 
 ```javascript
-const cypher = require('cypher-query-builder');
+const cypher = require("cypher-query-builder");
 // cypher.Connection
 // cypher.greaterThan
 // ....
@@ -80,18 +82,18 @@ const cypher = require('cypher-query-builder');
 ES6
 
 ```javascript
-import { Connection, greaterThan } from 'cypher-query-builder';
+import { Connection, greaterThan } from "cypher-query-builder";
 ```
 
 ### Connecting
 
 ```javascript
-const cypher = require('cypher-query-builder');
+const cypher = require("cypher-query-builder");
 
 // Make sure to include the protocol in the hostname
-let db = new cypher.Connection('bolt://localhost', {
-  username: 'root',
-  password: 'password',
+let db = new cypher.Connection("bolt://localhost", {
+  username: "root",
+  password: "password",
 });
 ```
 
@@ -104,8 +106,8 @@ are accepted by that driver.
 ES6
 
 ```javascript
-db.matchNode('projects', 'Project')
-  .return('projects')
+db.matchNode("projects", "Project")
+  .return("projects")
   .run()
   .then(function (results) {
     // Do something with results
@@ -115,8 +117,9 @@ db.matchNode('projects', 'Project')
 ES2017
 
 ```javascript
-const results = await db.matchNode('projects', 'Project')
-  .return('projects')
+const results = await db
+  .matchNode("projects", "Project")
+  .return("projects")
   .run();
 ```
 
@@ -131,7 +134,7 @@ const results = [
       identity: 1,
 
       // All labels attached to the node
-      labels: [ 'Project' ],
+      labels: ["Project"],
 
       // Actual properties of the node.
       // Note that Neo4j numbers will automatically be converted to
@@ -139,21 +142,19 @@ const results = [
       // store larger numbers than can be represented in Javascript.
       // This behaviour is currently in consideration and may change
       // in the future.
-      properties: { name: 'Project 1' },
+      properties: { name: "Project 1" },
     },
   },
   // ...
-]
+];
 ```
 
 You can also use the `stream` method to download the results as an observable.
 
 ```javascript
-const results = db.matchNode('project', 'Project')
-  .ret('project')
-  .stream();
+const results = db.matchNode("project", "Project").ret("project").stream();
 
-results.subscribe(row => console.log(row.project.properties.name));
+results.subscribe((row) => console.log(row.project.properties.name));
 ```
 
 ### Processing
@@ -162,10 +163,10 @@ To extract the results, you can use ES5 array methods or a library like lodash:
 
 ```javascript
 // Get all the project nodes (including their id, labels and properties).
-let projects = results.map(row => row.projects);
+let projects = results.map((row) => row.projects);
 
 // Get just the properties of the nodes
-let projectProps = results.map(row => row.projects.properties);
+let projectProps = results.map((row) => row.projects.properties);
 ```
 
 ## Documentation
@@ -173,18 +174,18 @@ let projectProps = results.map(row => row.projects.properties);
 All the reference documentation can be found [here](http://jamesfer.me/cypher-query-builder).
 However, the two most useful pages are probably:
 
- - The [Connection](https://jamesfer.me/cypher-query-builder/classes/connection.html) class, for 
-   details on creating and using a connection.
- - The [Query](https://jamesfer.me/cypher-query-builder/classes/query.html) class, for details on 
-   all the available clauses, and building and running queries.
+- The [Connection](https://jamesfer.me/cypher-query-builder/classes/connection.html) class, for
+  details on creating and using a connection.
+- The [Query](https://jamesfer.me/cypher-query-builder/classes/query.html) class, for details on
+  all the available clauses, and building and running queries.
 
 ## Contributing
 
-Please feel free to submit any bugs or questions you may have in an 
-[issue](https://github.com/jamesfer/cypher-query-builder/issues). I'm very open to discussing 
+Please feel free to submit any bugs or questions you may have in an
+[issue](https://github.com/jamesfer/cypher-query-builder/issues). I'm very open to discussing
 suggestions or new ideas so don't hesitate to reach out.
 
-Maintaining the library does take some time out of my schedule so if you'd like to show your 
+Maintaining the library does take some time out of my schedule so if you'd like to show your
 appreciation please consider donating. Even the smallest amount is really encouraging.
 
 <a href="https://www.patreon.com/jamesfer" title="Become a patreon"> 
