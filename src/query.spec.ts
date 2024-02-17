@@ -1,11 +1,11 @@
 import { Dictionary, each } from 'lodash';
 import { spy, stub } from 'sinon';
 import { expect } from '../test-setup';
-import { mockConnection } from '../tests/connection.mock';
 import { ClauseCollection } from './clause-collection';
 import { node, NodePattern } from './clauses';
 import { Query } from './query';
 import { Observable } from 'rxjs';
+import { Connection } from './connection';
 
 describe('Query', () => {
   describe('query methods', () => {
@@ -86,10 +86,10 @@ describe('Query', () => {
     });
 
     it('should run the query on its connection', () => {
-      const { connection } = mockConnection();
+      const connection = makeConnection();
       const runStub = stub(connection, 'run');
       runStub.returns(Promise.resolve([{}]));
-      const query = (new Query(connection)).raw('Query');
+      const query = new Query(connection).raw('Query');
       return expect(query.run()).to.be.fulfilled.then(() => {
         expect(runStub.calledOnce);
       });
@@ -111,9 +111,9 @@ describe('Query', () => {
     });
 
     it('should run the query on its connection', () => {
-      const { connection } = mockConnection();
+      const connection = makeConnection();
       const streamStub = stub(connection, 'stream');
-      const query = (new Query(connection)).raw('Query');
+      const query = new Query(connection).raw('Query');
       query.stream();
       expect(streamStub.calledOnce);
     });
@@ -126,12 +126,12 @@ describe('Query', () => {
     });
 
     it('should run the query on its connection and return the first result', () => {
-      const { connection } = mockConnection();
-      const runStub = stub(connection, 'run');
+      const connection = makeConnection();
       const firstRecord = { number: 1 };
-      runStub.returns(Promise.resolve([firstRecord, { number: 2 }, { number: 3 }]));
+      const runStub = stub(connection, 'run')
+        .returns(Promise.resolve([firstRecord, { number: 2 }, { number: 3 }]));
 
-      const query = (new Query(connection)).raw('Query');
+      const query = new Query(connection).raw('Query');
       return expect(query.first()).to.be.fulfilled.then((result: any) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(firstRecord);
@@ -139,15 +139,20 @@ describe('Query', () => {
     });
 
     it('should return undefined if the query returns no results', () => {
-      const { connection } = mockConnection();
-      const runStub = stub(connection, 'run');
-      runStub.returns(Promise.resolve([]));
+      const connection = makeConnection();
+      const runStub = stub(connection, 'run').returns(Promise.resolve([]));
 
-      const query = (new Query(connection)).raw('Query');
+      const query = new Query(connection).raw('Query');
       return expect(query.first()).to.be.fulfilled.then((result: any) => {
         expect(runStub.calledOnce);
         expect(result).to.equal(undefined);
       });
     });
   });
+
+  function makeConnection(): Connection {
+    const url = 'bolt://localhost';
+    const credentials = { username: 'neo4j', password: 'admin1234' };
+    return new Connection(url, credentials);
+  }
 });

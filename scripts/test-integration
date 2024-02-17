@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+NEO4J_URL=bolt://localhost
+NEO4J_USER=neo4j
+NEO4J_PASS=admin1234
+
 start-neo4j() {
   docker run \
   -d \
   --rm \
   -p 7474:7474 \
   -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/admin \
+  -e NEO4J_AUTH="$NEO4J_USER/$NEO4J_PASS" \
   "neo4j:${NEO4J_VERSION-latest}"
 }
 
@@ -28,7 +32,7 @@ id=$(start-neo4j) || exit 1
 
 # Run the tests
 echo "Running tests..."
-NEO4J_URL=bolt://localhost NEO4J_USER=neo4j NEO4J_PASS=admin run-tests "$@"
+NEO4J_URL="$NEO4J_URL" NEO4J_USER="$NEO4J_USER" NEO4J_PASS="$NEO4J_PASS" run-tests "$@"
 code="$?"
 
 # Stop the container
